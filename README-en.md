@@ -461,17 +461,37 @@ For example, the removed 無 --> ⺚
 - 2.Resolved the issue where punctuation marks following certain emoji would appear as invisible spaces by removing all related punctuation symbols from Symbola-13.otf. This operation does not affect the main font, as emoji display primarily relies on NotoColorEmoji, and Symbola-13.otf only serves as a supplement. Around 200 symbols still rely on Symbola-13.otf for display. If further issues arise, they will be addressed later.
  
 15.9.0.06-01-RCTEST(1590060101)
- - 1.Removed conflicting characters from Unknown-symbol-supplementRegular.ttf
- - 2.Removed NazoMin+-Regular.otf
- - 3.Upgraded font configuration to Android 15:
+- 1.Removed conflicting characters from Unknown-symbol-supplementRegular.ttf
+- 2.Removed NazoMin+-Regular.otf
+- 3.Upgraded font configuration to Android 15:
       • Some fonts have been renamed
       • A few font suffixes changed
       • Added DroidSansMono.ttf
- - 4.Fixed invisibility issues in certain cases for combining characters:
+- 4.Fixed invisibility issues in certain cases for combining characters:
 U+0B67, U+2364, U+20DD
 ```
 ୧⍤⃝
 ```
- - 5.Switched main fonts to .ttf format, using numeric values to represent weights
- - 6.Changed some NotoSans font suffixes from -Medium to -VF for consistency with Android 15;
+- 5.Switched main fonts to .ttf format, using numeric values to represent weights
+- 6.Changed some NotoSans font suffixes from -Medium to -VF for consistency with Android 15;
       this avoids potential font conflict or duplication issues
+
+
+15.9.1.06-27(1591062700)
+- 1.Fixed issues with mixing certain symbols and punctuation marks
+- 2.Fixed missing important combining marks in two primary fonts
+- 3.Fixed 5 missing characters in the Emoji and Old Italic blocks (U+1032D..1032F, U+1F547..1F548)
+```
+𐌭𐌮𐌯🕇🕈
+```
+
+15.9.2.08-24(1592082400)
+- 1.Updated the main font and some secondary fonts
+- 2.Fixed the issue of some symbols missing again
+- 3.Adapted to approximately 3,000 new symbols added in HarmonyOS 5, all of which are in the U + F0000 Supplementary Private Use Area - A 
+
+16.0.1.09-15-beta1 (1601091501)
+- 1.Added WebUI. New feature: block individual fonts (.ttf, .otf, .ttc). Blocking the main system font is not allowed; the font must come from the module path.
+- 2.Adopted a new deduplication method to completely fix conflicts between NotoColorEmoji.ttf and Symbola-13.otf / Unknown-symbol-supplementRegular.ttf that caused abnormal rendering of some symbol combinations.
+- 3.Adapted for Android 9–11, and resolved the issue where systems below Android 10 could not recognize COLRv1, which made NotoColorEmoji.ttf ineffective.
+- 4.Adapted for Android 16.
