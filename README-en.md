@@ -8,7 +8,6 @@
 > [!IMPORTANT]
 > 
 >[Note! Executing action.sh means clicking the execute (operation) button in the manager]
->[The manager is (R/M)KernelSU(NEXT) or apatch(NEXT) or magisk (alpha)]
 >[If the settings interface cannot be opened by Google or the Play store cannot be opened, please enable the (magisk)hide/uninstall module(ksu)² for the all play service](This is a problem with the "play integrity fix" module「pif」)
  
  [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91) 
@@ -18,14 +17,13 @@
  ❗¹ and ² do not conflict, read carefully!!!❗
  
 >>Tsukushi A-circle global font module, theoretical adaptation
-- All major categories of native (A15 is not sure whether it supports it, but it has been adapted)
-- All major fake categories of native
-- ColorOS13-15(Please enable Roboto in settings)
-- OxygenOS 12-15
+- All major categories of native (A9~A16)
+- ColorOS13-16(Please enable Roboto in settings)
+- OxygenOS 12-16
 - RealmeUI
-- *Flyme (may have bugs)
-- MIUI14
-- HyperOS 1/2.0
+- Flyme
+- MIUI
+- HyperOS 1-2
 - Samsung
 
 
@@ -36,7 +34,7 @@
 -[Unique feature] Full coverage of WeChat public account articles and their contents
 -Huge font library, covering some rare new characters (Mom no longer has to worry about my phone not seeing any symbols~)
 -[Most efficient] Starting from MFGA version 15.5.1, Unicode16 full coverage is equivalent to any symbol as long as it is officially recognized！！！
-#⚠ If the Play Store does not take effect, please click Execute (action.sh) in the manager and wait for the text to run. No need to restart.
+⚠ If the Play Store does not take effect, please click Execute (action.sh) in the manager and wait for the text to run. No need to restart.
 Recent version update log:
 
 - 1.Update all fonts to the latest version
