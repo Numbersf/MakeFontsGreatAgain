@@ -11,8 +11,6 @@
  
  [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91) 
  
->>[管理器就是(R/M)KernelSU(NEXT)或apatch(NEXT)或magisk(alpha)]
- 
 >>[如果设置界面Google打不开、Play商店打不开请单独对play服务开启隐藏/卸载模块¹](这是play integrity fix模块的问题)
  
 >>[KernelSU,apatch系列内核管理器请关掉默认卸载模块²、Delta Magisk缺少更新无法适配、shamiko请使用黑名单]
@@ -21,14 +19,13 @@
  
 
 >>MFGA,理论适配:
--  各大类原生(A15暂不确定是否支持,但已适配)
--  各大假类原生
--  ColorOS13-15(请在设置中启用Roboto)
--  OxygenOS 12-15
+-  各大类原生(A9~A16)
+-  ColorOS13-16(请在设置中启用Roboto)
+-  OxygenOS 12-16
 -  RealmeUI
 -  Flyme
--  MIUI14
--  澎湃OS 1/2.0
+-  MIUI
+-  澎湃OS 1-2
 -  三星
  
    ***⚠请使用最新版本的管理器⚠***
@@ -39,7 +36,7 @@
 -[独特功能]微信公众号文章及其内部全覆盖
 - 字库巨大,覆盖一些少见新出的字符(妈妈再也不用担心我的手机有任何符号看不见~)
  
-#⚠ play商店如果没有生效,请在管理器中点击执行(action.sh),等待文字跑完,不需要重启.
+⚠ play商店如果没有生效,请在管理器中点击执行(action.sh),等待文字跑完,不需要重启.
  
 -[最高效]MFGA 15.5.1版本起,Unicode16全覆盖 相当于只要是官方承认存在任何符号都有！！！
  
