@@ -45,6 +45,12 @@
  
 更新日志:
  
+ 16.0.2.09-18-beta2(1602091802)
+ - 1.补全西夏文字部首补充分区、西夏文字补充分区缺失字符
+ - 2.更新部分字体到最新(包括NotoColorEmoji更新到U17)
+ - 3.优化中文README.md的排版
+ - 4.从Unicode17-new移除U+1F6D8
+ 
  16.0.1.09-15-beta1(1601091501)
  - 1.加入webui,新功能:屏蔽单个字体(ttf、otf、ttc).禁止对主字体进行屏蔽操作,字体必须是模块路径中的
  - 2.采用新的方法去重,彻底解决NotoColorEmoji.ttf与Symbola-13.otf、Unknown-symbol-supplementRegular.ttf产生冲突导致部分符号组合显示异常
