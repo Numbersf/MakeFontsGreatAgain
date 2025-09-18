@@ -488,8 +488,14 @@ U+0B67, U+2364, U+20DD
 - 2.Fixed the issue of some symbols missing again
 - 3.Adapted to approximately 3,000 new symbols added in HarmonyOS 5, all of which are in the U + F0000 Supplementary Private Use Area - A 
 
-16.0.1.09-15-beta1 (1601091501)
+16.0.1.09-15-beta1(1601091501)
 - 1.Added WebUI. New feature: block individual fonts (.ttf, .otf, .ttc). Blocking the main system font is not allowed; the font must come from the module path.
 - 2.Adopted a new deduplication method to completely fix conflicts between NotoColorEmoji.ttf and Symbola-13.otf / Unknown-symbol-supplementRegular.ttf that caused abnormal rendering of some symbol combinations.
 - 3.Adapted for Android 9–11, and resolved the issue where systems below Android 10 could not recognize COLRv1, which made NotoColorEmoji.ttf ineffective.
 - 4.Adapted for Android 16.
+
+16.0.2.09-18-beta2(1602091802)
+- 1.Completed the missing characters in the Tangut Radicals Supplement block and the Tangut Supplement block.
+- 2.Updated some fonts to the latest version (including updating NotoColorEmoji to Unicode 17).
+- 3.Optimized the formatting of the Chinese README.md.
+- 4.Removed U+1F6D8 from Unicode17-new.
