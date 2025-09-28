@@ -100,3 +100,5 @@ else
     ui_print_msg "non_xiaomi_remove"
     rm -rf "$ZYGISK_DIR"
 fi
+
+ui_print "- Welcome to MFGA!"
