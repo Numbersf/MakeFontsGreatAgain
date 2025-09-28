@@ -43,6 +43,14 @@
  
 #  Update log:
  
+ 16.0.3.09-27-beta3 (1603092703)
+ - 1.Fixed the two missing symbols in HarmonyOS 5 private area extension A
+```
+U+F0AFE(󰫾), U+F0ADD(󰫝)
+```
+ - 2.Optimized WebUI – added execution results, font previews in the font directory, highlighted section hints, and fixed the zooming issue
+ - 3.Rewrote README-en.md
+ 
  16.0.2.09-18-beta2(1602091802)
  - 1.Completed the missing characters in the Tangut Radicals Supplement block and the Tangut Supplement block.
  - 2.Updated some fonts to the latest version (including updating NotoColorEmoji to Unicode 17).
