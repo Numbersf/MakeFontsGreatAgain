@@ -12,7 +12,7 @@ function ui_print_msg() {
                 "magisk_low") echo "[!] Magisk系列管理器 版本低于 28.0，正在取消安装..." ;;
                 "android_11_or_lower") echo "[!] 检测到 Android 11 或更低版本，正在切换 Emoji 字体兼容方案..." ;;
                 "android_12_or_higher") echo "[✓] 检测到 Android 12 或更高版本，移除备用 Emoji 字体..." ;;
-                "pif_warning_ksu") echo "[!] 检测到 PlayIntegrityFix 模块存在, 请单独打开 Play 服务的卸载模块!" ;;
+                "pif_warning_ksu") echo "[!] 检测到 PlayIntegrityFix 模块存在, 如果挂载方式为overlayfs，请单独打开 Play 服务的卸载模块!" ;;
                 "pif_warning_ksu2") echo "[-] 检测到你正在使用 KernelSU系列管理器, 请关闭默认卸载模块功能!" ;;
                 "pif_warning_magisk") echo "[!] 检测到 PlayIntegrityFix 模块存在, 请单独打开 Play 服务的配置排除列表!" ;;
                 "module_obsolete") echo "[-] 模块 ID 已更改，旧模块已弃用" ;;
@@ -26,7 +26,7 @@ function ui_print_msg() {
                 "magisk_low") echo "[!] Magisk version is below 28.0, cancelling installation..." ;;
                 "android_11_or_lower") echo "[!] Android 11 or lower detected, applying Emoji font compatibility..." ;;
                 "android_12_or_higher") echo "[✓] Android 12 or higher detected, removing fallback Emoji font..." ;;
-                "pif_warning_ksu") echo "[!] PlayIntegrityFix(pif) exists, Please open 'Superuser→Custom→Umount Module' in PlayServices!" ;;
+                "pif_warning_ksu") echo "[!] PlayIntegrityFix(pif) exists. If the mount method is overlayfs, Please open 'Superuser→Custom→Umount Module' in PlayServices!" ;;
                 "pif_warning_ksu2") echo "[-] Detect you are using KernelSU, Turn off the Umount Module by default function!" ;;
                 "pif_warning_magisk") echo "[!] PlayIntegrityFix(pif) exists, Please configure 'DenyList' in PlayServices!" ;;
                 "module_obsolete") echo "[-] Changing the module ID, the old module is obsolete" ;;
