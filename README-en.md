@@ -1,7 +1,6 @@
-**`Enlish`** | [简体中文](https://github.com/KernelSU-Modules-Repo/MFGA/blob/main/README.md)
+**`Enlish`** | [简体中文](README.md)
  
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91)
-[![Coolapk](https://img.shields.io/badge/Follow-Coolapk-3DDC84?style=flat-square&logo=android&logoColor=white)](http://www.coolapk.com/u/28259173)
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91) 
  
 # MFGA
 > [!CAUTION]
@@ -31,23 +30,23 @@
 -  Samsung
 ```
  
-# Features the module can achieve:
+```[Global Debut (1)]``` Full coverage of English and numbers in the Play Store
  
-``play`` store English letters and numbers fully covered
-> If the ``Play Store`` does not take effect, please click execute ``(action.sh)`` in the manager and wait until the text finishes scrolling. If some ``GApps`` crash, please reboot
+```[Unique feature]``` Full coverage of WeChat public account articles and their contents
+> Huge font library, covering some rare new characters(Mom no longer has to worry about my phone not seeing any symbols~)
  
-WeChat Official Account articles and all content inside fully covered
-> For ``KSU-based`` managers, you need to disable WeChat’s “Uninstall Module” feature
+> If the Play Store does not take effect, please click Execute (action.sh) in the manager and wait for the text to run. No need to restart.
  
-Starting from ``MFGA`` ``15.5.1``, ``Unicode16`` is fully covered; ``15.8.2`` starts full ``Unicode17`` coverage.... In other words, as long as any symbol is officially recognized, it is included. Of course, there are also some Private Use Area symbols called by the system
+```[Most efficient]```MFGA 15.5.1 version,Unicode16 is fully covered;15.8.2 version,Unicode17 is fully covered.... It is equivalent to any symbol officially recognized as existing, of course there are also some private area symbols used by the system official.
  
-Custom content is more visualized
-> ``15.9.0`` and later, you can replace fonts directly by modifying the numeric ``ttf``
- 
-Ability to block auxiliary fonts provided by the module
-> ``16.0.1`` and later, you can enter ``ttf/otf`` existing in the module in ``webui`` to block them
+```[Customization]```Starting from version 15.9.0, the customized content is more visual
  
 #  Update log:
+ 
+ 16.0.6.01-19-beta7(1606011907)
+ - 1.service.sh: Forcibly changes the permissions of font files under the data directories of com.qidian.QDReader and com.dragon.read to 000 to achieve the override effect.
+ - 2.Updated DisableMiFontOverlay to v1.5.
+ - 3.Updated some primary fonts.
  
  16.0.5.10-23-beta5(1605102305)
  - 1.Fixed an issue where some characters in the range U+2600…U+27BF were displayed incorrectly in Unknown-symbol-supplementRegular.ttf
@@ -56,7 +55,7 @@ Ability to block auxiliary fonts provided by the module
  16.0.3.09-27-beta3(1603092703)
  - 1.Fixed the two missing symbols in HarmonyOS 5 private area extension A
 ```
- U+F0AFE(󰫾), U+F0ADD(󰫝)
+U+F0AFE(󰫾), U+F0ADD(󰫝)
 ```
  - 2.Optimized WebUI – added execution results, font previews in the font directory, highlighted section hints, and fixed the zooming issue
  - 3.Rewrote README-en.md
@@ -154,8 +153,6 @@ For example, the removed 無 --> ⺚
  - 3.Updated all primary fonts and removed conflicting parts.
  - 4.customize.sh: Fixed an issue with retrieving the Android version number.
  - 5.action.sh: Added volume key selection functionality.
- <details>
- <summary><strong>Click to view all changelogs</strong></summary>
  
  15.7.7.03-16-beta5(1577031605)
  - 1.Updated Roboto to beta36
@@ -525,4 +522,3 @@ U+2800-U+28FF=U+FF000-U+FF0FF U+F8FF U+EEEE(U+E16A) U+EEEF U+F8FF  U+E005
 ```
 󰀀
 ```
- </details>

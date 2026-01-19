@@ -1,12 +1,11 @@
-**`简体中文`** | [English](https://github.com/KernelSU-Modules-Repo/MFGA/blob/main/README-en.md)
+**`简体中文`** | [English](README-en.md)
  
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91)
-[![Coolapk](https://img.shields.io/badge/Follow-Coolapk-3DDC84?style=flat-square&logo=android&logoColor=white)](http://www.coolapk.com/u/28259173)
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91) 
  
 # MFGA
 > [!CAUTION]
 > 
-> 本模块使用了 action.sh,所以需要magisk28.0+,alpha28001+,kernelSU 11986/1.0.2+,(M/R)KernelSU(NEXT)12300+刷入！！！
+> 本模块使用了action.sh,所以需要magisk28.0+,alpha28001+,kernelSU 11986/1.0.2+,(M/R)KernelSU(NEXT)12300+刷入！！！
  
 > [!IMPORTANT]
 >
@@ -31,23 +30,23 @@
 -  三星
 ```
  
-# 模块能实现的功能:
+```[全球首发(1)]```play商店的英文及数字全覆盖
  
-``play``商店的英文及数字全覆盖
-> ``play``商店如果没有生效,请在管理器中点击执行``(action.sh)``,等待文字跑完即可,如果部分``gapp``出现闪退请重启
+```[独特功能]```微信公众号文章及其内部全覆盖
+> 字库巨大,覆盖一些少见新出的字符(妈妈再也不用担心我的手机有任何符号看不见~)
  
-微信公众号文章及其内部全覆盖
-> ``KSU``系管理器需关闭微信的“卸载模块”功能
+> play商店如果没有生效,请在管理器中点击执行(action.sh),等待文字跑完,不需要重启.
  
-``MFGA`` ``15.5.1``版本起,``Unicode16``全覆盖;``15.8.2``版本起,``Unicode17``全覆盖.... 相当于只要是官方承认存在任何符号都有,当然也有一些系统官方在调用的私用区符号
+```[最高效]```MFGA 15.5.1版本起,Unicode16全覆盖;15.8.2版本起,Unicode17全覆盖.... 相当于只要是官方承认存在任何符号都有,当然也有一些系统官方在调用的私用区符号
  
-自定义内容更加可视化
-> ``15.9.0``版本起,你可以通过修改数字``ttf``直接替换字体
- 
-可屏蔽模块提供的附属字体
-> ``16.0.1``版本起,你可以在``webui``中填写模块内存在的``ttf/otf``来进行屏蔽处理
+```[自定义]```15.9.0版本起,自定义内容更加可视化
  
 # 更新日志:
+ 
+ 16.0.6.01-19-beta7(1606011907)
+ - 1.service.sh:强制将com.qidian.QDReader、com.dragon.read数据目录下的字体文件权限改为000以达到覆盖效果，还原请改为600
+ - 2.更新DisableMiFontOverlay到1.5
+ - 3.更新部分主字体
  
  16.0.5.10-23-beta5(1605102305)
  - 1.修复Unknown-symbol-supplementRegular.ttf显示部分U+2600...U+27BF字符异常
@@ -154,8 +153,6 @@
  - 3.更新所有主字体并删除冲突部分
  - 4.customize.sh:修复一个Android版本号获取问题
  - 5.action.sh:新增音量键选择
- <details>
- <summary><strong>点击查看完整更新日志</strong></summary>
  
  15.7.7.03-16-beta5(1577031605)
  - 1.更新Roboto到beta36
@@ -525,4 +522,3 @@ U+16D40-U+16D79(U+16D7F)
 ```
 󰀀
 ```
- </details>
