@@ -43,6 +43,11 @@
  
 #  Update log:
  
+ 16.0.7.01-20-beta9(1607012009)
+ - 1.Initial release updating maple-font to v7.9
+ - 2.Removed all previously built-in font*.xml files from the module. Only fonts.xml in the module root is now kept as the copy source. Font configuration files are discovered via search_dirs.sh, which searches for their absolute paths and filenames before copying.
+ - 3.Translations in action.sh, customize.sh, and search_dirs.sh are now handled by calling lang/lang.sh
+ 
  16.0.6.01-19-beta7(1606011907)
  - 1.service.sh: Forcibly changes the permissions of font files under the data directories of com.qidian.QDReader and com.dragon.read to 000 to achieve the override effect.
  - 2.Updated DisableMiFontOverlay to v1.5.

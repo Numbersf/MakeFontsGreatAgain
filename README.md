@@ -43,6 +43,11 @@
  
 # 更新日志:
  
+ 16.0.7.01-20-beta9(1607012009)
+ - 1.第一版本更新maple-font到7.9
+ - 2.移除所有原先模块直接内置的font*.xml，现仅保留模块根目录的fonts.xml作为复制源，通过调用search_dirs.sh搜索字体配置文件绝对路径和文件名进行复制
+ - 3.action.sh、customize.sh、search_dirs.sh的翻译改调用lang/lang.sh
+ 
  16.0.6.01-19-beta7(1606011907)
  - 1.service.sh:强制将com.qidian.QDReader、com.dragon.read数据目录下的字体文件权限改为000以达到覆盖效果，还原请改为600
  - 2.更新DisableMiFontOverlay到1.5
