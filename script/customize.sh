@@ -2,12 +2,20 @@ SKIPUNZIP=0
 . "$MODPATH/lang/lang.sh"
 
 version_check() {
-  if [[ $KSU_VER_CODE != "" ]] && [[ $KSU_VER_CODE -lt 11986 || $KSU_KERNEL_VER_CODE -lt 11986 ]]; then
-    ui_print "$(msg KSU_LOW)"
-    abort
-  elif [[ $KSU_VER_CODE == "" && $MAGISK_VER_CODE != "" && $MAGISK_VER_CODE -lt 28000 ]]; then
-    ui_print "$(msg MAGISK_LOW)"
-    abort
+  if [ -d /data/adb/ksu ]; then
+    if [ -z "$KSU_VER_CODE" ] || [ -z "$KSU_KERNEL_VER_CODE" ]; then
+      ui_print "$(msg KSU_LOW)"
+      abort
+    fi
+    if [ "$KSU_VER_CODE" -lt 11986 ] || [ "$KSU_KERNEL_VER_CODE" -lt 11986 ]; then
+      ui_print "$(msg KSU_LOW)"
+      abort
+    fi
+  elif [ -d /data/adb/magisk ]; then
+    if [ -z "$MAGISK_VER_CODE" ] || [ "$MAGISK_VER_CODE" -lt 28000 ]; then
+      ui_print "$(msg MAGISK_LOW)"
+      abort
+    fi
   fi
 }
 
