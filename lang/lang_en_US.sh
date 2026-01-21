@@ -1,0 +1,43 @@
+##### Common #####
+POWERED="=====Powered by Numbersf====="
+
+##### action.sh #####
+ACTION_CONFIRM="The GMS blocking script will be executed, including disabling services, deleting fonts, and closing Gmail and Chrome apps. Press Volume Down to continue, or Volume Up to exit."
+NO_KEY_DEFAULT="No volume key detected; proceeding by default..."
+VOL_UP_EXIT="Volume Up detected, exiting..."
+VOL_DOWN="Volume Down detected, proceeding..."
+GMS_START="Enabling global GMS font blocking for you!"
+GMS_TEST="Please test whether it is successful, and provide feedback if it fails!"
+STOP_APPS="Force stopping specific applications (com.android.chrome, com.google.android.gm)..."
+STOP_APPS_DONE="[✓] Applications stopped."
+PM_CHECK="Checking if 'pm' command is available..."
+PM_MISSING="[✕] Error: 'pm' command not found! Please confirm the runtime environment."
+DISABLE_GMS="Disabling GMS font services..."
+NO_USER_PROFILE="[!] Warning: No user configuration file found, functionality may be affected."
+DISABLE_DONE="[✓] GMS font services disabled."
+DEL_GMS_FONT="Cleaning up GMS-generated font files..."
+DEL_DATA_FONTS="Removing files from /data/fonts/ directory..."
+DEL_DATA_DONE="[✓] /data/fonts/ cleaned. Processing other services, please wait 10s~1min depending on device performance."
+DEL_ALL_DONE="[✓] All GMS-generated font files have been removed."
+ALL_DONE="All operations completed. Tap the screen to exit."
+WAIT_TOUCH="Waiting for screen touch to exit..."
+TOUCH_EXIT="Screen tap detected, exiting script..."
+
+##### customize.sh #####
+KSU_LOW="[!] KernelSU version is below 11986, cancelling installation..."
+MAGISK_LOW="[!] Magisk version is below 28.0, cancelling installation..."
+ANDROID_11_OR_LOWER="[!] Android 11 or lower detected, applying Emoji font compatibility..."
+ANDROID_12_OR_HIGHER="[!] Android 12 or higher detected, removing fallback Emoji font..."
+PIF_WARNING_KSU="[!] PlayIntegrityFix exists. If overlayfs is used, please manually enable Play Services unmount!"
+PIF_WARNING_KSU2="[-] KernelSU detected, disable default Umount Module function!"
+PIF_WARNING_MAGISK="[!] PlayIntegrityFix exists, please configure DenyList for Play Services!"
+MODULE_OBSOLETE="[-] Module ID has changed, old module is obsolete."
+XIAOMI_KEEP="[!] Xiaomi device detected, keeping zygisk directory and MiSansVF font."
+NON_XIAOMI_REMOVE="[✓] Non-Xiaomi device detected, removing zygisk directory and MiSansVF font."
+
+##### search_dirs.sh #####
+SEARCH_FONTS="[•] Starting search for system font XML files..."
+FOUND_FONT="[✓] Font config found:"
+FONTS_DONE="[✓] Font paths copied successfully"
+ERR_NO_FONTS_XML="[!] fonts.xml not found in module root"
+ERR_NO_SYSTEM_DIR="[!] system directory is missing in module"

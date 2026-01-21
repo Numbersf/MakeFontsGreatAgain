@@ -1,0 +1,43 @@
+##### 通用 #####
+POWERED="=====Powered by Numbersf====="
+
+##### action.sh #####
+ACTION_CONFIRM="これから GMS ブロックスクリプトを実行します。サービスの無効化、フォントファイルの削除、および一部アプリ（Gmail、Chrome）の終了が含まれます！音量ダウンキーで続行、音量アップキーで終了してください。"
+NO_KEY_DEFAULT="音量キーの入力が検出されませんでした。デフォルトで続行します..."
+VOL_UP_EXIT="音量アップキーが検出されました。スクリプトを終了します..."
+VOL_DOWN="音量ダウンキーが検出されました。処理を続行します..."
+GMS_START="GMS フォントのグローバルブロックを有効化しています..."
+GMS_TEST="正常に動作するかテストしてください。失敗した場合はフィードバックをお願いします！"
+STOP_APPS="一部のアプリを強制終了しています (com.android.chrome, com.google.android.gm)..."
+STOP_APPS_DONE="[✓] アプリは正常に強制終了されました。"
+PM_CHECK="pm コマンドが使用可能か確認しています..."
+PM_MISSING="[✕] エラー: pm コマンドが見つかりません。実行環境を確認してください。"
+DISABLE_GMS="GMS フォントサービスを無効化しています..."
+NO_USER_PROFILE="[!] 警告: ユーザープロファイルが見つかりません。一部機能に影響する可能性があります。"
+DISABLE_DONE="[✓] GMS フォントサービスは無効化されました。"
+DEL_GMS_FONT="GMS によって生成されたフォントファイルをクリーンアップしています..."
+DEL_DATA_FONTS="/data/fonts/ ディレクトリ内のファイルを削除しています..."
+DEL_DATA_DONE="[✓] /data/fonts/ のクリーンアップが完了しました。他のサービスを処理中です。10秒〜1分ほどお待ちください（端末性能によります）。"
+DEL_ALL_DONE="[✓] GMS によって生成されたすべてのフォントファイルが削除されました。"
+ALL_DONE="すべて完了しました。画面をタップして終了してください。"
+WAIT_TOUCH="画面タップによる終了イベントを待機中..."
+TOUCH_EXIT="画面タップが検出されました。スクリプトを終了します..."
+
+##### customize.sh #####
+KSU_LOW="[!] KernelSU マネージャーのバージョンが 11986 未満のため、インストールを中止します..."
+MAGISK_LOW="[!] Magisk マネージャーのバージョンが 28.0 未満のため、インストールを中止します..."
+ANDROID_11_OR_LOWER="[!] Android 11 以下を検出しました。Emoji フォント互換モードに切り替えます..."
+ANDROID_12_OR_HIGHER="[✓] Android 12 以上を検出しました。予備の Emoji フォントを削除します..."
+PIF_WARNING_KSU="[!] PlayIntegrityFix モジュールが検出されました。overlayfs を使用している場合、Play サービスのアンインストール用モジュールを個別に有効化してください。"
+PIF_WARNING_KSU2="[-] KernelSU を使用中です。デフォルトのアンインストールモジュール機能を無効にしてください。"
+PIF_WARNING_MAGISK="[!] PlayIntegrityFix モジュールが検出されました。Play サービスを設定除外リストに追加してください。"
+MODULE_OBSOLETE="[-] モジュール ID が変更されました。旧モジュールは廃止されています。"
+XIAOMI_KEEP="[!] Xiaomi デバイスのため、zygisk ディレクトリと MiSansVF フォントを保持します。空のフォントモジュールを削除してください。"
+NON_XIAOMI_REMOVE="[✓] Xiaomi 以外のデバイスのため、zygisk ディレクトリと MiSansVF フォントを削除しました。"
+
+##### search_dirs.sh #####
+SEARCH_FONTS="[•] システムフォント XML ファイルの検索を開始します..."
+FOUND_FONT="[✓] フォント設定を検出しました:"
+FONTS_DONE="[✓] フォントパスの記録とコピーが完了しました。"
+ERR_NO_FONTS_XML="[!] モジュールのルートディレクトリに fonts.xml が見つかりません。"
+ERR_NO_SYSTEM_DIR="[!] モジュールに system ディレクトリが存在しません。"

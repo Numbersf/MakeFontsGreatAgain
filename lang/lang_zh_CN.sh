@@ -1,0 +1,43 @@
+##### 通用 #####
+POWERED="=====Powered by Numbersf====="
+
+##### action.sh #####
+ACTION_CONFIRM="即将执行GMS屏蔽脚本，包括禁用服务和删除字体文件，关闭部分应用(Gmail、Chrome)！请按音量下键继续, 按音量上键退出。"
+NO_KEY_DEFAULT="未检测到音量键输入，默认继续执行..."
+VOL_UP_EXIT="检测到音量上键, 退出脚本..."
+VOL_DOWN="检测到音量下键, 继续操作..."
+GMS_START="正在为你启用 GMS 字体全局屏蔽!"
+GMS_TEST="请测试是否成功，如果失败请及时反馈！"
+STOP_APPS="正在强行停止部分应用 (com.android.chrome, com.google.android.gm)..."
+STOP_APPS_DONE="[✓] 应用已强行停止。"
+PM_CHECK="检测 pm 命令是否可用..."
+PM_MISSING="[✕] 错误: 找不到 pm 命令！请确认运行环境。"
+DISABLE_GMS="正在禁用 GMS 字体服务..."
+NO_USER_PROFILE="[!] 警告: 未找到用户配置文件，可能会影响功能。"
+DISABLE_DONE="[✓] GMS 字体服务已禁用。"
+DEL_GMS_FONT="正在清理 GMS 生成的字体文件..."
+DEL_DATA_FONTS="删除 /data/fonts/ 目录中的文件..."
+DEL_DATA_DONE="[✓] /data/fonts/ 清理完成,开始处理其它服务 请等待10s~1min,这取决于你手机的性能"
+DEL_ALL_DONE="[✓] 所有 GMS 生成的字体文件已被清理。"
+ALL_DONE="一切准备就绪, 点击屏幕退出"
+WAIT_TOUCH="等待屏幕触摸退出事件..."
+TOUCH_EXIT="已检测到屏幕点击, 退出脚本..."
+
+##### customize.sh #####
+KSU_LOW="[!] KernelSU系列管理器 版本低于 11986，正在取消安装..."
+MAGISK_LOW="[!] Magisk系列管理器 版本低于 28.0，正在取消安装..."
+ANDROID_11_OR_LOWER="[!] 检测到 Android 11 或更低版本，正在切换 Emoji 字体兼容方案..."
+ANDROID_12_OR_HIGHER="[✓] 检测到 Android 12 或更高版本，移除备用 Emoji 字体..."
+PIF_WARNING_KSU="[!] 检测到 PlayIntegrityFix 模块存在, 如果挂载方式为overlayfs，请单独打开 Play 服务的卸载模块!"
+PIF_WARNING_KSU2="[-] 检测到你正在使用 KernelSU系列管理器, 请关闭默认卸载模块功能!"
+PIF_WARNING_MAGISK="[!] 检测到 PlayIntegrityFix 模块存在, 请单独打开 Play 服务的配置排除列表!"
+MODULE_OBSOLETE="[-] 模块 ID 已更改，旧模块已弃用"
+XIAOMI_KEEP="[!] 设备为米系,所以保留zygisk目录以及MiSansVF字体,请删除空字体模块"
+NON_XIAOMI_REMOVE="[✓] 非米系设备,删除zygisk目录以及MiSansVF字体"
+
+##### search_dirs.sh #####
+SEARCH_FONTS="[•] 开始搜索系统字体 XML 文件..."
+FOUND_FONT="[✓] 找到字体配置:"
+FONTS_DONE="[✓] 字体路径记录复制完成"
+ERR_NO_FONTS_XML="[!] 模块根目录未找到 fonts.xml"
+ERR_NO_SYSTEM_DIR="[!] 模块缺少 system 目录"
