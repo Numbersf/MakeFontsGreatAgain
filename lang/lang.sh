@@ -1,6 +1,8 @@
 #!/system/bin/sh
 
 LANG_DIR="$MODPATH/lang"
+
+# 读取系统 locale，如果为空默认 zh_CN
 SYSTEM_LOCALE=$(getprop persist.sys.locale | tr '-' '_')
 [ -z "$SYSTEM_LOCALE" ] && SYSTEM_LOCALE="zh_CN"
 
@@ -11,19 +13,27 @@ try_source() {
 
 LANGUAGE_LOADED=0
 
-LANG_CODE=$(echo "$SYSTEM_LOCALE" | cut -d_ -f1 | tr 'A-Z' 'a-z')
-LOCALE_SUFFIX=$(echo "$SYSTEM_LOCALE" | cut -s -d_ -f2-)
+# 拆分 locale: language[-script][-region][-variant]
+set -- $(echo "$SYSTEM_LOCALE" | tr '_' ' ')
+LANG_CODE=$1
+SCRIPT_PART=$2
+REGION_PART=$3
+VARIANT_PART=$4
 
-if [ -n "$LOCALE_SUFFIX" ]; then
-  try_source "$LANG_DIR/lang_${LANG_CODE}_$(echo $LOCALE_SUFFIX | tr 'a-z' 'A-Z').sh" && LANGUAGE_LOADED=1
+LANG_CODE=$(echo "$LANG_CODE" | tr 'A-Z' 'a-z')
+[ -n "$SCRIPT_PART" ] && SCRIPT_PART="$(echo ${SCRIPT_PART:0:1} | tr 'a-z' 'A-Z')$(echo ${SCRIPT_PART:1} | tr 'A-Z' 'a-z')"
+[ -n "$REGION_PART" ] && REGION_PART=$(echo "$REGION_PART" | tr 'a-z' 'A-Z')
+
+if [ -n "$SCRIPT_PART" ] && [ ${#SCRIPT_PART} -eq 4 ]; then
+  REGION_CODE="$REGION_PART"
+else
+  REGION_CODE="$SCRIPT_PART"
 fi
 
-if [ "$LANGUAGE_LOADED" -eq 0 ] && [ "$LANG_CODE" = "zh" ] && [ -n "$LOCALE_SUFFIX" ]; then
-  SCRIPT_TYPE=$(echo "$LOCALE_SUFFIX" | cut -d_ -f1)
-  REGION_CODE=$(echo "$LOCALE_SUFFIX" | cut -s -d_ -f2)
-  if [ "$SCRIPT_TYPE" = "Hans" ] || [ "$SCRIPT_TYPE" = "Hant" ]; then
-    [ -n "$REGION_CODE" ] && try_source "$LANG_DIR/lang_${LANG_CODE}_${REGION_CODE}.sh" && LANGUAGE_LOADED=1
-  fi
+try_source "$LANG_DIR/lang_${LANG_CODE}.sh" && LANGUAGE_LOADED=1
+
+if [ "$LANGUAGE_LOADED" -eq 0 ] && [ -n "$REGION_CODE" ]; then
+  try_source "$LANG_DIR/lang_${LANG_CODE}_$REGION_CODE.sh" && LANGUAGE_LOADED=1
 fi
 
 if [ "$LANGUAGE_LOADED" -eq 0 ]; then
@@ -32,6 +42,7 @@ if [ "$LANGUAGE_LOADED" -eq 0 ]; then
 fi
 
 [ "$LANGUAGE_LOADED" -eq 0 ] && . "$LANG_DIR/lang_zh_CN.sh"
+
 
 msg() {
   eval "echo \"\${$1}\""
