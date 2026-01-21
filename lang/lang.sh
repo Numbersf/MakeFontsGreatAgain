@@ -3,8 +3,21 @@
 LANG_DIR="$MODPATH/lang"
 
 # 读取系统 locale，如果为空默认 zh_CN
-SYSTEM_LOCALE=$(getprop persist.sys.locale | tr '-' '_')
+get_locale() {
+    local value
+    value=$("$@" 2>/dev/null)
+    value=$(echo "$value" | cut -d',' -f1)
+    [ -n "$value" ] && [ "$value" != "null" ] && ! echo "$value" | grep -q "Failed transaction" && echo "$value"
+}
+
+SYSTEM_LOCALE=$(getprop persist.sys.locale 2>/dev/null)
+[ -z "$SYSTEM_LOCALE" ] || [ "$SYSTEM_LOCALE" = "null" ] && SYSTEM_LOCALE=""
+
+SYSTEM_LOCALE=${SYSTEM_LOCALE:-$(get_locale settings get system system_locales)}
+SYSTEM_LOCALE=${SYSTEM_LOCALE:-$(get_locale settings get system "system locales")}
+
 [ -z "$SYSTEM_LOCALE" ] && SYSTEM_LOCALE="zh_CN"
+SYSTEM_LOCALE="${SYSTEM_LOCALE//-/_}"
 
 try_source() {
   [ -f "$1" ] && . "$1" && return 0
@@ -42,7 +55,6 @@ if [ "$LANGUAGE_LOADED" -eq 0 ]; then
 fi
 
 [ "$LANGUAGE_LOADED" -eq 0 ] && . "$LANG_DIR/lang_zh_CN.sh"
-
 
 msg() {
   eval "echo \"\${$1}\""
