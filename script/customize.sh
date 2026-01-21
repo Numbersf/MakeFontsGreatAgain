@@ -13,8 +13,10 @@ version_check() {
 
 if [ "$API" -le 30 ]; then
   ui_print "$(msg ANDROID_11_OR_LOWER)"
+  mv -f "$MODPATH/system/fonts/NotoColorEmoji-fallback.ttf" "$MODPATH/system/fonts/NotoColorEmoji.ttf"
 else
   ui_print "$(msg ANDROID_12_OR_HIGHER)"
+  rm -f "$MODPATH/system/fonts/NotoColorEmoji-fallback.ttf"
 fi
 
 if [ -d "/data/adb/modules/playintegrityfix" ]; then

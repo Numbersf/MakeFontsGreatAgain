@@ -6,7 +6,7 @@ echo "$(msg POWERED)"
 echo "$(msg GMS_START)"
 echo "$(msg GMS_TEST)"
 
-confirm_action() {
+CONFIRM_ACTION() {
   echo "$(msg ACTION_CONFIRM)"
 
   SECONDS_WAIT=10
@@ -17,12 +17,12 @@ confirm_action() {
       echo "$(msg NO_KEY_DEFAULT)"
       STOP_APPS
       break
-    elif echo "$event" | grep -q "KEY_VOLUMEUP"; then
-      echo "$(msg VOL_UP)"
+    elif echo "$event" | grep -q "KEY_VOLUMEDOWN"; then
+      echo "$(msg VOL_DOWN)"
       STOP_APPS
       break
-    elif echo "$event" | grep -q "KEY_VOLUMEDOWN"; then
-      echo "$(msg VOL_DOWN_EXIT)"
+    elif echo "$event" | grep -q "KEY_VOLUMEUP"; then
+      echo "$(msg VOL_UP_EXIT)"
       exit 0
     fi
   done
@@ -67,7 +67,7 @@ DEL_GMSF() {
   echo "$(msg DEL_ALL_DONE)"
 }
 
-confirm_action
+CONFIRM_ACTION
 STATE_GMSF
 DEL_GMSF
 
