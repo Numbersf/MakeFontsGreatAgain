@@ -43,6 +43,13 @@
  
 # 更新日志:
  
+ 16.0.9.01-21-fix(1609012101)
+ - 1.customize.sh:调整version_check检查逻辑及缩进，避免可能存在的误判及unknown operand
+ - 2.customize.sh:修复检查安卓版本替换表情字体的逻辑在上一版本中被误删导致无法正确处理的问题
+ - 3.action.sh:音量上下开启屏蔽gms字体逻辑对换，现在音量下是开始
+ - 4.lang.sh:优化识别翻译语言方式
+ - 5.新增日文、俄文翻译
+ 
  16.0.7.01-20-beta9(1607012009)
  - 1.第一版本更新maple-font到7.9
  - 2.移除所有原先模块直接内置的font*.xml，现仅保留模块根目录的fonts.xml作为复制源，通过调用search_dirs.sh搜索字体配置文件绝对路径和文件名进行复制
@@ -167,6 +174,8 @@
 新增2个非表意文字符：U+2B96，⮖、U+18D1D，𘴝
 对标Unicode 17.0草案，修正7个改形的汉字：𮈺𠁗𣋰𣫲𥟌𩆬𬶘，新增4个汉字：𫜻𫜼𫜽𫜾
 ```
+ <details>
+ <summary><strong>点击查看完整更新日志</strong></summary>
  
  15.7.6.03-03-beta3(1576030303)
  - 1.BraillePatterns+SPUA.ttf:支持全彩U+E16A,复制来自U+EEEE

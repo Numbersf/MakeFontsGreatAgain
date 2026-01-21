@@ -43,6 +43,13 @@
  
 #  Update log:
  
+ 16.0.9.01-21-fix(1609012101)
+ - 1.customize.sh: Adjusted the version_check logic and indentation to avoid potential misjudgments and unknown operand errors.
+ - 2.customize.sh: Fixed an issue where the logic for checking the Android version to replace emoji fonts was accidentally removed in the previous release, causing incorrect handling.
+ - 3.action.sh: Swapped the volume key behavior for enabling GMS font blocking — Volume Down now starts the process.
+ - 4.lang.sh: Optimized the method for detecting the translation language.
+ - 5.Added Japanese and Russian translations.
+ 
  16.0.7.01-20-beta9(1607012009)
  - 1.Initial release updating maple-font to v7.9
  - 2.Removed all previously built-in font*.xml files from the module. Only fonts.xml in the module root is now kept as the copy source. Font configuration files are discovered via search_dirs.sh, which searches for their absolute paths and filenames before copying.
@@ -167,6 +174,8 @@ For example, the removed 無 --> ⺚
 Added 2 non-ideographic symbols: U+2B96 (⮖) and U+18D1D (𘴝)  
 Aligned with the Unicode 17.0 draft, fixed 7 modified Chinese characters: 𮈺, 𠁗, 𣋰, 𣫲, 𥟌, 𩆬, 𬶘,Added 4 new Chinese characters: 𫜻, 𫜼, 𫜽, 𫜾
 ```
+ <details>
+ <summary><strong>Click to view all changelogs</strong></summary>
  
  15.7.6.03-03-beta3(1576030303)
  - 1.BraillePatterns+SPUA.ttf: supports full-color U+E16A, copied from U+EEEE
