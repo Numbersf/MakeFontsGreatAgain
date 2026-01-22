@@ -1,0 +1,7 @@
+fallback:
+  whitelist:
+    - flyme_font_fallback.xml
+    - flyme_fallback.xml
+
+  blacklist:
+    - fonts_customization.xml
