@@ -10,13 +10,15 @@ FONTS_LIST="$MODPATH/fonts_list.yaml"
 
 [ ! -f "$SRC_FONT_XML" ] && { ui_print "$ERR_NO_FONTS_XML"; exit 1; }
 [ ! -d "$MODPATH/system" ] && { ui_print "$ERR_NO_SYSTEM_DIR"; exit 1; }
+[ ! -f "$FONTS_LIST" ] && { ui_print "$ERR_NO_FONTS_LIST"; exit 1; }
 
 get_list() {
-  sed -n "/^[[:space:]]*$1:/,/^[^[:space:]]/p" "$FONTS_LIST" 2>/dev/null | sed -n 's/^[[:space:]]*-[[:space:]]*//p'
+  sed -n "/^[[:space:]]*fallback:/,/^[^[:space:]]/p" "$FONTS_LIST" | sed -n "/^[[:space:]]\\{2\\}$1:/,/^[[:space:]]\\{2\\}[a-zA-Z_][a-zA-Z_]*:/p" | sed 's/#.*$//' | sed -n 's/^[[:space:]]*-[[:space:]]*//p'
 }
 
 FALLBACK_WHITELIST="$(get_list 'whitelist')"
 FALLBACK_BLACKLIST="$(get_list 'blacklist')"
+FALLBACK_REVERSE="$(get_list 'reverse')"
 
 is_blacklisted() {
   local fname="$1"
@@ -30,6 +32,14 @@ is_whitelisted() {
   local fname="$1"
   for wl in $FALLBACK_WHITELIST; do
     [ "$fname" = "$wl" ] && return 0
+  done
+  return 1
+}
+
+is_reversed() {
+  local fname="$1"
+  for rv in $FALLBACK_REVERSE; do
+    [ "$fname" = "$rv" ] && return 0
   done
   return 1
 }
@@ -57,7 +67,15 @@ handle_file() {
   fi
 
   mkdir -p "$MODPATH/system/$MOD_SUBDIR"
-  cp -f "$SRC_FONT_XML" "$MODPATH/system/$MOD_SUBDIR/$FILE_NAME"
+  local SRC
+  if is_reversed "$FILE_NAME" && [ -f "$MODPATH/$FILE_NAME" ]; then
+    SRC="$MODPATH/$FILE_NAME"
+    ui_print "$FONT_REVERSE $FILE_NAME"
+  else
+    SRC="$SRC_FONT_XML"
+  fi
+
+  cp -f "$SRC" "$MODPATH/system/$MOD_SUBDIR/$FILE_NAME"
 
   if is_whitelisted "$FILE_NAME"; then
     ui_print "$FONT_ALLOWED $FILE_NAME"
