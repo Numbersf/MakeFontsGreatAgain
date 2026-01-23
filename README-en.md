@@ -26,7 +26,7 @@
 -  RealmeUI
 -  Flyme
 -  MIUI
--  HyperOS 1-2
+-  HyperOS 1-3
 -  Samsung
 ```
  
@@ -43,7 +43,11 @@
  
 #  Update log:
  
- 16.0.9.01-21-fix(1609012101)
+ 16.1.0.01-23-fix3(1610012303)
+ - 1.lang.sh: Adapted for more scenarios; switched to a new recognition format compliant with BCP 47.
+ - 2.search_dirs.sh: Added whitelist/blacklist support, controlled by fonts_list.yaml in the module root directory.
+ 
+ 16.0.9.01-21-fix(1609012102)
  - 1.customize.sh: Adjusted the version_check logic and indentation to avoid potential misjudgments and unknown operand errors.
  - 2.customize.sh: Fixed an issue where the logic for checking the Android version to replace emoji fonts was accidentally removed in the previous release, causing incorrect handling.
  - 3.action.sh: Swapped the volume key behavior for enabling GMS font blocking — Volume Down now starts the process.

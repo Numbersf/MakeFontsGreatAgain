@@ -26,7 +26,7 @@
 -  RealmeUI
 -  Flyme
 -  MIUI
--  澎湃OS 1-2
+-  澎湃OS 1-3
 -  三星
 ```
  
@@ -43,7 +43,11 @@
  
 # 更新日志:
  
- 16.0.9.01-21-fix(1609012101)
+ 16.1.0.01-23-fix3(1610012303)
+ - 1.lang.sh:适配更多场景，改为符合BCP 47的新识别写法
+ - 2.search_dirs.sh:新增黑白名单功能，由模块根目录fonts_list.yaml控制
+ 
+ 16.0.9.01-21-fix(1609012102)
  - 1.customize.sh:调整version_check检查逻辑及缩进，避免可能存在的误判及unknown operand
  - 2.customize.sh:修复检查安卓版本替换表情字体的逻辑在上一版本中被误删导致无法正确处理的问题
  - 3.action.sh:音量上下开启屏蔽gms字体逻辑对换，现在音量下是开始

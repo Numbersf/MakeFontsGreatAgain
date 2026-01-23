@@ -1,6 +1,6 @@
 {
-  "version": "16.0.9.01-21-fix",
-  "versionCode": 1609012102,
-  "zipUrl": "https://github.com/KernelSU-Modules-Repo/MFGA/releases/download/1609012102/MFGA-16.0.9.01-21-fix.1609012102.zip",
+  "version": "16.1.0.01-23-fix3",
+  "versionCode": 1610012303,
+  "zipUrl": "https://github.com/KernelSU-Modules-Repo/MFGA/releases/download/1610012303/MFGA-16.1.0.01-23-fix3.1610012303.zip",
   "changelog": "https://raw.githubusercontent.com/KernelSU-Modules-Repo/MFGA/main/changelog.md"
 }
