@@ -32,15 +32,14 @@ if [ -d "/data/adb/modules/playintegrityfix" ]; then
   [ -d "/data/adb/magisk" ] && ui_print "$(msg PIF_WARNING_MAGISK)"
 fi
 
-MFGA="/data/adb/modules/Colorfontsproject"
-[ -d "$MFGA" ] && ui_print "$(msg MODULE_OBSOLETE)" && touch "$MFGA/remove"
+MFGA_OLD_ID="/data/adb/modules/Colorfontsproject"
+[ -d "$MFGA_OLD_ID" ] && ui_print "$(msg MODULE_OBSOLETE)" && touch "$MFGA_OLD_ID/remove"
 
 version_check
 
-BRAND=$(getprop ro.product.brand | tr '[:upper:]' '[:lower:]')
-MANUFACTURER=$(getprop ro.product.manufacturer | tr '[:upper:]' '[:lower:]')
-
-if [[ "$BRAND" == "xiaomi" || "$BRAND" == "redmi" || "$BRAND" == "poco" || "$MANUFACTURER" == "xiaomi" ]]; then
+MIUI_NAM=$(getprop ro.miui.ui.version.name)
+MIOS_NAM=$(getprop ro.mi.os.version.name)
+if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
   ui_print "$(msg XIAOMI_KEEP)"
 else
   ui_print "$(msg NON_XIAOMI_REMOVE)"
