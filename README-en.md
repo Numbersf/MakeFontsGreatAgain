@@ -1,6 +1,6 @@
 **`Enlish`** | [简体中文](README.md)
  
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/taichi91) 
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/AndroidCoreLayer) 
  
 # MFGA
 > [!CAUTION]
