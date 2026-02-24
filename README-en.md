@@ -43,6 +43,17 @@
  
 #  Update log:
  
+ 16.1.0.02-23-fix6(1610022306)
+ - 1.search_dirs.sh: Added an undo feature. You can place a font*.xml in the module root directory and add font*.xml under reverse in fonts_list.yaml as a new copy source for system fonts with the same name, instead of always using the module root fonts.xml.
+ - 2.search_dirs.sh: Optimized the disable function. Adding # before any font*.xml line will skip processing that line.
+ - 3.customize.sh: Improved Xiaomi device detection. Whether ro.mi.os.version.name or ro.miui.ui.version.name exists determines if processing is done.
+ - 4.Adapted to Unicode 18.0 Archaic Cuneiform Numerals block symbols (U+12550..U+1268F):
+```
+𒕐𒕑𒕒𒕓𒕔𒕕𒕖𒕗𒕘𒕙𒕚𒕛𒕜𒕝𒕞𒕟𒕠𒕡𒕢𒕣𒕤𒕥𒕦𒕧𒕨𒕩𒕪𒕫𒕬𒕭𒕮𒕯𒕰𒕱𒕲𒕳𒕴𒕵𒕶𒕷𒕸𒕹𒕺𒕻𒕼𒕽𒕾𒕿𒖀𒖁𒖂𒖃𒖄𒖅𒖆𒖇𒖈𒖉𒖊𒖋𒖌𒖍𒖎𒖏𒖐𒖑𒖒𒖓𒖔𒖕𒖖𒖗𒖘𒖙𒖚𒖛𒖜𒖝𒖞𒖟𒖠𒖡𒖢𒖣𒖤𒖥𒖦𒖧𒖨𒖩𒖪𒖫𒖬𒖭𒖮𒖯𒖰𒖱𒖲𒖳𒖴𒖵𒖶𒖷𒖸𒖹𒖺𒖻𒖼𒖽𒖾𒖿𒗀𒗁𒗂𒗃𒗄𒗅𒗆𒗇𒗈𒗉𒗊𒗋𒗌𒗍𒗎𒗏𒗐𒗑𒗒𒗓𒗔𒗕𒗖𒗗𒗘𒗙𒗚𒗛𒗜𒗝𒗞𒗟𒗠𒗡𒗢𒗣𒗤𒗥𒗦𒗧𒗨𒗩𒗪𒗫𒗬𒗭𒗮𒗯𒗰𒗱𒗲𒗳𒗴𒗵𒗶𒗷𒗸𒗹𒗺𒗻𒗼𒗽𒗾𒗿𒘀𒘁𒘂𒘃𒘄𒘅𒘆𒘇𒘈𒘉𒘊𒘋𒘌𒘍𒘎𒘏𒘐𒘑𒘒𒘓𒘔𒘕𒘖𒘗𒘘𒘙𒘚𒘛𒘜𒘝𒘞𒘟𒘠𒘡
+```
+ - 5.Optimized some symbols in the Unicode 18.0 Musical Symbols Supplement block.
+ - 6.Updated UnicodiaFunky to version 3.1.0.<
+ 
  16.1.0.01-23-fix3(1610012303)
  - 1.lang.sh: Adapted for more scenarios; switched to a new recognition format compliant with BCP 47.
  - 2.search_dirs.sh: Added whitelist/blacklist support, controlled by fonts_list.yaml in the module root directory.

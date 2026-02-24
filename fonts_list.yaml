@@ -5,3 +5,6 @@ fallback:
 
   blacklist:
     - fonts_customization.xml
+
+  reverse:
+   # - font_fallback.xml
