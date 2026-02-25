@@ -4,17 +4,16 @@ SKIPUNZIP=0
 version_check() {
   if [ -d /data/adb/ksu ]; then
     if [ -z "$KSU_VER_CODE" ] || [ -z "$KSU_KERNEL_VER_CODE" ]; then
+      ui_print "$(msg KSUV_NOFOUND)"
+    elif [ "$KSU_VER_CODE" -lt 11986 ] || [ "$KSU_KERNEL_VER_CODE" -lt 11986 ]; then
       ui_print "$(msg KSU_LOW)"
-      abort
     fi
-    if [ "$KSU_VER_CODE" -lt 11986 ] || [ "$KSU_KERNEL_VER_CODE" -lt 11986 ]; then
-      ui_print "$(msg KSU_LOW)"
-      abort
-    fi
+
   elif [ -d /data/adb/magisk ]; then
-    if [ -z "$MAGISK_VER_CODE" ] || [ "$MAGISK_VER_CODE" -lt 28000 ]; then
+    if [ -z "$MAGISK_VER_CODE" ]; then
+      ui_print "$(msg MAGISKV_NOFOUND)"
+    elif [ "$MAGISK_VER_CODE" -lt 28000 ]; then
       ui_print "$(msg MAGISK_LOW)"
-      abort
     fi
   fi
 }
@@ -43,7 +42,7 @@ if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
   ui_print "$(msg XIAOMI_KEEP)"
 else
   ui_print "$(msg NON_XIAOMI_REMOVE)"
-  rm -rf "$MODPATH/zygisk" "$MODPATH/system/product/fonts"
+  rm -rf "$MODPATH/zygisk" "$MODPATH/system/product/"
 fi
 
 . "$MODPATH/search_dirs.sh"
