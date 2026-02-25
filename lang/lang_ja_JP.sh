@@ -25,7 +25,9 @@ TOUCH_EXIT="画面タップが検出されました。スクリプトを終了�
 
 ##### customize.sh #####
 KSU_LOW="[!] KernelSU マネージャーのバージョンが 11986 未満のため、インストールを中止します..."
+KSUV_NOFOUND="[!] KernelSU のバージョンコードが検出されませんでした。バージョンチェックをスキップします..."
 MAGISK_LOW="[!] Magisk マネージャーのバージョンが 28.0 未満のため、インストールを中止します..."
+MAGISKV_NOFOUND="[!] Magisk のバージョンコードが検出されませんでした。バージョンチェックをスキップします..."
 ANDROID_11_OR_LOWER="[!] Android 11 以下を検出しました。Emoji フォント互換モードに切り替えます..."
 ANDROID_12_OR_HIGHER="[✓] Android 12 以上を検出しました。予備の Emoji フォントを削除します..."
 PIF_WARNING_KSU="[!] PlayIntegrityFix モジュールが検出されました。overlayfs を使用している場合、Play サービスのアンインストール用モジュールを個別に有効化してください。"
@@ -41,5 +43,6 @@ FOUND_FONT="[✓] フォント設定を検出しました:"
 FONTS_DONE="[✓] フォントパスの記録とコピーが完了しました。"
 ERR_NO_FONTS_XML="[!] モジュールのルートディレクトリに fonts.xml が見つかりません。"
 ERR_NO_SYSTEM_DIR="[!] モジュールに system ディレクトリが存在しません。"
-FONT_BLOCKED="[✗] ブラックリストのフォントをブロック:"
-FONT_ALLOWED="[✓] 許可されたフォント:"
+FONT_BLOCKED="[✗] ブラックリストによりブロックされたフォント設定:"
+FONT_ALLOWED="[✓] 許可されたフォント設定:"
+FONT_REVERSE="[*] モジュール内蔵のフォント設定を使用:"
