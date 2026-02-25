@@ -7,6 +7,7 @@ version_check() {
       ui_print "$(msg KSUV_NOFOUND)"
     elif [ "$KSU_VER_CODE" -lt 11986 ] || [ "$KSU_KERNEL_VER_CODE" -lt 11986 ]; then
       ui_print "$(msg KSU_LOW)"
+      abort
     fi
 
   elif [ -d /data/adb/magisk ]; then
@@ -14,6 +15,7 @@ version_check() {
       ui_print "$(msg MAGISKV_NOFOUND)"
     elif [ "$MAGISK_VER_CODE" -lt 28000 ]; then
       ui_print "$(msg MAGISK_LOW)"
+      abort
     fi
   fi
 }
