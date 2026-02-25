@@ -44,7 +44,7 @@ if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
   ui_print "$(msg XIAOMI_KEEP)"
 else
   ui_print "$(msg NON_XIAOMI_REMOVE)"
-  rm -rf "$MODPATH/zygisk" "$MODPATH/system/product/"
+  rm -rf "$MODPATH/zygisk" "$MODPATH/system/product"
 fi
 
 . "$MODPATH/search_dirs.sh"
