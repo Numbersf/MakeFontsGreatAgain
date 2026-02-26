@@ -1,0 +1,72 @@
+# https://github.com/notofonts/notofonts.github.io/raw/refs/heads/main/fonts/
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansAdlamUnjoined/unhinted/otf/NotoSansAdlamUnjoined-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansBuginese/unhinted/otf/NotoSansBuginese-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCanadianAboriginal/unhinted/otf/NotoSansCanadianAboriginal-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCarian/unhinted/otf/NotoSansCarian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCherokee/unhinted/otf/NotoSansCherokee-Medium.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCoptic/unhinted/otf/NotoSansCoptic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCuneiform/unhinted/otf/NotoSansCuneiform-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansCypriot/unhinted/otf/NotoSansCypriot-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansDeseret/unhinted/otf/NotoSansDeseret-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansEthiopic/unhinted/otf/NotoSansEthiopic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansGeorgian/unhinted/otf/NotoSansGeorgian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansGothic/unhinted/otf/NotoSansGothic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansImperialAramaic/unhinted/otf/NotoSansImperialAramaic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansInscriptionalPahlavi/unhinted/otf/NotoSansInscriptionalPahlavi-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansInscriptionalParthian/unhinted/otf/NotoSansInscriptionalParthian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansJavanese/unhinted/otf/NotoSansJavanese-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansKhmer/unhinted/otf/NotoSansKhmer-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansLisu/unhinted/otf/NotoSansLisu-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansLycian/unhinted/otf/NotoSansLycian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansLydian/unhinted/otf/NotoSansLydian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansMeeteiMayek/unhinted/otf/NotoSansMeeteiMayek-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansMono/unhinted/otf/NotoSansMono-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansMyanmar/unhinted/otf/NotoSansMyanmar-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansNewTaiLue/unhinted/otf/NotoSansNewTaiLue-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansNKo/unhinted/otf/NotoSansNKo-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOgham/unhinted/otf/NotoSansOgham-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOlChiki/unhinted/otf/NotoSansOlChiki-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOldPersian/unhinted/otf/NotoSansOldPersian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOldSouthArabian/unhinted/otf/NotoSansOldSouthArabian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOldTurkic/unhinted/otf/NotoSansOldTurkic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOsage/unhinted/otf/NotoSansOsage-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOsmanya/unhinted/otf/NotoSansOsmanya-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansOldItalic/unhinted/otf/NotoSansOldItalic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansPhagsPa/unhinted/otf/NotoSansPhagsPa-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansPhoenician/unhinted/otf/NotoSansPhoenician-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/unhinted/otf/NotoSans-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansShavian/unhinted/otf/NotoSansShavian-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSoraSompeng/unhinted/otf/NotoSansSoraSompeng-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSymbols2/unhinted/otf/NotoSansSymbols2-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSymbols/unhinted/otf/NotoSansSymbols-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSyriac/unhinted/otf/NotoSansSyriac-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansTaiLe/unhinted/otf/NotoSansTaiLe-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansTamil/unhinted/otf/NotoSansTamil-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansThaana/unhinted/otf/NotoSansThaana-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansThaiLooped/unhinted/otf/NotoSansThaiLooped-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansTifinagh/unhinted/otf/NotoSansTifinagh-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansUgaritic/unhinted/otf/NotoSansUgaritic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansVai/unhinted/otf/NotoSansVai-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansYi/unhinted/otf/NotoSansYi-Regular.otf
+
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoMusic/unhinted/otf/NotoMusic-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansArabic/unhinted/otf/NotoSansArabic-Medium.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansDevanagari/unhinted/otf/NotoSansDevanagari-Regular.otf
+https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansKawi/unhinted/otf/NotoSansKawi-Regular.otf
+
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansArmenian/hinted/ttf/NotoSansArmenian-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansBengali/hinted/ttf/NotoSansBengali-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansChakma/hinted/ttf/NotoSansChakma-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansEgyptianHieroglyphs/hinted/ttf/NotoSansEgyptianHieroglyphs-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansGurmukhi/hinted/ttf/NotoSansGurmukhi-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansKannada/hinted/ttf/NotoSansKannada-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansLinearA/hinted/ttf/NotoSansLinearA-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansLinearB/hinted/ttf/NotoSansLinearB-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansMalayalam/hinted/ttf/NotoSansMalayalam-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansRunic/hinted/ttf/NotoSansRunic-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSinhala/hinted/ttf/NotoSansSinhala-Regular.ttf
+# https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansTelugu/hinted/ttf/NotoSansTelugu-Regular.ttf
+
+https://cdn.jsdelivr.net/gh/Mercury13/unicodia/Fonts/NotoSansMath-Regular.ttf
+https://cdn.jsdelivr.net/gh/Mercury13/unicodia/Fonts/UnicodiaFunky.ttf
