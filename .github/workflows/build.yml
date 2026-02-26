@@ -1,0 +1,71 @@
+name: Build NotoSansPro Font
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Fonts From URLs
+        run: |
+          set -e
+          mkdir -p tools/fontslist build
+          count=0
+          while read -r path; do
+            [[ "$path" =~ ^\s*(#|$) ]] && continue
+            if [[ "$path" =~ :// ]]; then
+              url="$path"
+            else
+              url="https://${path#//}"
+            fi
+            file="${url##*/}"
+            echo "Downloading $url"
+            wget --timeout=30 --tries=3 -O "tools/fontslist/$file" "$url"
+            count=$((count+1))
+          done < tools/fontslist/urls.txt
+          echo "Download complete: $count font files"
+
+      - name: Build and Merge All Fonts
+        run: |
+          set -euo pipefail
+
+          chmod +x tools/{otfccdump,merge-otd,otfccbuild}
+          workdir=$(mktemp -d)
+          trap 'rm -rf "$workdir"' EXIT
+
+          echo "Converting fonts to .otd..."
+          for font in tools/fontslist/*.{ttf,otf}; do
+            [[ -e "$font" ]] || continue
+            base=$(basename "$font" | sed 's/\.\(ttf\|otf\)$//')
+            out="$workdir/${base}.otd"
+            echo "  ➡️ $font → $out"
+            if ! ./tools/otfccdump --ignore-hints "$font" -o "$out"; then
+              echo "⚠️ Warning: failed to process $font, skipping." >&2
+              continue
+            fi
+          done
+
+          echo "Collecting .otd files and sorting by size..."
+          mapfile -t otd_files < <(ls -1S "$workdir"/*.otd)
+          if [[ ${#otd_files[@]} -eq 0 ]]; then
+            echo "❌ No .otd files found, exiting."
+            exit 1
+          fi
+          echo "Merging .otd files into notosanspro.otd..."
+          ./tools/merge-otd -o notosanspro.otd -n "Noto Sans Pro;400;5;Normal" "${otd_files[@]}"
+          echo "Building final OpenType font NotoSansPro.otf..."
+          ./tools/otfccbuild notosanspro.otd -O1 -o build/NotoSansPro.otf
+          cp notosanspro.otd build/
+          cp -r tools/fontslist build/
+
+          echo "✅ Build complete: build/NotoSansPro.otf, build/notosanspro.otd"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotoSansPro-Build-OUTPUT
+          path: build
