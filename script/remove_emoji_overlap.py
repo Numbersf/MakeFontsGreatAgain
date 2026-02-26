@@ -2,23 +2,46 @@
 # -*- coding: utf-8 -*-
 
 """
-Remove glyphs from target fonts that overlap with NotoColorEmoji.ttf
+Remove glyphs from target fonts that overlap with emoji defined in all.toml
 
 Logic:
-1. Read all Unicode codepoints from NotoColorEmoji.ttf
+1. Parse all.toml and extract Unicode codepoints from svg filenames
 2. Remove these codepoints from target fonts
-3. Automatically clean unused glyphs via fontTools Subsetter
+3. Clean unused glyphs via fontTools Subsetter
 """
 
 import sys
+import re
 from fontTools.ttLib import TTFont
 from fontTools.subset import Subsetter, Options
 
 
-def get_codepoints(font_path):
+def parse_all_toml(toml_path):
     """
-    Extract all Unicode codepoints from a font
+    Extract emoji Unicode codepoints from all.toml
     """
+    emoji_codepoints = set()
+
+    with open(toml_path, "r", encoding="utf-8") as f:
+        for line in f:
+            # match: emoji_uXXXX.svg or emoji_uXXXX_XXXX.svg
+            m = re.search(r'emoji_u([0-9a-fA-F_]+)\.svg', line)
+            if not m:
+                continue
+
+            sequence = m.group(1)
+            parts = sequence.split("_")
+
+            for p in parts:
+                try:
+                    emoji_codepoints.add(int(p, 16))
+                except ValueError:
+                    pass
+
+    return emoji_codepoints
+
+
+def get_font_codepoints(font_path):
     font = TTFont(font_path)
     codepoints = set()
 
@@ -30,25 +53,20 @@ def get_codepoints(font_path):
 
 
 def remove_overlap(source_font_path, emoji_codepoints, output_path):
-    """
-    Remove overlapping Unicode codepoints from source font
-    """
     font = TTFont(source_font_path)
 
-    # Collect existing codepoints in source font
     existing_codepoints = set()
     for table in font["cmap"].tables:
         existing_codepoints.update(table.cmap.keys())
 
-    # Determine which codepoints to keep
+    overlap = existing_codepoints & emoji_codepoints
     keep_codepoints = existing_codepoints - emoji_codepoints
 
     print(f"\nProcessing: {source_font_path}")
     print(f"Total glyphs before: {len(existing_codepoints)}")
-    print(f"Removing: {len(existing_codepoints & emoji_codepoints)}")
-    print(f"Keeping: {len(keep_codepoints)}")
+    print(f"Emoji removed: {len(overlap)}")
+    print(f"Remaining: {len(keep_codepoints)}")
 
-    # Configure subsetter
     options = Options()
     options.set(layout_features='*')
     options.recalc_average_width = True
@@ -62,21 +80,21 @@ def remove_overlap(source_font_path, emoji_codepoints, output_path):
     font.save(output_path)
     font.close()
 
-    print(f"Saved to: {output_path}")
+    print(f"Font saved to: {output_path}")
 
 
 def main():
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print("Usage:")
-        print("python remove_emoji_overlap.py NotoColorEmoji.ttf target1.otf target2.otf ...")
+        print("python remove_emoji_overlap.py all.toml target1.otf target2.otf ...")
         sys.exit(1)
 
-    emoji_font_path = sys.argv[1]
+    toml_path = sys.argv[1]
     target_fonts = sys.argv[2:]
 
-    print("Reading emoji font...")
-    emoji_codepoints = get_codepoints(emoji_font_path)
-    print(f"Emoji codepoints found: {len(emoji_codepoints)}")
+    print("Parsing emoji list from all.toml...")
+    emoji_codepoints = parse_all_toml(toml_path)
+    print(f"Total emoji codepoints from TOML: {len(emoji_codepoints)}")
 
     for font_path in target_fonts:
         output_path = font_path.replace(".otf", "_noEmoji.otf").replace(".ttf", "_noEmoji.ttf")
