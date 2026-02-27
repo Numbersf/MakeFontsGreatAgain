@@ -43,6 +43,14 @@
  
 # 更新日志:
  
+ 16.1.1.02-26-alpha1(1611022601)
+ - 1.customize.sh:优化处理管理器版本逻辑，修复可能因为残留导致的误判
+ - 2.customize.sh:非小米设备且product中未找到.xml时不再空挂载product分区
+ - 3.重新加回NotoUnicode.otf，用于处理低安卓版本Noto系列字体版本过低导致的缺失问题
+ - 4.新增NotoSansPro.otf，使大部分Noto系列字体保持最新；同时接入remove_emoji_overlap功能，解决部分符号组合显示冲突
+ - 5.删除原先内置的所有Noto*-VF字体
+ - 6.优化weiui缩放和按钮
+ 
  16.1.0.02-23-fix6(1610022306)
  - 1.search_dirs.sh:新增撤销功能，你可以在模块根目录添加一个font*.xml并在fonts_list.yaml的reverse下方添加font*.xml，作为同名系统字体配置的新复制源而非全部使用模块根目录的fonts.xml
  - 2.search_dirs.sh:优化关闭功能，在任意- font*.xml前加上#则此行不处理

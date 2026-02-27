@@ -1979,7 +1979,10 @@
     </family>
     <!-- 最后增加对「天珩全字库」的支持（终）-->
         
-    <!-- 补字区Power by 咿云冷雨@2025 yiyunlengyu -->
+    <!-- 补字区Power by 咿云冷雨@2026 yiyunlengyu -->
+    <family>
+        <font weight="400" style="normal">NotoSansPro.otf</font>
+    </family>
     <family>
         <font weight="400" style="normal">UnicodiaFunky.ttf</font>
     </family>
@@ -1999,13 +2002,13 @@
         <font weight="400" style="normal">Unicode16-new.ttf</font>
     </family>
     <family>
-        <font weight="400" style="normal">NotoNaskhArabic-Medium.ttf</font>
-    </family>
-    <family>
         <font weight="400" style="normal">Unknown-symbol-supplementRegular.ttf</font>
     </family>
     <family>
         <font weight="400" style="normal">Symbola-13.otf</font>
+    </family>
+    <family>
+        <font weight="400" style="normal">NotoUnicode.otf</font>
     </family>
     <family>
         <font weight="400" style="normal">Tibetan-Regular.ttf</font>

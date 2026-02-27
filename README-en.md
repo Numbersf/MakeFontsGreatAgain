@@ -42,6 +42,13 @@
 ```[Customization]```Starting from version 15.9.0, the customized content is more visual
  
 #  Update log:
+ 16.1.1.02-26-alpha1(1611022601)
+ - 1.customize.sh: Optimized the logic for handling manager versions and fixed potential misjudgments caused by leftover files.
+ - 2.customize.sh: On non-Xiaomi devices, the product partition will no longer be mounted empty if no .xml is found in the product directory.
+ - 3.Re-added NotoUnicode.otf to fix missing font issues caused by outdated Noto series fonts on lower Android versions.
+ - 4.Added NotoSansPro.otf to keep most Noto series fonts up to date; also integrated the remove_emoji_overlap feature to resolve display conflicts for certain symbol combinations.
+ - 5.Removed all previously built-in Noto-VF* fonts.
+ - 6.Optimized weiui scaling and buttons.
  
  16.1.0.02-23-fix6(1610022306)
  - 1.search_dirs.sh: Added an undo feature. You can place a font*.xml in the module root directory and add font*.xml under reverse in fonts_list.yaml as a new copy source for system fonts with the same name, instead of always using the module root fonts.xml.
