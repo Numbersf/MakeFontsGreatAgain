@@ -2,9 +2,14 @@
 MODPATH=${0%/*}
 . "$MODPATH/lang/lang.sh"
 
+MODE="${MODE:-$1}"
 echo "$(msg POWERED)"
 echo "$(msg GMS_START)"
 echo "$(msg GMS_TEST)"
+
+if [ "$MODE" != "web" ]; then
+echo "$(msg KEY_WARNING)"
+fi
 
 CONFIRM_ACTION() {
   echo "$(msg ACTION_CONFIRM)"
@@ -15,15 +20,14 @@ CONFIRM_ACTION() {
 
     if [ -z "$event" ]; then
       echo "$(msg NO_KEY_DEFAULT)"
-      STOP_APPS
-      break
+      exit 0
+    elif echo "$event" | grep -q "KEY_VOLUMEUP"; then
+      echo "$(msg VOL_UP_EXIT)"
+      exit 0
     elif echo "$event" | grep -q "KEY_VOLUMEDOWN"; then
       echo "$(msg VOL_DOWN)"
       STOP_APPS
       break
-    elif echo "$event" | grep -q "KEY_VOLUMEUP"; then
-      echo "$(msg VOL_UP_EXIT)"
-      exit 0
     fi
   done
 }
@@ -67,11 +71,16 @@ DEL_GMSF() {
   echo "$(msg DEL_ALL_DONE)"
 }
 
-CONFIRM_ACTION
+if [ "$MODE" != "web" ]; then
+  CONFIRM_ACTION
+fi
 STATE_GMSF
 DEL_GMSF
 
-echo "$(msg ALL_DONE)"
-echo "$(msg WAIT_TOUCH)"
-getevent -l | grep -m 1 "BTN_TOUCH"
-echo "$(msg TOUCH_EXIT)"
+
+if [ "$MODE" != "web" ]; then
+  echo "$(msg ALL_DONE)"
+  echo "$(msg WAIT_TOUCH)"
+  getevent -l | grep -m 1 "BTN_TOUCH"
+  echo "$(msg TOUCH_EXIT)"
+fi
