@@ -3,7 +3,8 @@ POWERED="=====Powered by Numbersf====="
 
 ##### action.sh #####
 ACTION_CONFIRM="即将执行GMS屏蔽脚本，包括禁用服务和删除字体文件，关闭部分应用(Gmail、Chrome)！请按音量下键继续, 按音量上键退出。"
-NO_KEY_DEFAULT="未检测到音量键输入，默认继续执行..."
+KEY_WARNING="如果音量键无效，请尝试使用WebUI。"
+NO_KEY_DEFAULT="未检测到音量键输入，默认退出..."
 VOL_UP_EXIT="检测到音量上键, 退出脚本..."
 VOL_DOWN="检测到音量下键, 继续操作..."
 GMS_START="正在为你启用 GMS 字体全局屏蔽!"

@@ -3,7 +3,8 @@ POWERED="=====Powered by Numbersf====="
 
 ##### action.sh #####
 ACTION_CONFIRM="The GMS blocking script will be executed, including disabling services, deleting fonts, and closing Gmail and Chrome apps. Press Volume Down to continue, or Volume Up to exit."
-NO_KEY_DEFAULT="No volume key detected; proceeding by default..."
+KEY_WARNING="If the volume keys don't work, try using the WebUI."
+NO_KEY_DEFAULT="No volume key detected; exiting by default..."
 VOL_UP_EXIT="Volume Up detected, exiting..."
 VOL_DOWN="Volume Down detected, proceeding..."
 GMS_START="Enabling global GMS font blocking for you!"
