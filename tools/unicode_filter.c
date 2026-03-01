@@ -161,13 +161,29 @@ void fix_font_checksum(uint8_t *buf,uint32_t size){
 
 int main(int argc,char **argv){
     if(argc<3){
-        printf("Usage: %s font.ttf U+XXXX-U+YYYY\n",argv[0]);
+        printf("Usage: %s font.ttf U+XXXX-U+YYYY[;U+XXXX-U+YYYY...]\n",argv[0]);
         return 1;
     }
 
     RangeList list;
-    list.count=1;
-    sscanf(argv[2],"U+%x-U+%x",&list.ranges[0].start,&list.ranges[0].end);
+    list.count = 0;
+    char *ranges = strdup(argv[2]);
+    char *token = strtok(ranges, ";,");
+    while(token && list.count < MAX_RANGES){
+        uint32_t start, end;
+        if(sscanf(token,"U+%x-U+%x",&start,&end)==2){
+            list.ranges[list.count].start = start;
+            list.ranges[list.count].end   = end;
+            list.count++;
+        }
+        token = strtok(NULL,";,");
+    }
+    free(ranges);
+
+    if(list.count == 0){
+        printf("No valid ranges parsed.\n");
+        return 1;
+    }
 
     int fd=open(argv[1],O_RDWR);
     struct stat st;
