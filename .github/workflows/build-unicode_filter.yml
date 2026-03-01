@@ -1,0 +1,57 @@
+name: Build unicode_filter
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/unicode_filter.c'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install NDK
+      run: |
+        set -e
+        sudo apt update
+        sudo apt install -y unzip wget
+        wget -q https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
+        unzip -q android-ndk-r26d-linux.zip
+        ls -lh
+        ls android-ndk-r26d
+
+    - name: Build
+      run: |
+        set -e
+
+        export NDK=$PWD/android-ndk-r26d
+        TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+        echo "Using toolchain at: $TOOLCHAIN"
+        ls $TOOLCHAIN | head
+
+        $TOOLCHAIN/aarch64-linux-android21-clang tools/unicode_filter.c -O2 -s -o unicode_filter_arm64
+        $TOOLCHAIN/armv7a-linux-androideabi21-clang tools/unicode_filter.c -O2 -s -o unicode_filter_arm
+        $TOOLCHAIN/x86_64-linux-android21-clang tools/unicode_filter.c -O2 -s -o unicode_filter_x86_64
+        $TOOLCHAIN/i686-linux-android21-clang tools/unicode_filter.c -O2 -s -o unicode_filter_x86
+
+        echo "=== FILE TYPE CHECK ==="
+        file unicode_filter_arm64
+        file unicode_filter_arm
+        file unicode_filter_x86_64
+        file unicode_filter_x86
+
+        echo "=== SIZE CHECK ==="
+        ls -lh unicode_filter_*
+
+        mkdir -p out/bin
+        mv unicode_filter_* out/bin/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: unicode_filter_bin
+        path: out/bin/
