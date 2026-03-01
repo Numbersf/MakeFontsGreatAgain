@@ -1,5 +1,6 @@
 // unicode_filter.c
 // Supports format 4 + format 12
+// Author: 咿云冷雨(Numbersf)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +33,6 @@ static void w32(uint8_t *b,uint32_t v){ b[0]=(v>>24)&0xFF; b[1]=(v>>16)&0xFF; b[
 uint32_t checksum(uint8_t *data,uint32_t len){
     uint32_t sum=0;
     uint32_t n=(len+3)&~3;
-
     for(uint32_t i=0;i<n;i+=4){
         uint32_t v=0;
         if(i+3 < len){
@@ -57,6 +57,26 @@ int should_delete(uint32_t start,uint32_t end,RangeList *list){
     return 0;
 }
 
+// clip a range to delete list, return 1 if fully removed
+int clip_range(uint32_t *start,uint32_t *end,RangeList *list){
+    for(int i=0;i<list->count;i++){
+        Range r = list->ranges[i];
+        if(*end < r.start || *start > r.end)
+            continue; // no overlap
+        if(*start >= r.start && *end <= r.end)
+            return 1; // fully covered, remove
+        if(*start < r.start && *end <= r.end)
+            *end = r.start - 1;
+        else if(*start >= r.start && *end > r.end)
+            *start = r.end + 1;
+        else if(*start < r.start && *end > r.end){
+            // split range: keep left part, remove right part by shrinking
+            *end = r.start - 1;
+        }
+    }
+    return 0;
+}
+
 // format12 safe rebuild
 void rebuild_format12_safe(uint8_t *sub,RangeList *list){
     uint32_t n = r32(sub+12);
@@ -68,9 +88,12 @@ void rebuild_format12_safe(uint8_t *sub,RangeList *list){
         uint32_t start = r32(g);
         uint32_t end   = r32(g+4);
 
-        if(should_delete(start,end,list)){
-            continue;
-        }
+        if(clip_range(&start,&end,list))
+            continue; // fully removed
+
+        // write back possibly clipped range
+        w32(g,start);
+        w32(g+4,end);
 
         if(writeIndex != i)
             memcpy(grp+writeIndex*12,g,12);
@@ -98,7 +121,6 @@ void rebuild_format4_safe(uint8_t *sub,RangeList *list){
     p += segCount*2;
 
     uint16_t *idRangeOffset = (uint16_t*)p;
-    // glyphIdArray follows but we don't modify it
 
     for(int i=0;i<segCount;i++){
         uint32_t start = r16((uint8_t*)&startCode[i]);
@@ -107,6 +129,9 @@ void rebuild_format4_safe(uint8_t *sub,RangeList *list){
         if(start == 0xFFFF) continue;
 
         if(should_delete(start,end,list)){
+            // fully remove this segment
+            w16((uint8_t*)&startCode[i],0xFFFF);
+            w16((uint8_t*)&endCode[i],0xFFFF);
             w16((uint8_t*)&idDelta[i],0);
             w16((uint8_t*)&idRangeOffset[i],0);
         }
@@ -171,7 +196,7 @@ int main(int argc,char **argv){
 
         if(format==12)
             rebuild_format12_safe(sub,&list);
-        if(format==4)
+        else if(format==4)
             rebuild_format4_safe(sub,&list);
     }
 
