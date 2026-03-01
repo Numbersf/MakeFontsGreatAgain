@@ -42,6 +42,27 @@
 ```[Customization]```Starting from version 15.9.0, the customized content is more visual
  
 #  Update log:
+ 
+ 16.2.1.03-01-alpha2(1621030102)
+ - 1.WebUI now allows blocking specific font Unicode ranges. Glyphs outside the specified ranges will remain effective.
+```
+
+1.
+Enter a single font file.
+Click Disable/Restore. Takes effect after reboot.
+ep:BraillePatterns.ttf
+2.
+Enter a single font file + comma + parentheses (Unicode range inside the parentheses).
+Click Disable/Restore. Takes effect immediately. Fallback fonts require a reboot.
+ep: BraillePatterns.ttf,(U+2800-U+28FF)
+3*.
+Enter a single font file + comma + parentheses (Unicode ranges inside the parentheses, separated by semicolons).
+Example: Private-UseTest.ttf,(U+F002B-U+F003B;U+F0038-U+F003F)
+
+```
+ - 2.Added support for blocking GMS fonts in WebUI, which can resolve cases where volume buttons become ineffective.
+ - 3.Newly define U+E111 as a OnePlus symbol (unofficial).
+ 
  16.1.1.02-26-alpha1(1611022601)
  - 1.customize.sh: Optimized the logic for handling manager versions and fixed potential misjudgments caused by leftover files.
  - 2.customize.sh: On non-Xiaomi devices, the product partition will no longer be mounted empty if no .xml is found in the product directory.
