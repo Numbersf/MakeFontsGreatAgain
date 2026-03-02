@@ -1,8 +1,10 @@
 name: Build unicode_filter
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
+    branches:
+      - main
     paths:
       - 'tools/unicode_filter.c'
 
