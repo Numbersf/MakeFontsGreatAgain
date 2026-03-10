@@ -19,12 +19,13 @@ version_check() {
     fi
   fi
 }
+version_check
 
-if [ "$API" -le 30 ]; then
-  ui_print "$(msg ANDROID_11_OR_LOWER)"
+if [ "$API" -le 32 ]; then
+  ui_print "$(msg ANDROID_12_OR_LOWER)"
   mv -f "$MODPATH/system/fonts/NotoColorEmoji-fallback.ttf" "$MODPATH/system/fonts/NotoColorEmoji.ttf"
 else
-  ui_print "$(msg ANDROID_12_OR_HIGHER)"
+  ui_print "$(msg ANDROID_13_OR_HIGHER)"
   rm -f "$MODPATH/system/fonts/NotoColorEmoji-fallback.ttf"
 fi
 
@@ -36,7 +37,16 @@ fi
 MFGA_OLD_ID="/data/adb/modules/Colorfontsproject"
 [ -d "$MFGA_OLD_ID" ] && ui_print "$(msg MODULE_OBSOLETE)" && touch "$MFGA_OLD_ID/remove"
 
-version_check
+deleted_fonts=0
+for f in /data/adb/modules/MFGA/system/fonts/*.disabled; do
+    [ -e "$f" ] && rm -f -- "$f" && deleted_fonts=1
+done
+[ "$deleted_fonts" -eq 1 ] && ui_print "$(msg FONT_BLOCK_DISABLED)"
+deleted_backup=0
+for f in /data/adb/modules/MFGA/uni_backup/*.*; do
+    [ -e "$f" ] && rm -f -- "$f" && deleted_backup=1
+done
+[ "$deleted_backup" -eq 1 ] && ui_print "$(msg UNI_BLOCK_DISABLED)"
 
 MIUI_NAM=$(getprop ro.miui.ui.version.name)
 MIOS_NAM=$(getprop ro.mi.os.version.name)
