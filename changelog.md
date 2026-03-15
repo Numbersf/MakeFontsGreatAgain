@@ -1,5 +1,19 @@
 CN
  
+16.2.2.03-15-alpha3(1622031503)
+ - 1.适配Unicode18.0 Miscellaneous Symbols and Arrows Extended分区符号(U+1DB00..U+1DB1C)
+```
+𝬀𝬁𝬂𝬃𝬄𝬅𝬆𝬇𝬈𝬉𝬊𝬋𝬌𝬍𝬎𝬏𝬐𝬑𝬒𝬓𝬔𝬕𝬖𝬗𝬘𝬙𝬚𝬛𝬜
+```
+ - 2.适配Unicode18.0部分散装符号比如几何形状扩展、杂类符号补充分区
+```
+几何形状扩展:
+🟱🟲🟳🟴🟵🟶🟷🟸🟹🟺🟻🟼🟽🟾🟿
+杂类符号补充:
+𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
+```
+ - 3.主字体同步、修复主分支同步问题、优化部分逻辑
+ 
 16.2.1.03-01-alpha2(1621030102)
  - 1.WebUI新增允许屏蔽字体区间，除区间外的部分将继续生效
 ```
@@ -20,17 +34,23 @@ CN
  - 2.支持WebUI屏蔽GMS字体，用于解决音量键无效的情况
  - 3.新定义U+E111为一加符号(非官方)
  
-16.1.1.02-26-alpha1(1611022601)
- - 1.customize.sh:优化处理管理器版本逻辑，修复可能因为残留导致的误判
- - 2.customize.sh:非小米设备且product中未找到.xml时不再空挂载product分区
- - 3.重新加回NotoUnicode.otf，用于处理低安卓版本Noto系列字体版本过低导致的缺失问题
- - 4.新增NotoSansPro.otf，使大部分Noto系列字体保持最新；同时接入remove_emoji_overlap功能，解决部分符号组合显示冲突
- - 5.删除原先内置的所有Noto*-VF字体
- - 6.优化weiui缩放和按钮
- 
 
 -------
 EN
+ 
+16.2.2.03-15-alpha3(1622031503)
+ - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
+```
+𝬀𝬁𝬂𝬃𝬄𝬅𝬆𝬇𝬈𝬉𝬊𝬋𝬌𝬍𝬎𝬏𝬐𝬑𝬒𝬓𝬔𝬕𝬖𝬗𝬘𝬙𝬚𝬛𝬜
+```
+ - 2.Added support for some Unicode 18.0 scattered symbols, such as those in the Geometric Shapes Extended、Miscellaneous Symbols Supplement block.
+```
+Geometric Shapes Extended:
+🟱🟲🟳🟴🟵🟶🟷🟸🟹🟺🟻🟼🟽🟾🟿
+Miscellaneous Symbols Supplement:
+𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
+```
+ - 3.Synced the main font, fixed issues with main branch synchronization, and optimized some logic.
  
 16.2.1.03-01-alpha2(1621030102)
  - 1.WebUI now allows blocking specific font Unicode ranges. Glyphs outside the specified ranges will remain effective.
@@ -51,14 +71,6 @@ Example: Private-UseTest.ttf,(U+F002B-U+F003B;U+F0038-U+F003F)
 ```
  - 2.Added support for blocking GMS fonts in WebUI, which can resolve cases where volume buttons become ineffective.
  - 3.Newly define U+E111 as a OnePlus symbol (unofficial).
- 
-16.1.1.02-26-alpha1(1611022601)
- - 1.customize.sh: Optimized the logic for handling manager versions and fixed potential misjudgments caused by leftover files.
- - 2.customize.sh: On non-Xiaomi devices, the product partition will no longer be mounted empty if no .xml is found in the product directory.
- - 3.Re-added NotoUnicode.otf to fix missing font issues caused by outdated Noto series fonts on lower Android versions.
- - 4.Added NotoSansPro.otf to keep most Noto series fonts up to date; also integrated the remove_emoji_overlap feature to resolve display conflicts for certain symbol combinations.
- - 5.Removed all previously built-in Noto-VF* fonts.
- - 6.Optimized weiui scaling and buttons.
  
 
 Telegram channel:

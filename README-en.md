@@ -43,6 +43,20 @@
  
 #  Update log:
  
+ 16.2.2.03-15-alpha3(1622031503)
+ - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
+```
+𝬀𝬁𝬂𝬃𝬄𝬅𝬆𝬇𝬈𝬉𝬊𝬋𝬌𝬍𝬎𝬏𝬐𝬑𝬒𝬓𝬔𝬕𝬖𝬗𝬘𝬙𝬚𝬛𝬜
+```
+ - 2.Added support for some Unicode 18.0 scattered symbols, such as those in the Geometric Shapes Extended、Miscellaneous Symbols Supplement block.
+```
+Geometric Shapes Extended:
+🟱🟲🟳🟴🟵🟶🟷🟸🟹🟺🟻🟼🟽🟾🟿
+Miscellaneous Symbols Supplement:
+𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
+```
+ - 3.Synced the main font, fixed issues with main branch synchronization, and optimized some logic.
+ 
  16.2.1.03-01-alpha2(1621030102)
  - 1.WebUI now allows blocking specific font Unicode ranges. Glyphs outside the specified ranges will remain effective.
 ```
