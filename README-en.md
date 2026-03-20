@@ -1,48 +1,38 @@
 **`Enlish`** | [简体中文](README.md)
  
-[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/AndroidCoreLayer) 
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/AndroidCoreLayer)
+[![Coolapk](https://img.shields.io/badge/Follow-Coolapk-3DDC84?style=flat-square&logo=android&logoColor=white)](http://www.coolapk.com/u/28259173)
  
 # MFGA
-> [!CAUTION]
-> 
-> This module is in the testing phase. Since action.sh is used, it requires magisk28.0+,alpha28001+, KernelSU 11986/1.0.2+,(M/R)KernelSU(NEXT)12300+ to be flashed! ! ! 
+> **This module achieves complete glyph coverage of all defined characters in ``Unicode Latest`` (including private use areas and supplementary private use areas) by combining multiple fonts [Font Sources & Licenses](https://github.com/Numbersf/MakeFontsGreatAgain/blob/main/LICENSES.md). ``Reserved`` symbols and undefined characters in private use areas will display their code information using ``ZUno-Number.ttf``**
  
-> [!IMPORTANT]
->
-> Note! Executing action.sh means clicking the execute (operation) button in the manager
-> 
-> KernelSU,apatch series kernel managers, please turn off the default uninstall module², Delta Magisk lacks updates and cannot be adapted
-> 
->>[If the settings interface cannot be opened by Google or the Play store cannot be opened, please enable the (magisk)hide/uninstall module(ksu)² for the all play service](This is a problem with the "play integrity fix" module「pif」)
-
+> **This module can block ``GMS fonts`` through ``action.sh`` and the ``WebUI``, covering most ``GAPPS``. This feature conflicts with the ``PIF module`` (also partially depending on the mounting method), so please enable the uninstall module separately for ``Play Services and Store``, do not enable “default uninstall module”, and do not use the ``shamiko`` whitelist**
  
->>¹ and ² do not conflict, read carefully
+> **This module allows specifying ``ttf/otf`` font ranges to block, while leaving other areas effective. This feature is currently unstable (trimming has minor issues) and is intended for debugging only**
  
->MFGA theory adaptation:
+# Theoretical Compatibility
 ```
--  All major categories of native (A9~A16)
--  ColorOS13-16(Please enable Roboto in settings)
--  OxygenOS 12-16
+-  All major native A9+
+-  ColorOS13+ (for best results, enable Roboto in settings)
+-  OxygenOS 12+
 -  RealmeUI
 -  Flyme
 -  MIUI
--  HyperOS 1-3
+-  HyperOS
 -  Samsung
 ```
  
-```[Global Debut (1)]``` Full coverage of English and numbers in the Play Store
+# Major Version History
+- ``14.9.6`` First version to block ``GMS fonts``
+- ``15.5.1`` Full coverage of ``Unicode16``
+- ``15.8.2`` Full coverage of ``Unicode17``
+- ``15.9.0`` Custom content becomes more visual
+- ``16.0.1`` Brand new solution for partial conflicts between supplementary emoji fonts and main emoji fonts
+- ``16.1.0`` Translation coverage for all scenarios
+- ``16.1.1`` Automated acquisition of ``*font*.xml``
+- ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
-```[Unique feature]``` Full coverage of WeChat public account articles and their contents
-> Huge font library, covering some rare new characters(Mom no longer has to worry about my phone not seeing any symbols~)
- 
-> If the Play Store does not take effect, please click Execute (action.sh) in the manager and wait for the text to run. No need to restart.
- 
-```[Most efficient]```MFGA 15.5.1 version,Unicode16 is fully covered;15.8.2 version,Unicode17 is fully covered.... It is equivalent to any symbol officially recognized as existing, of course there are also some private area symbols used by the system official.
- 
-```[Customization]```Starting from version 15.9.0, the customized content is more visual
- 
-#  Update log:
- 
+#  Update log
  16.2.2.03-15-alpha3(1622031503)
  - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
 ```
@@ -137,7 +127,7 @@ U+F0AFE(󰫾), U+F0ADD(󰫝)
  
  16.0.1.09-15-beta1(1601091501)
  - 1.Added WebUI. New feature: block individual fonts (.ttf, .otf, .ttc). Blocking the main system font is not allowed; the font must come from the module path.
- - 2.Adopted a new deduplication method to completely fix conflicts between NotoColorEmoji.ttf and Symbola-13.otf / Unknown-symbol-supplementRegular.ttf that caused abnormal rendering of some symbol combinations.
+ - 2.Adopted a new deduplication method to completely fix conflicts between NotoColorEmoji.ttf and Unknown-symbol-supplementRegular.ttf that caused abnormal rendering of some symbol combinations.
  - 3.Adapted for Android 9–11, and resolved the issue where systems below Android 10 could not recognize COLRv1, which made NotoColorEmoji.ttf ineffective.
  - 4.Adapted for Android 16.
  
@@ -167,7 +157,6 @@ U+F0AFE(󰫾), U+F0ADD(󰫝)
  
  15.8.5.05-27-beta13(1585052713)
  - 1.Updated UnicodiaFunky.ttf to the latest version to fix the display issue of U+20C1`⃁`in Unicode 17.0.
- - 2.Resolved the issue where punctuation marks following certain emoji would appear as invisible spaces by removing all related punctuation symbols from Symbola-13.otf. This operation does not affect the main font, as emoji display primarily relies on NotoColorEmoji, and Symbola-13.otf only serves as a supplement. Around 200 symbols still rely on Symbola-13.otf for display. If further issues arise, they will be addressed later.
  
  15.8.4.05-15-beta12(1584051512)
  - 1.Fix the issue that Flyme12 cannot be used
@@ -176,6 +165,8 @@ U+F0AFE(󰫾), U+F0ADD(󰫝)
  - 1.Fixed possible call errors of three ttf (SELFUSE does not have this problem)
  - 2.Update Maplemono to 7.2, Iosevka to 33.2.2
  - 3.Remove NotoSansSymbols2.ttf
+ <details>
+ <summary><strong>Click to view all changelogs</strong></summary>
  
  15.8.2.05-04-beta10(1582050410)
  - 1.Update Plangotic to 2.9.5777, delete the conflicting parts, and add the following Chinese characters in the extended E area
@@ -191,10 +182,6 @@ U+F0AFE(󰫾), U+F0ADD(󰫝)
  15.8.1.04-19-beta9(1581041909)
  - 1.Fixed a priority issue caused by an indentation error in font.xml
  - 2.Removed redundant parts of font.xml and renamed some .ttf files
- - 3.Added ZUno-Number.ttf to display all deleted or disabled Unicode symbols before U+FFEF (excluding the Private Use Area), similar to unifont, covering around 1100 symbols
-```
-For example, the removed 無 --> ⺚
-```
  
  15.8.0.04-17-beta8(1580041708)
  - 1.Private-UseTest.ttf: Added some PUA symbol support (U+E880...U+E887, U+E890...U+E895, U+E898...U+E89C, U+E8A0...U+E8B7), a total of 41 symbols
@@ -231,8 +218,6 @@ For example, the removed 無 --> ⺚
 Added 2 non-ideographic symbols: U+2B96 (⮖) and U+18D1D (𘴝)  
 Aligned with the Unicode 17.0 draft, fixed 7 modified Chinese characters: 𮈺, 𠁗, 𣋰, 𣫲, 𥟌, 𩆬, 𬶘,Added 4 new Chinese characters: 𫜻, 𫜼, 𫜽, 𫜾
 ```
- <details>
- <summary><strong>Click to view all changelogs</strong></summary>
  
  15.7.6.03-03-beta3(1576030303)
  - 1.BraillePatterns+SPUA.ttf: supports full-color U+E16A, copied from U+EEEE
@@ -420,7 +405,6 @@ c.Fix cv31, cv33, cv35 combos not working in italic style
 d.Add missing ℃, ℉ 
 e.More identity info
 ```
- - 2.Delete U+1F17F, U+1F17E, U+1F171, and U+1F170 in Noto Color Emoji because the colors are inconsistent with U+1F172-U+1F18D (show the corresponding symbols in Symbola-13.otf instead)
 - 3.Delete invalid font Noto Color Emoji-flag
  
  15.5.2.12-13(1552121302)
@@ -498,7 +482,7 @@ U+1E5D0-U+1E5FF
  
  15.3.6.12-06-RC1(1536120601)
  - 1.Urgently fix a large number of Unicode7.0-13.0 emoji missing
- - 2.Added Symbola-13.otf and NotoSansSymbols2-Regular.ttf to cover more emojis (Unicode 7-16)
+ - 2.Added NotoSansSymbols2-Regular.ttf to cover more emojis (Unicode 7-16)
  - 3.Fixed the problem caused by PlangothicP2-Regular.ttf that spaces U+2000-U+200A will be displayed no matter where (such as YouTube likes)
  
  15.3.5/6.12-03-AI(1535/61203)
