@@ -33,6 +33,14 @@
 - ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
 #  Update log
+ 16.2.3.03-20-alpha5(1623032005)
+ - 1.Removed some non-OFL licensed fonts
+ - 2.Added ZUno-Number.ttf to display Unicode code points of all deleted or disabled symbols in format4 (for private use areas, if not enabled, a black square will appear at the bottom-right)
+```
+Deleted 无-->⺚
+Private Use 
+```
+ 
  16.2.2.03-15-alpha3(1622031503)
  - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
 ```
@@ -461,7 +469,6 @@ U+1E5D0-U+1E5FF
  
  15.4.0.12-08-EE(1540120801)
  - 1.Update Unknown symbol supplementRegular to 32.2.1
- - 2.Adjust the priority of Unknown symbol supplementRegular and Symbolola-13
  - 3.Added font_fallback.xml to solve the adaptation issues of A15 native and some C15 devices (fonts_fallback.xml will not be deleted)
  - 4.Delete the custom function to solve the problem of incorrect glyph characters in the root state, which does not support Unicode16 characters to display errors and swallow characters on some pages.
  

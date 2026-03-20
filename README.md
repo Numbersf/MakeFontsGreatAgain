@@ -33,6 +33,14 @@
 - ``16.2.1`` 允许屏蔽字体区间，保留此字体区间外的其他部分
  
 # 更新日志
+ 16.2.3.03-20-alpha5(1623032005)
+ - 1.移除一些非OFL许可字体
+ - 2.新增ZUno-Number.ttf用于显示format4所有被删除、未启用的符号Unicode编码(私用区未启用右下角将有一个黑色方框)
+```
+被删除的 无-->⺚
+私用区的 
+```
+ 
  16.2.2.03-15-alpha3(1622031503)
  - 1.适配Unicode18.0 Miscellaneous Symbols and Arrows Extended分区符号(U+1DB00..U+1DB1C)
 ```
@@ -461,7 +469,6 @@ U+1E5D0-U+1E5FF
  
  15.4.0.12-08-EE(1540120801)
  - 1.更新Unknown symbol supplementRegular到32.2.1
- - 2.调整Unknown symbol supplementRegular和Symbola-13的优先级
  - 3.新增font_fallback.xml解决A15类原生和部分C15设备适配问题(不会删除fonts_fallback.xml)
  - 4.删除自定义功能解决根状态下字形字符错乱导致不支持Unicode16字符在部分页面显示错误、吞字问题
  

@@ -1,5 +1,13 @@
 CN
  
+16.2.3.03-20-alpha5(1623032005)
+ - 1.移除一些非OFL许可字体
+ - 2.新增ZUno-Number.ttf用于显示format4所有被删除、未启用的符号Unicode编码(私用区未启用右下角将有一个黑色方框)
+```
+被删除的 无-->⺚
+私用区的 
+```
+ 
 16.2.2.03-15-alpha3(1622031503)
  - 1.适配Unicode18.0 Miscellaneous Symbols and Arrows Extended分区符号(U+1DB00..U+1DB1C)
 ```
@@ -14,29 +22,17 @@ CN
 ```
  - 3.主字体同步、修复主分支同步问题、优化部分逻辑
  
-16.2.1.03-01-alpha2(1621030102)
- - 1.WebUI新增允许屏蔽字体区间，除区间外的部分将继续生效
-```
-
-1.
-输入单个字体文件
-点击屏蔽/恢复，重启生效
-例:BraillePatterns.ttf
-2.
-输入单个字体文件+逗号[英]+括号[英](括号内填写Unicode编码)
-点击屏蔽/恢复，立即生效，fallback字体需重启生效
-例:BraillePatterns.ttf,(U+2800-U+28FF)
-3*.
-输入单个字体文件+逗号[英]+括号[英](括号内填写Unicode编码、区间之间用分号[英]隔开)
-例:Private-UseTest.ttf,(U+F002B-U+F003B;U+F0038-U+F003F)
-
-```
- - 2.支持WebUI屏蔽GMS字体，用于解决音量键无效的情况
- - 3.新定义U+E111为一加符号(非官方)
- 
 
 -------
 EN
+ 
+16.2.3.03-20-alpha5(1623032005)
+ - 1.Removed some non-OFL licensed fonts
+ - 2.Added ZUno-Number.ttf to display Unicode code points of all deleted or disabled symbols in format4 (for private use areas, if not enabled, a black square will appear at the bottom-right)
+```
+Deleted 无-->⺚
+Private Use 
+```
  
 16.2.2.03-15-alpha3(1622031503)
  - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
@@ -51,26 +47,6 @@ Miscellaneous Symbols Supplement:
 𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
 ```
  - 3.Synced the main font, fixed issues with main branch synchronization, and optimized some logic.
- 
-16.2.1.03-01-alpha2(1621030102)
- - 1.WebUI now allows blocking specific font Unicode ranges. Glyphs outside the specified ranges will remain effective.
-```
-
-1.
-Enter a single font file.
-Click Disable/Restore. Takes effect after reboot.
-ep:BraillePatterns.ttf
-2.
-Enter a single font file + comma + parentheses (Unicode range inside the parentheses).
-Click Disable/Restore. Takes effect immediately. Fallback fonts require a reboot.
-ep: BraillePatterns.ttf,(U+2800-U+28FF)
-3*.
-Enter a single font file + comma + parentheses (Unicode ranges inside the parentheses, separated by semicolons).
-Example: Private-UseTest.ttf,(U+F002B-U+F003B;U+F0038-U+F003F)
-
-```
- - 2.Added support for blocking GMS fonts in WebUI, which can resolve cases where volume buttons become ineffective.
- - 3.Newly define U+E111 as a OnePlus symbol (unofficial).
  
 
 Telegram channel:
