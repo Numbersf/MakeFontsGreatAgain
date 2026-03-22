@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Install NDK
       run: |
@@ -53,7 +53,7 @@ jobs:
         mv unicode_filter_* out/bin/
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: unicode_filter_bin
         path: out/bin/
