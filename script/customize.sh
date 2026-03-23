@@ -55,7 +55,7 @@ if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
 else
 ui_print "$(msg NON_XIAOMI_REMOVE)"
   if find "$MODPATH/system/product/fonts" -type f -iname "GoogleSans*.ttf" 2>/dev/null | grep -q .; then
-    rm -rf "$MODPATH/zygisk"
+    rm -rf "$MODPATH/zygisk" "$MODPATH/system/product/MiSansVF.ttf"
   else
     rm -rf "$MODPATH/zygisk" "$MODPATH/system/product"
   fi
