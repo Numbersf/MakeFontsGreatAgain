@@ -4,7 +4,7 @@
 
 本模块包含的字体及其许可证如下：
  
-- [Unicode*-New](https://github.com/Numbersf/MakeFontsGreatAgain/tree/main/fonts)：此字体的部分字形提取自 Unicode PDF，如有侵权请立即提出
+- [Unicode*-New](https://github.com/Numbersf/MakeFontsGreatAgain/tree/main/fonts)：此字体的部分字形提取自 Unicode PDF，如有侵权请立即向我们提出
 - [NotoSansPro.otf](https://github.com/Numbersf/MakeFontsGreatAgain/blob/main/fonts%2FNotoSansPro.otf)：此字体是由多个 Noto 家族及其他 OFL-1.1 许可的字体合并
 - [Iosevka](https://github.com/be5invis/Iosevka)
 - [UFSTemp Alpha](https://github.com/Losketch/UnicodeFontSet-magisk-module/blob/main/font-source%2FUFSTempAlpha.fcp)
@@ -24,7 +24,7 @@
 
 The fonts included in this module and their licenses are as follows:
  
-- [Unicode*-New](https://github.com/Numbersf/MakeFontsGreatAgain/tree/main/fonts)：Some glyphs in this font are extracted from Unicode PDFs. If there is any infringement, please report it immediately.
+- [Unicode*-New](https://github.com/Numbersf/MakeFontsGreatAgain/tree/main/fonts)：Some glyphs in this font are extracted from Unicode PDFs. If there is any infringement, please inform us immediately.
 - [NotoSansPro.otf](https://github.com/Numbersf/MakeFontsGreatAgain/blob/main/fonts%2FNotoSansPro.otf): This font is a merged compilation of multiple Noto family fonts and other fonts licensed under OFL-1.1.
 - [Iosevka](https://github.com/be5invis/Iosevka)
 - [UFSTemp Alpha](https://github.com/Losketch/UnicodeFontSet-magisk-module/blob/main/font-source%2FUFSTempAlpha.fcp)
