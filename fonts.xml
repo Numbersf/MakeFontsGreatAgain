@@ -321,66 +321,7 @@
     
 	<!-- 可变等宽字体调用 -->
     <family name="monospace">
-        <font weight="100" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="100"/>
-        </font>
-        <font weight="200" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="200"/>
-        </font>
-        <font weight="300" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="300"/>
-        </font>
-        <font weight="350" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="350"/>
-        </font>
-        <font weight="400" style="normal">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="400"/>
-        </font>
-        <font weight="500" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="500"/>
-        </font>
-        <font weight="600" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="600"/>
-        </font>
-        <font weight="700" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="700"/>
-        </font>
-        <font weight="800" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="800"/>
-        </font>
-        <font weight="900" style="normal" postScriptName="DroidSansMono">DroidSansMono.ttf
-            <axis tag="wght" stylevalue="800"/>
-        </font>
-        <font weight="100" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="100"/>
-        </font>
-        <font weight="200" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="200"/>
-        </font>
-        <font weight="300" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="300"/>
-        </font>
-        <font weight="350" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="350"/>
-        </font>
-        <font weight="400" style="italic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="400"/>
-        </font>
-        <font weight="500" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="500"/>
-        </font>
-        <font weight="600" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="600"/>
-        </font>
-        <font weight="700" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="700"/>
-        </font>
-        <font weight="800" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="800"/>
-        </font>
-        <font weight="900" style="italic" postScriptName="DroidSansMonoitalic">DroidSansMonoitalic.ttf
-            <axis tag="wght" stylevalue="800"/>
-        </font>
+        <font weight="400" style="normal">DroidSansMono.ttf</font>
     </family>
     <!-- 可变等宽字体调用（终） -->
 
@@ -555,15 +496,15 @@
     <!-- fallback fonts -->
     <family lang="und-Arab" variant="elegant">
         <font weight="400" style="normal" postScriptName="NotoNaskhArabic">
-            NotoKufiArabic-Medium.ttf
+            NotoNaskhArabic-Regular.ttf
         </font>
-        <font weight="700" style="normal">NotoKufiArabic-Medium.ttf</font>
+        <font weight="700" style="normal">NotoNaskhArabic-Bold.ttf</font>
     </family>
     <family lang="und-Arab" variant="compact">
         <font weight="400" style="normal" postScriptName="NotoNaskhArabicUI">
-            NotoKufiArabic-Medium.ttf
+            NotoNaskhArabicUI-Regular.ttf
         </font>
-        <font weight="700" style="normal">NotoKufiArabic-Medium.ttf</font>
+        <font weight="700" style="normal">NotoNaskhArabicUI-Bold.ttf</font>
     </family>
     <family lang="und-Ethi">
         <font weight="400" style="normal" postScriptName="NotoSansEthiopic-Regular">
@@ -1635,7 +1576,6 @@
         <font weight="800" style="normal">800.ttf</font>
         <font weight="900" style="normal">900.ttf</font>
     </family>
-
     <family lang="ja">
         <font weight="100" style="normal" index="0" postScriptName="NotoSansCJKJP-Regular">
             NotoSansCJK-Regular.ttc
@@ -1730,11 +1670,11 @@
     </family>
     
     <!-- Emoji文件自定义 -->
-    <family lang="und-Zsye">
-        <font weight="400" style="normal">NotoColorEmoji.ttf</font>
-    </family>
     <family lang="und-Zsye" ignore="true">
         <font weight="400" style="normal">NotoColorEmojiLegacy.ttf</font>
+    </family>
+    <family lang="und-Zsye">
+        <font weight="400" style="normal">NotoColorEmoji.ttf</font>
     </family>
     <family lang="und-Zsye">
         <font weight="400" style="normal">NotoColorEmojiFlags.ttf</font>
