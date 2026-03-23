@@ -53,8 +53,12 @@ MIOS_NAM=$(getprop ro.mi.os.version.name)
 if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
   ui_print "$(msg XIAOMI_KEEP)"
 else
-  ui_print "$(msg NON_XIAOMI_REMOVE)"
-  rm -rf "$MODPATH/zygisk" "$MODPATH/system/product"
+ui_print "$(msg NON_XIAOMI_REMOVE)"
+  if find "$MODPATH/system/product/fonts" -type f -iname "GoogleSans*.ttf" 2>/dev/null | grep -q .; then
+    rm -rf "$MODPATH/zygisk"
+  else
+    rm -rf "$MODPATH/zygisk" "$MODPATH/system/product"
+  fi
 fi
 
 . "$MODPATH/search_dirs.sh"
