@@ -33,6 +33,22 @@
 - ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
 #  Update log
+ 16.2.5.03-23-alpha6(1625032306)
+ - 1.fonts.xml: Preliminary adaptation for Android 17 Beta
+ - 2.Adapted all newly added Unicode 18 characters (except the Seal block) @Losketch
+```
+𒑯𒑵𒑶𒑷𒑸𒑹𒑺𒑻𒑼𒑽𒑾𒑿
+𝽔𝽕𝽎𝼻𝼼𝼽𝼾𝼿𝽀𝽁𝽂𝽃𝽄𝽅𝽆𝽇𝽈𝽉𝽑𝽊𝽒𝽋𝽓𝽌𝽖𝽏𝽘𝽠𝽙𝽡𝽚𝽢𝽛𝽣𝽜𝽤𝽝𝽥𝽞𝽟𝽍
+𘸻𘸯𘸦𘸡𘸗𘸚𘸕𘸋𘸁𘸂𘸀
+𐻉𐻊𐻋𐻌𐻍𐻎𐻏𐻙𐻚𐻛𐻜𐻝𐻞𐻟𐻠𐻡𐻢𐻣𐻤𐻥𐻦𐻧𐻨𐻩𐻪𐻫𐻬𐻭𐻮𐻰𐻱𐻲𐻳𐻴𐻵𐻶𐻷𐻸𐻹
+🪋🪌🪍🫌🫝🫫🫹🫺
+⹠⹡⹢⹣꟢꟝
+₏𐥚𐥛𐥜
+```
+ - 3.ZUno-Number.ttf: Optimized overall outlines and clarity; PUA small squares are further lowered and aligned with the baseline; now rendered directly instead of relying on symbols
+ - 4.LICENSES.md: Adjusted one description
+ - 5.customize.sh: Properly handles the special case of preserving GoogleSans*.ttf
+ 
  16.2.3.03-20-alpha5(1623032005)
  - 1.Removed some non-OFL licensed fonts
  - 2.Added ZUno-Number.ttf to display Unicode code points of all deleted or disabled symbols in format4 (for private use areas, if not enabled, a black square will appear at the bottom-right)

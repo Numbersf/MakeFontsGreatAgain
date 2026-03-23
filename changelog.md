@@ -1,5 +1,21 @@
 CN
  
+16.2.5.03-23-alpha6(1625032306)
+ - 1.fonts.xml:初步适配Android 17 Beta
+ - 2.适配Unicode18除Seal分区外其他分区新增的所有符号@Losketch
+```
+𒑯𒑵𒑶𒑷𒑸𒑹𒑺𒑻𒑼𒑽𒑾𒑿
+𝽔𝽕𝽎𝼻𝼼𝼽𝼾𝼿𝽀𝽁𝽂𝽃𝽄𝽅𝽆𝽇𝽈𝽉𝽑𝽊𝽒𝽋𝽓𝽌𝽖𝽏𝽘𝽠𝽙𝽡𝽚𝽢𝽛𝽣𝽜𝽤𝽝𝽥𝽞𝽟𝽍
+𘸻𘸯𘸦𘸡𘸗𘸚𘸕𘸋𘸁𘸂𘸀
+𐻉𐻊𐻋𐻌𐻍𐻎𐻏𐻙𐻚𐻛𐻜𐻝𐻞𐻟𐻠𐻡𐻢𐻣𐻤𐻥𐻦𐻧𐻨𐻩𐻪𐻫𐻬𐻭𐻮𐻰𐻱𐻲𐻳𐻴𐻵𐻶𐻷𐻸𐻹
+🪋🪌🪍🫌🫝🫫🫹🫺
+⹠⹡⹢⹣꟢꟝
+₏𐥚𐥛𐥜
+```
+ - 3.ZUno-Number.ttf:优化整体轮廓、清晰度，PUA小方块继续下移与底边对齐，直接绘制不再依赖符号
+ - 4.LICENSES.md:调整一处说明
+ - 5.customize.sh:正确处理保留GoogleSans*.ttf的特殊情况
+ 
 16.2.3.03-20-alpha5(1623032005)
  - 1.移除一些非OFL许可字体
  - 2.新增ZUno-Number.ttf用于显示format4所有被删除、未启用的符号Unicode编码(私用区未启用右下角将有一个黑色方框)
@@ -8,23 +24,25 @@ CN
 私用区的 
 ```
  
-16.2.2.03-15-alpha3(1622031503)
- - 1.适配Unicode18.0 Miscellaneous Symbols and Arrows Extended分区符号(U+1DB00..U+1DB1C)
-```
-𝬀𝬁𝬂𝬃𝬄𝬅𝬆𝬇𝬈𝬉𝬊𝬋𝬌𝬍𝬎𝬏𝬐𝬑𝬒𝬓𝬔𝬕𝬖𝬗𝬘𝬙𝬚𝬛𝬜
-```
- - 2.适配Unicode18.0部分散装符号比如几何形状扩展、杂类符号补充分区
-```
-几何形状扩展:
-🟱🟲🟳🟴🟵🟶🟷🟸🟹🟺🟻🟼🟽🟾🟿
-杂类符号补充:
-𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
-```
- - 3.主字体同步、修复主分支同步问题、优化部分逻辑
- 
 
 -------
 EN
+ 
+16.2.5.03-23-alpha6(1625032306)
+ - 1.fonts.xml: Preliminary adaptation for Android 17 Beta
+ - 2.Adapted all newly added Unicode 18 characters (except the Seal block) @Losketch
+```
+𒑯𒑵𒑶𒑷𒑸𒑹𒑺𒑻𒑼𒑽𒑾𒑿
+𝽔𝽕𝽎𝼻𝼼𝼽𝼾𝼿𝽀𝽁𝽂𝽃𝽄𝽅𝽆𝽇𝽈𝽉𝽑𝽊𝽒𝽋𝽓𝽌𝽖𝽏𝽘𝽠𝽙𝽡𝽚𝽢𝽛𝽣𝽜𝽤𝽝𝽥𝽞𝽟𝽍
+𘸻𘸯𘸦𘸡𘸗𘸚𘸕𘸋𘸁𘸂𘸀
+𐻉𐻊𐻋𐻌𐻍𐻎𐻏𐻙𐻚𐻛𐻜𐻝𐻞𐻟𐻠𐻡𐻢𐻣𐻤𐻥𐻦𐻧𐻨𐻩𐻪𐻫𐻬𐻭𐻮𐻰𐻱𐻲𐻳𐻴𐻵𐻶𐻷𐻸𐻹
+🪋🪌🪍🫌🫝🫫🫹🫺
+⹠⹡⹢⹣꟢꟝
+₏𐥚𐥛𐥜
+```
+ - 3.ZUno-Number.ttf: Optimized overall outlines and clarity; PUA small squares are further lowered and aligned with the baseline; now rendered directly instead of relying on symbols
+ - 4.LICENSES.md: Adjusted one description
+ - 5.customize.sh: Properly handles the special case of preserving GoogleSans*.ttf
  
 16.2.3.03-20-alpha5(1623032005)
  - 1.Removed some non-OFL licensed fonts
@@ -33,20 +51,6 @@ EN
 Deleted 无-->⺚
 Private Use 
 ```
- 
-16.2.2.03-15-alpha3(1622031503)
- - 1.Added support for symbols in the Unicode 18.0 Miscellaneous Symbols and Arrows Extended block (U+1DB00..U+1DB1C).
-```
-𝬀𝬁𝬂𝬃𝬄𝬅𝬆𝬇𝬈𝬉𝬊𝬋𝬌𝬍𝬎𝬏𝬐𝬑𝬒𝬓𝬔𝬕𝬖𝬗𝬘𝬙𝬚𝬛𝬜
-```
- - 2.Added support for some Unicode 18.0 scattered symbols, such as those in the Geometric Shapes Extended、Miscellaneous Symbols Supplement block.
-```
-Geometric Shapes Extended:
-🟱🟲🟳🟴🟵🟶🟷🟸🟹🟺🟻🟼🟽🟾🟿
-Miscellaneous Symbols Supplement:
-𜻒𜻓𜻔𜻝𜻞𜻟𜻱𜻲𜻳𜻴𜻵𜻶𜻷𜻸𜻹𜻺𜻻𜻼𜻽
-```
- - 3.Synced the main font, fixed issues with main branch synchronization, and optimized some logic.
  
 
 Telegram channel:
