@@ -37,8 +37,8 @@ PIF_WARNING_MAGISK="[!] Обнаружен модуль PlayIntegrityFix. Доб
 MODULE_OBSOLETE="[-] ID модуля изменён, старый модуль устарел."
 FONT_BLOCK_DISABLED="[-] Модуль обновляется... функция блокировки шрифтов отключена, пожалуйста, настройте заново."
 UNI_BLOCK_DISABLED="[-] Модуль обновляется... функция блокировки диапазона юникода отключена, пожалуйста, настройте заново."
-XIAOMI_KEEP="[!] Обнаружено устройство Xiaomi, каталог zygisk и шрифт MiSansVF сохранены. Удалите пустой модуль шрифтов."
-NON_XIAOMI_REMOVE="[✓] Не Xiaomi-устройство, каталог zygisk и шрифт MiSansVF удалены."
+XIAOMI_KEEP="[!] Обнаружено устройство Xiaomi, каталог zygisk сохранен. Удалите пустой модуль шрифтов."
+NON_XIAOMI_REMOVE="[✓] Не Xiaomi-устройство, каталог zygisk удален."
 
 ##### search_dirs.sh #####
 SEARCH_FONTS="[•] Начало поиска XML-файлов системных шрифтов..."
@@ -49,3 +49,19 @@ ERR_NO_SYSTEM_DIR="[!] В модуле отсутствует каталог sys
 FONT_BLOCKED="[✗] Конфигурация шрифтов заблокирована (чёрный список):"
 FONT_ALLOWED="[✓] Конфигурация шрифтов разрешена:"
 FONT_REVERSE="[*] Используется встроенная конфигурация шрифтов модуля:"
+
+##### unicode_filter.sh #####
+UNI_UNSUPPORTED_ARCH="[!] Неподдерживаемая архитектура:"
+UNI_BIN_MISSING="[!] Бинарный файл не найден или не является исполняемым:"
+UNI_USAGE="Использование:"
+UNI_FONT_NOT_FOUND="[!] Файл шрифта не найден в каталоге шрифтов"
+UNI_BACKUP_CREATED="[+] Резервная копия создана:"
+UNI_PROCESSING="[+] Обработка шрифта:"
+UNI_WITH_RANGES="диапазоны:"
+UNI_SUCCESS="Фильтрация диапазонов Unicode успешно завершена"
+UNI_FAIL="Фильтрация диапазонов Unicode завершилась с ошибкой"
+
+##### service.sh #####
+NOTIFY_TITLE="MFGA"
+NOTIFY_TAG="Tag"
+NOTIFY_BODY="Спасибо за использование модуля Advanced Global Font Module MFGA. Смахните, чтобы закрыть уведомление. Powered by Yiyunlengyu."

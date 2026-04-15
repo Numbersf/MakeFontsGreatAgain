@@ -37,8 +37,8 @@ PIF_WARNING_MAGISK="[!] PlayIntegrityFix exists, please configure DenyList for P
 MODULE_OBSOLETE="[-] Module ID has changed, old module is obsolete."
 FONT_BLOCK_DISABLED="[-] Module updating... Font block feature disabled, please reconfigure."
 UNI_BLOCK_DISABLED="[-] Module updating... Unicode range block feature disabled, please reconfigure."
-XIAOMI_KEEP="[!] Xiaomi device detected, keeping zygisk directory and MiSansVF font."
-NON_XIAOMI_REMOVE="[✓] Non-Xiaomi device detected, removing zygisk directory and MiSansVF font."
+XIAOMI_KEEP="[!] Xiaomi device detected, keeping zygisk directory."
+NON_XIAOMI_REMOVE="[✓] Non-Xiaomi device detected, removing zygisk directory."
 
 ##### search_dirs.sh #####
 SEARCH_FONTS="[•] Starting search for system font XML files..."
@@ -49,3 +49,19 @@ ERR_NO_SYSTEM_DIR="[!] system directory is missing in module"
 FONT_BLOCKED="[✗] Font configuration blocked:"
 FONT_ALLOWED="[✓] Font configuration allowed:"
 FONT_REVERSE="[*] Using built-in module font configuration:"
+
+##### unicode_filter.sh #####
+UNI_UNSUPPORTED_ARCH="[!] Unsupported architecture:"
+UNI_BIN_MISSING="[!] Binary not found or not executable:"
+UNI_USAGE="Usage:"
+UNI_FONT_NOT_FOUND="[!] Font file not found in font directory"
+UNI_BACKUP_CREATED="[+] Backup created:"
+UNI_PROCESSING="[+] Processing font:"
+UNI_WITH_RANGES="with ranges:"
+UNI_SUCCESS="Unicode screening completed successfully"
+UNI_FAIL="Unicode screening failed"
+
+##### service.sh #####
+NOTIFY_TITLE="MFGA"
+NOTIFY_TAG="Tag"
+NOTIFY_BODY="Thank you for using Advanced Global Font Module MFGA. Swipe to dismiss this notification. Powered by Yiyunlengyu."

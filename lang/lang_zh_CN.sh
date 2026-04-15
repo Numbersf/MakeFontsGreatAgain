@@ -37,8 +37,8 @@ PIF_WARNING_MAGISK="[!] 检测到 PlayIntegrityFix 模块存在, 请单独打开
 MODULE_OBSOLETE="[-] 模块 ID 已更改，旧模块已弃用"
 FONT_BLOCK_DISABLED="[-] 模块更新中...停用字体屏蔽功能，请重新设置"
 UNI_BLOCK_DISABLED="[-] 模块更新中...停用字体区间屏蔽功能，请重新设置"
-XIAOMI_KEEP="[!] 设备为米系,所以保留zygisk目录以及MiSansVF字体,请删除空字体模块"
-NON_XIAOMI_REMOVE="[✓] 非米系设备,删除zygisk目录以及MiSansVF字体"
+XIAOMI_KEEP="[!] 设备为米系,所以保留zygisk目录,请删除空字体模块"
+NON_XIAOMI_REMOVE="[✓] 非米系设备,删除zygisk目录"
 
 ##### search_dirs.sh #####
 SEARCH_FONTS="[•] 开始搜索系统字体 XML 文件..."
@@ -49,3 +49,19 @@ ERR_NO_SYSTEM_DIR="[!] 模块缺少 system 目录"
 FONT_BLOCKED="[✗] 已拦截黑名单字体配置:"
 FONT_ALLOWED="[✓] 已放行字体配置:"
 FONT_REVERSE="[*] 使用模块内置字体配置:"
+
+##### unicode_filter.sh #####
+UNI_UNSUPPORTED_ARCH="[!] 不支持的处理器架构:"
+UNI_BIN_MISSING="[!] 二进制文件未找到或不可执行:"
+UNI_USAGE="用法:"
+UNI_FONT_NOT_FOUND="[!] 在字体目录中未找到字体文件"
+UNI_BACKUP_CREATED="[+] 备份已创建:"
+UNI_PROCESSING="[+] 正在处理字体:"
+UNI_WITH_RANGES="区间:"
+UNI_SUCCESS="Unicode 区间屏蔽已成功完成"
+UNI_FAIL="Unicode 区间屏蔽失败"
+
+##### service.sh #####
+NOTIFY_TITLE="MFGA"
+NOTIFY_TAG="Tag"
+NOTIFY_BODY="感谢使用高级全局字体模块MFGA，滑动以删除本通知。Powered by Yiyunlengyu（咿云冷雨）"
