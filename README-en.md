@@ -33,6 +33,12 @@
 - ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
 #  Update log
+ 16.3.1.04-15-beta(1631041501)
+ - 1.unicode_filter.c:Completely fixed interval jumping and out-of-bounds issues.
+ - 2.fonts.xml:Adapted symbol calls for certain Private Use Areas (PUA) in RedMagic OS.
+ - 3.Private-UseTest.ttf:Adapted support for certain Nerd Font icons/symbols.
+ - 4.Sync with DisableMiOverlay v1.0.6: Fixed crashes in Flutter-based apps (Weather/Gallery) and resolved the loss of variable font capabilities.
+ 
  16.2.5.03-23-alpha6(1625032306)
  - 1.fonts.xml: Preliminary adaptation for Android 17 Beta
  - 2.Adapted all newly added Unicode 18 characters (except the Seal block) @Losketch
