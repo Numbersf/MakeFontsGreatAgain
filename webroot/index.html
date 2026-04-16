@@ -39,7 +39,7 @@
                             <span class="help-code" data-copy="XXX.ttf">XXX.ttf</span>
                             举例:<br>
                             <span class="help-code" data-copy="Private-UseTest.ttf">Private-UseTest.ttf</span>
-                            输入一个字体(ttf/otf/ttc)，自动重命名为 .disabled 禁用，重启生效。禁止对主字体进行此操作
+                            输入一个字体文件(ttf/otf/ttc)，自动重命名为 .disabled 禁用，重启生效。禁止对主字体进行此操作
                         </div>
                     </div>
 
@@ -50,7 +50,9 @@
                             <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX)</span>
                             举例:<br>
                             <span class="help-code" data-copy="BraillePatterns.ttf,(U+2800-U+28FF)">BraillePatterns.ttf,(U+2800-U+28FF)</span>
-                            范围使用 Unicode 编码，从小到大。必须是 XXX.ttf 里有的范围才能处理。可以仅处理一个 Unicode。请严格按照此格式输入!
+                            <span class="help-code" data-copy="Unknown-symbol-supplementRegular.ttf,(U+EE01-U+EE01)">Unknown-symbol-supplementRegular.ttf,(U+EE01-U+EE01)</span>
+                            屏蔽一个字体文件单个被指定的符号范围，其他部分将继续生效<br>
+                            使用 Unicode 编码，编码从小到大排列。必须是此字体文件里有的范围才能处理。可以仅处理一个 Unicode，但是格式不能变。还原时只输入字体文件名即可，不需要加范围。
                         </div>
                     </div>
 
@@ -65,13 +67,15 @@
                             <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)</span>
                             <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)</span>
                             <span class="help-code help-code-dim">•••</span>
-                            你可以通过";"分离多个区间，区间必须从小到大，且各区间范围尽量避免相交。请严格按照此格式输入!
+                            屏蔽一个字体文件多个被指定的符号范围，其他部分将继续生效<br>
+                            使用 Unicode 编码，编码从小到大排列。你可以通过";"分离多个区间，区间也从小到大排列，且各区间尽量避免相交。必须是此字体文件里有的范围才能处理。还原时只输入字体文件名即可，不需要加范围。
                         </div>
                     </div>
 
                     <div class="help-section">
                         <div class="help-sub-title">屏蔽 GMS 字体</div>
-                        <div class="help-answer">点击开关后会立即执行而不再询问，更多用于 action.sh 音量键控制以及触屏识别失效的情况。正常执行结束会显示退出码 0，开关自动重新关闭</div>
+                        <div class="help-answer">暂停 GMS 自带的字体服务并删除本地缓存字体文件使部分 GAPP 指向系统字体。执行时会强行停止(杀后台) Gmail 和 Chrome 一次。执行后出现应用闪退请重启手机。理论上所有 Android8+ 设备都能正常工作。隔一段时间字体就会再次缓存出来，需再次执行</div>
+                        <div class="help-answer">点击开关后会立即执行而不再询问，WebUI版本更多用于 action.sh 音量键控制/触屏识别失效时。正常执行结束会显示退出码 0，结束后开关会再次关闭</div>
                     </div>
                 </div>
 

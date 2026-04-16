@@ -195,6 +195,11 @@ body {
     color: var(--text-muted);
 }
 
+.gms-text-group .toggle-text {
+    white-space: nowrap;
+    word-break: normal;
+}
+
 /* 输入框 */
 .simple-input {
     width: 100%;
