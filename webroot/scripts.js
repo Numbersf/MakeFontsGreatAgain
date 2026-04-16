@@ -118,6 +118,7 @@ async function handleFont(action) {
             } catch (e) {
                 warn(`[✗] 屏蔽失败: ${filename}, 错误: ${e}`);
             }
+            await showCurrentFiles();
         }
 
     } else {
@@ -151,13 +152,11 @@ async function handleFont(action) {
             if (output) log(`[✓] ${output}`);
             // 删除备份文件
             await exec(`[ -f "${backupPath}" ] && rm "${backupPath}" || echo "备份文件不存在"`);
+            if (disabledExists) await showCurrentFiles();
         } catch (e) {
             warn(`[✗] 恢复失败: ${name}, 错误: ${e}`);
         }
     }
-
-    // 最后显示当前字体目录
-    await showCurrentFiles();
 }
 
 async function handleGms() {
