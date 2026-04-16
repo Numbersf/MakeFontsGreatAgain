@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+    <title>MFGA 字体管理</title>
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/mmrl/insets.css" />
+    <script type="module" crossorigin src="scripts.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div class="header">
+            <h3>
+                MFGA 字体管理
+                <span id="version-text"></span>
+                <button class="help-btn ripple-element" id="help-btn" aria-label="帮助">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                </button>
+            </h3>
+        </div>
+
+        <!-- 帮助浮层 -->
+        <div class="help-overlay" id="help-overlay">
+            <div class="help-panel">
+                <div class="help-body">
+                    <h2 class="help-main-title">帮助</h2>
+
+                    <div class="help-section">
+                        <div class="help-sub-title">屏蔽字体</div>
+                        <div class="help-answer">
+                            格式:<br>
+                            <span class="help-code" data-copy="XXX.ttf">XXX.ttf</span>
+                            举例:<br>
+                            <span class="help-code" data-copy="Private-UseTest.ttf">Private-UseTest.ttf</span>
+                            输入一个字体(ttf/otf/ttc)，自动重命名为 .disabled 禁用，重启生效。禁止对主字体进行此操作
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-sub-title">屏蔽字体单区间</div>
+                        <div class="help-answer">
+                            格式:<br>
+                            <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX)</span>
+                            举例:<br>
+                            <span class="help-code" data-copy="BraillePatterns.ttf,(U+2800-U+28FF)">BraillePatterns.ttf,(U+2800-U+28FF)</span>
+                            范围使用 Unicode 编码，从小到大。必须是 XXX.ttf 里有的范围才能处理。可以仅处理一个 Unicode。请严格按照此格式输入!
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-sub-title">屏蔽字体多区间</div>
+                        <div class="help-answer">
+                            格式:<br>
+                            <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX)</span>
+                            <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX;U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX;U+XXXX-U+XXXX)</span>
+                            <span class="help-code help-code-dim">•••</span>
+                            举例:<br>
+                            <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)</span>
+                            <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)</span>
+                            <span class="help-code help-code-dim">•••</span>
+                            你可以通过";"分离多个区间，区间必须从小到大，且各区间范围尽量避免相交。请严格按照此格式输入!
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <div class="help-sub-title">屏蔽 GMS 字体</div>
+                        <div class="help-answer">点击开关后会立即执行而不再询问，更多用于 action.sh 音量键控制以及触屏识别失效的情况。正常执行结束会显示退出码 0，开关自动重新关闭</div>
+                    </div>
+                </div>
+
+                <button class="help-close ripple-element" id="help-close">关闭</button>
+            </div>
+        </div>
+
+        <div class="button-box">
+
+            <div class="toggle-list font-block">
+                <div class="font-text-group">
+                    <div class="toggle-text">
+                        屏蔽字体文件或区间
+                    </div>
+                    <div class="font-desc-text">
+                        重启手机生效
+                    </div>
+                </div>
+                <input id="font-input"
+                       class="simple-input"
+                       placeholder="例:BraillePatterns.ttf,(U+2800-U+28FF)">
+                <div class="font-btn-row">
+                    <div class="mini-btn ripple-element" id="disable-font">
+                        屏蔽
+                    </div>
+                    <div class="mini-btn ripple-element" id="restore-font">
+                        恢复
+                    </div>
+                </div>
+            </div>
+
+            <div class="toggle-list gms-row">
+                <div class="gms-text-group">
+                    <div class="toggle-text">
+                        屏蔽GMS字体及字体服务
+                    </div>
+                    <div class="gms-desc-text">
+                        此选项将<span style="color:#ef4444;font-weight:bold;">跳过音量键选择</span>直接运行
+                    </div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="gms-switch">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="toggle-list" id="path-row" style="cursor: default;">
+                <div class="toggle-text">
+                    喵喵喵？
+                </div>
+            </div>
+        </div>
+
+<div class="output-terminal">
+    <div class="output-terminal-header">
+        <!-- 左边图标 -->
+        <span class="output-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="18px" width="18px">
+                <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z"/>
+            </svg>
+        </span>
+        <!-- 右边按钮 -->
+        <div class="terminal-buttons">
+            <button class="mini-btn ripple-element copy-terminal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="12px" width="12px">
+                    <path fill="currentColor" fill-rule="evenodd" d="M16 2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM20 6H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2ZM8 8h12v14H8V8Z"/>
+                </svg>
+                copy
+            </button>
+            <!-- Clear 按钮 -->
+            <button class="mini-btn ripple-element clear-terminal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="12px" width="12px">
+                    <path fill="currentColor" d="M280-110q-33 0-56.5-13.5T200-190v-530h-40v-90h200v-50h240v50h200v90h-40v530q0 33-23.5 56.5T680-110H280Zm80-150h80v-370h-80v370Zm160 0h80v-370h-80v370"/>
+                </svg>
+                clear
+            </button>
+        </div>
+    </div>
+    <div class="output-terminal-content output-content"></div>
+</div>
+
+    </div>
+</body>
+</html>
