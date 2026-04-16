@@ -8,7 +8,7 @@
  
 > **This module can block ``GMS fonts`` through ``action.sh`` and the ``WebUI``, covering most ``GAPPS``. This feature conflicts with the ``PIF module`` (also partially depending on the mounting method), so please enable the uninstall module separately for ``Play Services and Store``, do not enable “default uninstall module”, and do not use the ``shamiko`` whitelist**
  
-> **This module allows specifying ``ttf/otf`` font ranges to block, while leaving other areas effective. This feature is currently unstable (trimming has minor issues) and is intended for debugging only**
+> **This module allows specifying ``ttf/otf`` font ranges to block, while leaving other areas effective**
  
 # Theoretical Compatibility
 ```
