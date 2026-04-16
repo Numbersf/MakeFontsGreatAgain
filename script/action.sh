@@ -26,7 +26,6 @@ CONFIRM_ACTION() {
       exit 0
     elif echo "$event" | grep -q "KEY_VOLUMEDOWN"; then
       echo "$(msg VOL_DOWN)"
-      STOP_APPS
       break
     fi
   done
@@ -74,6 +73,7 @@ DEL_GMSF() {
 if [ "$MODE" != "web" ]; then
   CONFIRM_ACTION
 fi
+STOP_APPS
 STATE_GMSF
 DEL_GMSF
 
