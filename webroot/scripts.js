@@ -1,13 +1,105 @@
 import { exec, spawn, toast } from "./assets/kernelsu.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+const LOCALES_BASE = "./strings/locales/";
+const FALLBACK_LOCALE = "zh_CN";
+
+// 与 lang.sh 相似的 locale 解析逻辑
+async function resolveLocaleKey() {
+    let raw = "";
+
+    try {
+        const r = await exec("getprop persist.sys.locale 2>/dev/null");
+        raw = (typeof r === "string" ? r : (r.stdout ?? r.output ?? "")).trim();
+        raw = raw.split(",")[0].replace(/-/g, "_");
+        if (raw === "null" || raw.includes("Failed")) raw = "";
+    } catch (_) {}
+
+    if (!raw) {
+        try {
+            const r = await exec("settings get system system_locales 2>/dev/null");
+            raw = (typeof r === "string" ? r : (r.stdout ?? r.output ?? "")).trim();
+            raw = raw.split(",")[0].replace(/-/g, "_");
+            if (raw === "null" || raw.includes("Failed")) raw = "";
+        } catch (_) {}
+    }
+
+    if (!raw) return [FALLBACK_LOCALE];
+
+    // 标准化：language 小写，Script/Region 按 lang.sh 规则处理
+    const parts = raw.split("_");
+    const langCode = parts[0].toLowerCase();
+    let regionCode = "";
+    if (parts.length >= 2) {
+        const p1 = parts[1];
+        // Script 段为 4 个字母（如 Hans），Region 段为 2 个字母（如 CN）
+        regionCode = p1.length === 4
+            ? (parts[2] ? parts[2].toUpperCase() : "")
+            : p1.toUpperCase();
+    }
+
+    // 优先级：lang_REGION → lang（前缀匹配由加载循环处理）→ fallback
+    const candidates = [];
+    if (regionCode) candidates.push(`${langCode}_${regionCode}`);
+    candidates.push(langCode);
+    candidates.push(FALLBACK_LOCALE);
+    return [...new Set(candidates)];
+}
+
+// 按候选列表顺序 fetch JSON，返回第一个成功的
+// 对于纯 langCode（如 "zh"），额外尝试前缀匹配
+async function loadTranslations(candidates) {
+    const KNOWN_LOCALES = ["zh_CN", "ja_JP", "en_US", "ru_RU"];
+
+    for (const key of candidates) {
+        try {
+            const res = await fetch(`${LOCALES_BASE}${key}.json`);
+            if (res.ok) return await res.json();
+        } catch (_) {}
+
+        if (!key.includes("_")) {
+            const prefix  = key.toLowerCase() + "_";
+            const matched = KNOWN_LOCALES.find(k => k.toLowerCase().startsWith(prefix));
+            if (matched) {
+                try {
+                    const res = await fetch(`${LOCALES_BASE}${matched}.json`);
+                    if (res.ok) return await res.json();
+                } catch (_) {}
+            }
+        }
+    }
+
+    return {};
+}
+
+// 将翻译表应用到 DOM
+function applyTranslations(T) {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (T[key] !== undefined) el.innerHTML = T[key];
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (T[key] !== undefined) el.placeholder = T[key];
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+// 检测 locale → 加载对应 JSON → 翻译 DOM
+const candidates = await resolveLocaleKey();
+const T = await loadTranslations(candidates);
+applyTranslations(T);
+
+// 取翻译字符串，缺失时返回 key 自身
+const t = key => T[key] ?? key;
 
 const fontInput = document.getElementById('font-input');
 const disableBtn = document.getElementById('disable-font');
 const restoreBtn = document.getElementById('restore-font');
 const gmsSwitch = document.getElementById('gms-switch');
 const terminal = document.querySelector('.output-terminal-content');
-const clearBtn = document.querySelector('.terminal-buttons .clear-terminal');
+const cleanBtn = document.querySelector('.terminal-buttons .clean-terminal');
 const copyBtn = document.querySelector('.terminal-buttons .copy-terminal');
 
 console.log("gmsSwitch =", gmsSwitch);
@@ -38,19 +130,19 @@ async function showCurrentFiles() {
             ? ls
             : (ls?.output ?? ls?.stdout ?? ls?.stderr ?? JSON.stringify(ls));
         output = output.trim();
-        log(`[+] 当前字体目录:<br>${highlightDisabledFiles(output).replace(/\n/g, '<br>')}`);
+        log(`${t('LOG_FONT_DIR')}<br>${highlightDisabledFiles(output).replace(/\n/g, '<br>')}`);
     } catch (e) {
-        warn(`[!] 读取目录失败: ${e}`);
+        warn(`${t('LOG_DIR_FAIL')}${e}`);
     }
 }
 
 async function handleFont(action) {
     const name = fontInput.value.trim();
-    if (!name) { toast('请输入字体文件喵'); return; }
-    if (!/^.+\.(?:ttf|otf|ttc)(?:,\(.+\))?$/.test(name)) { toast('填写信息不合法'); return; }
+    if (!name) { toast(t('TOAST_INPUT_EMPTY')); return; }
+    if (!/^.+\.(?:ttf|otf|ttc)(?:,\(.+\))?$/.test(name)) { toast(t('TOAST_INPUT_INVALID')); return; }
 
     if (/^\d{3}(\.\w+)?$/.test(name) && action === 'disable') {
-        warn(`[!] 检测到你选择了疑似主字体的文件 (${name})，如果确实是主字体，请立即恢复！`);
+        warn(t('LOG_WARN_MAIN_FONT').replace('{name}', name));
     }
 
     await ensureDir();
@@ -63,9 +155,8 @@ async function handleFont(action) {
 
     async function fileExists(path) {
         const result = await exec(`[ -f "${path}" ] && echo yes || echo no`);
-        let output = '';
-        if (typeof result === 'string') output = result;
-        else if (result && typeof result === 'object') output = result.stdout ?? result.output ?? '';
+        let output = typeof result === 'string' ? result
+            : (result?.stdout ?? result?.output ?? '');
         return output.trim() === 'yes';
     }
 
@@ -80,17 +171,18 @@ async function handleFont(action) {
         const disabledExists = await fileExists(disabledPath);
         const backupExists = await fileExists(backupPath);
         if (disabledExists || backupExists) {
-            warn(`字体 ${filename} 尚未恢复，禁止重复屏蔽！`);
+            warn(`字体 ${filename} ${t('LOG_REPEAT_BLOCK')}`);
             return;
         }
         // 检查是否有 Unicode 区间
         if (ranges) {
             // 有 Unicode 区间 → 调用 unicode_filter.sh
             const cmd = `sh /data/adb/modules/MFGA/unicode_filter.sh "${filename}" "${ranges}"`;
-            log(`[+] 尝试屏蔽: ${filename}, 区间: ${ranges}`);
+            log(`${t('LOG_TRY_DISABLE')}${filename}${t('LOG_RANGE')}${ranges}`);
             try {
                 const result = await exec(cmd);
-                let output = typeof result === 'string' ? result : (result.stdout ?? result.output ?? JSON.stringify(result));
+                let output = typeof result === 'string' ? result
+                    : (result.stdout ?? result.output ?? JSON.stringify(result));
                 output = output.trim();
                 const exitCode = (typeof result === 'object' && result !== null)
                     ? (result.exitCode ?? result.code ?? result.exit_code ?? null)
@@ -99,24 +191,29 @@ async function handleFont(action) {
                 const htmlOutput = output.replace(/\n/g, '<br>');
                 if (succeeded) {
                     if (htmlOutput) log(htmlOutput);
-                    log(`[✓] 屏蔽成功: ${filename}`);
+                    log(`${t('LOG_DISABLED_OK')}${filename}`);
                 } else {
                     if (htmlOutput) warn(htmlOutput);
-                    warn(`[✗] 屏蔽失败: ${filename}`);
+                    warn(`${t('LOG_DISABLED_FAIL')}${filename}`);
                 }
             } catch (e) {
-                warn(`[✗] 屏蔽异常: ${filename}, 错误: ${e}`);
+                warn(`${t('LOG_DISABLED_ERR')}${filename}${t('LOG_ERR_SUFFIX')}${e}`);
             }
         } else {
             // 无 Unicode → 直接 mv 改名为 .disabled
             try {
-                const result = await exec(`[ -f "${filePath}" ] && mv "${filePath}" "${disabledPath}" && echo "已屏蔽: ${filename}" || echo "未找到: ${filename}"`);
-                let output = typeof result === 'string' ? result : (result.stdout ?? result.output ?? '');
+                const disabledText = t('LOG_DISABLED_TEXT');
+                const notFoundText = t('LOG_NOT_FOUND_TEXT');
+                const result = await exec(
+                    `[ -f "${filePath}" ] && mv "${filePath}" "${disabledPath}" && echo "${disabledText}${filename}" || echo "${notFoundText}${filename}"`
+                );
+                let output = typeof result === 'string' ? result
+                    : (result.stdout ?? result.output ?? '');
                 output = output.trim();
-                if (output.includes('已屏蔽')) log(`[✓] ${output}`);
-                else if (output.includes('未找到')) warn(`[!] ${output}`);
+                if (output.includes(disabledText)) log(`[✓] ${output}`);
+                else if (output.includes(notFoundText)) warn(`[!] ${output}`);
             } catch (e) {
-                warn(`[✗] 屏蔽失败: ${filename}, 错误: ${e}`);
+                warn(`${t('LOG_DISABLED_FAIL')}${filename}${t('LOG_ERR_SUFFIX')}${e}`);
             }
             await showCurrentFiles();
         }
@@ -124,86 +221,76 @@ async function handleFont(action) {
     } else {
         // 恢复逻辑
         let restoreCmd = '';
-
         const disabledExists = await fileExists(disabledPath);
         if (disabledExists) {
             // 优先 .disabled
-            restoreCmd = `mv "${disabledPath}" "${filePath}" && echo "已恢复: ${name}"`;
+            restoreCmd = `mv "${disabledPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${name}"`;
         } else {
             const backupExists = await fileExists(backupPath);
             if (backupExists) {
                 // 其次 uni_backup
                 if (/.*\.(ttf|otf|ttc)$/i.test(name)) {
-                    restoreCmd = `cp "${backupPath}" "${filePath}" && echo "已恢复: ${filename}"`;
+                    restoreCmd = `cp "${backupPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${filename}"`;
                 } else {
-                    warn('[!] 有区间的字体恢复只需输入字体文件名');
+                    warn(t('LOG_RANGE_RESTORE_HINT'));
                     return;
                 }
             } else {
-                warn(`[!] 未找到可恢复的字体: ${name}`);
+                warn(`${t('LOG_NOT_FOUND_RESTORE')}${name}`);
                 return;
             }
         }
 
         try {
             const result = await exec(restoreCmd);
-            let output = typeof result === 'string' ? result : (result.stdout ?? result.output ?? '');
+            let output = typeof result === 'string' ? result
+                : (result.stdout ?? result.output ?? '');
             output = output.trim();
             if (output) log(`[✓] ${output}`);
-            // 删除备份文件
-            await exec(`[ -f "${backupPath}" ] && rm "${backupPath}" || echo "备份文件不存在"`);
+            const backupMissingText = t('LOG_BACKUP_MISSING');
+            await exec(`[ -f "${backupPath}" ] && rm "${backupPath}" || echo "${backupMissingText}"`);
             if (disabledExists) await showCurrentFiles();
         } catch (e) {
-            warn(`[✗] 恢复失败: ${name}, 错误: ${e}`);
+            warn(`${t('LOG_RESTORE_FAIL')}${name}${t('LOG_ERR_SUFFIX')}${e}`);
         }
     }
 }
 
 async function handleGms() {
-    if (!gmsSwitch) {
-        warn("[✗] 未找到 gms-switch 元素");
-        return;
-    }
-
+    if (!gmsSwitch) { warn(t('LOG_NO_GMS_SWITCH')); return; }
     if (gmsSwitch.disabled) return;
     gmsSwitch.disabled = true;
     gmsSwitch.checked = true;
 
-    const runScript = (cmd, args = [], envVars = {}) => {
-        return new Promise((resolve, reject) => {
-            const child = spawn(cmd, args, { env: envVars });
-
-            // 统一处理 stdout / stderr 输出
-            const handleOutput = (stream, logger) => {
-                stream.on('data', chunk => {
-                    const text = chunk.toString().trim();
-                    if (text) logger(text.replace(/\n/g, '<br>'));
-                });
-            };
-            handleOutput(child.stdout, log);
-            handleOutput(child.stderr, warn);
-
-            child.on('exit', code => resolve(code));
-            child.on('error', err => reject(err));
-        });
-    };
+    const runScript = (cmd, args = [], envVars = {}) => new Promise((resolve, reject) => {
+        const child = spawn(cmd, args, { env: envVars });
+        const handleOutput = (stream, logger) => {
+            stream.on('data', chunk => {
+                const text = chunk.toString().trim();
+                if (text) logger(text.replace(/\n/g, '<br>'));
+            });
+        };
+        handleOutput(child.stdout, log);
+        handleOutput(child.stderr, warn);
+        child.on('exit',  code => resolve(code));
+        child.on('error', err  => reject(err));
+    });
 
     try {
         const code = await runScript('sh', ['/data/adb/modules/MFGA/action.sh'], { MODE: 'web' });
-        log(`[✓] GMSF 清理屏蔽完成, 退出码: ${code}`);
+        log(`${t('LOG_GMS_DONE')}${code}`);
     } catch (err) {
-        warn(`[✗] GMSF 执行异常: ${err}`);
+        warn(`${t('LOG_GMS_ERR')}${err}`);
     } finally {
-        // 无论成功或失败，都恢复按钮状态
-        gmsSwitch.checked = false;
+        gmsSwitch.checked  = false;
         gmsSwitch.disabled = false;
     }
 }
 
-// GMSF开关
+// GMSF 开关
 if (gmsSwitch) {
     gmsSwitch.addEventListener('change', () => {
-        if (gmsSwitch.checked) handleGms(); // 勾选立即触发
+        if (gmsSwitch.checked) handleGms();
     });
 } else {
     console.warn("gmsSwitch 未找到，监听器未绑定");
@@ -214,18 +301,21 @@ if (disableBtn) disableBtn.addEventListener('click', () => handleFont('disable')
 if (restoreBtn) restoreBtn.addEventListener('click', () => handleFont('restore'));
 
 // 清理和复制按钮
-if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
+if (cleanBtn) {
+    cleanBtn.addEventListener('click', () => {
         terminal.innerHTML = '';
-        toast('清除完成喵');
+        toast(t('TOAST_CLEANED'));
     });
 }
-if (copyBtn) copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(terminal.innerText)
-        .then(() => toast('已复制输出内容喵'))
-        .catch(() => toast('复制失败'));
-});
+if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(terminal.innerText)
+            .then(()  => toast(t('TOAST_COPIED')))
+            .catch(()  => toast(t('TOAST_COPY_FAIL')));
+    });
+}
 
+// 双指缩放终端
 let initial = null;
 let fontSize = 14;
 
@@ -256,7 +346,7 @@ terminal.addEventListener('touchmove', (e) => {
     }
 });
 
-document.addEventListener('touchmove', function (e) {
+document.addEventListener('touchmove', (e) => {
     if (e.touches.length > 1 && !terminal.contains(e.target)) e.preventDefault();
 }, { passive: false });
 
@@ -265,29 +355,19 @@ const helpOverlay = document.getElementById('help-overlay');
 const helpBtn     = document.getElementById('help-btn');
 const helpClose   = document.getElementById('help-close');
 
-helpBtn.addEventListener('click', () => {
-    helpOverlay.classList.add('open');
-});
+helpBtn.addEventListener('click', () => helpOverlay.classList.add('open'));
 
-function closeHelp() {
-    helpOverlay.classList.remove('open');
-}
-
+function closeHelp() { helpOverlay.classList.remove('open'); }
 helpClose.addEventListener('click', closeHelp);
-
-// 点击遮罩关闭
-helpOverlay.addEventListener('click', (e) => {
-    if (e.target === helpOverlay) closeHelp();
-});
+helpOverlay.addEventListener('click', (e) => { if (e.target === helpOverlay) closeHelp(); });
 
 // 可复制的代码块
 document.querySelectorAll('.help-code[data-copy]').forEach(el => {
     el.addEventListener('click', () => {
         const text = el.getAttribute('data-copy');
         navigator.clipboard.writeText(text)
-            .then(() => toast('已复制样本喵'))
+            .then(() => toast(t('TOAST_SAMPLE_COPIED')))
             .catch(() => {
-                // 降级方案
                 const ta = document.createElement('textarea');
                 ta.value = text;
                 ta.style.position = 'fixed';
@@ -296,7 +376,7 @@ document.querySelectorAll('.help-code[data-copy]').forEach(el => {
                 ta.select();
                 document.execCommand('copy');
                 document.body.removeChild(ta);
-                toast('已复制样本喵');
+                toast(t('TOAST_SAMPLE_COPIED'));
             });
     });
 });

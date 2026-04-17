@@ -16,7 +16,7 @@
     <div class="content">
         <div class="header">
             <h3>
-                MFGA 字体管理
+                <span data-i18n="PAGE_TITLE">MFGA 字体管理</span>
                 <span id="version-text"></span>
                 <button class="help-btn ripple-element" id="help-btn" aria-label="帮助">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="currentColor">
@@ -30,56 +30,56 @@
         <div class="help-overlay" id="help-overlay">
             <div class="help-panel">
                 <div class="help-body">
-                    <h2 class="help-main-title">帮助</h2>
+                    <h2 class="help-main-title" data-i18n="HELP_TITLE">帮助</h2>
 
                     <div class="help-section">
-                        <div class="help-sub-title">屏蔽字体</div>
+                        <div class="help-sub-title" data-i18n="HELP_BLOCK_FONT">屏蔽字体</div>
                         <div class="help-answer">
-                            格式:<br>
+                            <span data-i18n="HELP_FORMAT">格式:</span><br>
                             <span class="help-code" data-copy="XXX.ttf">XXX.ttf</span>
-                            举例:<br>
+                            <span data-i18n="HELP_EXAMPLE">举例:</span><br>
                             <span class="help-code" data-copy="Private-UseTest.ttf">Private-UseTest.ttf</span>
-                            输入一个字体文件(ttf/otf/ttc)，自动重命名为 .disabled 禁用，重启生效。禁止对主字体进行此操作
+                            <span data-i18n="HELP_BLOCK_FONT_DESC">输入一个字体文件(ttf/otf/ttc)，自动重命名为 .disabled 禁用，重启生效。禁止对主字体进行此操作</span>
                         </div>
                     </div>
 
                     <div class="help-section">
-                        <div class="help-sub-title">屏蔽字体单区间</div>
+                        <div class="help-sub-title" data-i18n="HELP_BLOCK_SINGLE">屏蔽字体单区间</div>
                         <div class="help-answer">
-                            格式:<br>
+                            <span data-i18n="HELP_FORMAT">格式:</span><br>
                             <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX)</span>
-                            举例:<br>
+                            <span data-i18n="HELP_EXAMPLE">举例:</span><br>
                             <span class="help-code" data-copy="BraillePatterns.ttf,(U+2800-U+28FF)">BraillePatterns.ttf,(U+2800-U+28FF)</span>
                             <span class="help-code" data-copy="Unknown-symbol-supplementRegular.ttf,(U+EE01-U+EE01)">Unknown-symbol-supplementRegular.ttf,(U+EE01-U+EE01)</span>
-                            屏蔽一个字体文件单个被指定的符号范围，其他部分将继续生效<br>
-                            使用 Unicode 编码，编码从小到大排列。必须是此字体文件里有的范围才能处理。可以仅处理一个 Unicode，但是格式不能变。还原时只输入字体文件名即可，不需要加范围。
+                            <span data-i18n="HELP_BLOCK_SINGLE_DESC">屏蔽一个字体文件单个被指定的符号范围，其他部分将继续生效<br>
+                            使用 Unicode 编码，编码从小到大排列。必须是此字体文件里有的范围才能处理。可以仅处理一个 Unicode，但是格式不能变。还原时只输入字体文件名即可，不需要加范围。</span>
                         </div>
                     </div>
 
                     <div class="help-section">
-                        <div class="help-sub-title">屏蔽字体多区间</div>
+                        <div class="help-sub-title" data-i18n="HELP_BLOCK_MULTI">屏蔽字体多区间</div>
                         <div class="help-answer">
-                            格式:<br>
+                            <span data-i18n="HELP_FORMAT">格式:</span><br>
                             <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX)</span>
                             <span class="help-code" data-copy="XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX;U+XXXX-U+XXXX)">XXX.ttf,(U+XXXX-U+XXXX;U+XXXX-U+XXXX;U+XXXX-U+XXXX)</span>
                             <span class="help-code help-code-dim">•••</span>
-                            举例:<br>
+                            <span data-i18n="HELP_EXAMPLE">举例:</span><br>
                             <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F006B-U+F007C)</span>
                             <span class="help-code" data-copy="Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)">Private-UseTest.ttf,(U+F002B-U+F005B;U+F0183-U+F01AC;U+F0200-U+F0300)</span>
                             <span class="help-code help-code-dim">•••</span>
-                            屏蔽一个字体文件多个被指定的符号范围，其他部分将继续生效<br>
-                            使用 Unicode 编码，编码从小到大排列。你可以通过";"分离多个区间，区间也从小到大排列，且各区间尽量避免相交。必须是此字体文件里有的范围才能处理。还原时只输入字体文件名即可，不需要加范围。
+                            <span data-i18n="HELP_BLOCK_MULTI_DESC">屏蔽一个字体文件多个被指定的符号范围，其他部分将继续生效<br>
+                            使用 Unicode 编码，编码从小到大排列。你可以通过";"分离多个区间，区间也从小到大排列，且各区间尽量避免相交。必须是此字体文件里有的范围才能处理。还原时只输入字体文件名即可，不需要加范围。</span>
                         </div>
                     </div>
 
                     <div class="help-section">
-                        <div class="help-sub-title">屏蔽 GMS 字体</div>
-                        <div class="help-answer">暂停 GMS 自带的字体服务并删除本地缓存字体文件使部分 GAPP 指向系统字体。执行时会强行停止(杀后台) Gmail 和 Chrome 一次。执行后出现应用闪退请重启手机。理论上所有 Android8+ 设备都能正常工作。隔一段时间字体就会再次缓存出来，需再次执行</div>
-                        <div class="help-answer">点击开关后会立即执行而不再询问，WebUI版本更多用于 action.sh 音量键控制/触屏识别失效时。正常执行结束会显示退出码 0，结束后开关会再次关闭</div>
+                        <div class="help-sub-title" data-i18n="HELP_BLOCK_GMS">屏蔽 GMS 字体</div>
+                        <div class="help-answer" data-i18n="HELP_BLOCK_GMS_DESC1">暂停 GMS 自带的字体服务并删除本地缓存字体文件使部分 GAPP 指向系统字体。执行时会强行停止(杀后台) Gmail 和 Chrome 一次。执行后出现应用闪退请重启手机。理论上所有 Android8+ 设备都能正常工作。隔一段时间字体就会再次缓存出来，需再次执行</div>
+                        <div class="help-answer" data-i18n="HELP_BLOCK_GMS_DESC2">点击开关后会立即执行而不再询问，WebUI版本更多用于 action.sh 音量键控制/触屏识别失效时。正常执行结束会显示退出码 0，结束后开关会再次关闭</div>
                     </div>
                 </div>
 
-                <button class="help-close ripple-element" id="help-close">关闭</button>
+                <button class="help-close ripple-element" id="help-close" data-i18n="HELP_CLOSE">关闭</button>
             </div>
         </div>
 
@@ -87,21 +87,22 @@
 
             <div class="toggle-list font-block">
                 <div class="font-text-group">
-                    <div class="toggle-text">
+                    <div class="toggle-text" data-i18n="FONT_BLOCK_TITLE">
                         屏蔽字体文件或区间
                     </div>
-                    <div class="font-desc-text">
+                    <div class="font-desc-text" data-i18n="FONT_BLOCK_DESC">
                         重启手机生效
                     </div>
                 </div>
                 <input id="font-input"
                        class="simple-input"
+                       data-i18n-placeholder="FONT_INPUT_PLACEHOLDER"
                        placeholder="例:BraillePatterns.ttf,(U+2800-U+28FF)">
                 <div class="font-btn-row">
-                    <div class="mini-btn ripple-element" id="disable-font">
+                    <div class="mini-btn ripple-element" id="disable-font" data-i18n="BTN_DISABLE">
                         屏蔽
                     </div>
-                    <div class="mini-btn ripple-element" id="restore-font">
+                    <div class="mini-btn ripple-element" id="restore-font" data-i18n="BTN_RESTORE">
                         恢复
                     </div>
                 </div>
@@ -109,11 +110,11 @@
 
             <div class="toggle-list gms-row">
                 <div class="gms-text-group">
-                    <div class="toggle-text">
+                    <div class="toggle-text" data-i18n="GMS_BLOCK_TITLE">
                         屏蔽GMS字体及字体服务
                     </div>
                     <div class="gms-desc-text">
-                        此选项将<span style="color:#ef4444;font-weight:bold;">跳过音量键选择</span>直接运行
+                        <span data-i18n="GMS_BLOCK_DESC_PREFIX">此选项将</span><span style="color:#ef4444;font-weight:bold;" data-i18n="GMS_BLOCK_DESC_HIGHLIGHT">跳过音量键选择</span><span data-i18n="GMS_BLOCK_DESC_SUFFIX">直接运行</span>
                     </div>
                 </div>
                 <label class="toggle-switch">
@@ -123,7 +124,7 @@
             </div>
 
             <div class="toggle-list" id="path-row" style="cursor: default;">
-                <div class="toggle-text">
+                <div class="toggle-text" data-i18n="PATH_ROW_TEXT">
                     喵喵喵？
                 </div>
             </div>
@@ -145,12 +146,12 @@
                 </svg>
                 copy
             </button>
-            <!-- Clear 按钮 -->
-            <button class="mini-btn ripple-element clear-terminal">
+            <!-- Clean 按钮 -->
+            <button class="mini-btn ripple-element clean-terminal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="16px" width="16px">
                     <path fill="currentColor" d="M280-110q-33 0-56.5-13.5T200-190v-530h-40v-90h200v-50h240v50h200v90h-40v530q0 33-23.5 56.5T680-110H280Zm80-150h80v-370h-80v370Zm160 0h80v-370h-80v370"/>
                 </svg>
-                clear
+                clean
             </button>
         </div>
     </div>

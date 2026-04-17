@@ -64,4 +64,4 @@ UNI_FAIL="Фильтрация диапазонов Unicode завершилас
 ##### service.sh #####
 NOTIFY_TITLE="MFGA"
 NOTIFY_TAG="Tag"
-NOTIFY_BODY="Спасибо за использование модуля Advanced Global Font Module MFGA. Смахните, чтобы закрыть уведомление. Powered by Yiyunlengyu."
+NOTIFY_BODY="Спасибо за использование модуля Расширенный глобальный модуль шрифтов MFGA. Смахните, чтобы закрыть уведомление. Powered by Yiyunlengyu."
