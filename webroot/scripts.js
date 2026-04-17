@@ -200,7 +200,7 @@ async function handleFont(action) {
                 warn(`${t('LOG_DISABLED_ERR')}${filename}${t('LOG_ERR_SUFFIX')}${e}`);
             }
         } else {
-            // 无 Unicode → 直接 mv 改名为 .disabled
+            // 无 Unicode 区间 → 直接 mv 改名为 .disabled
             try {
                 const disabledText = t('LOG_DISABLED_TEXT');
                 const notFoundText = t('LOG_NOT_FOUND_TEXT');
@@ -223,12 +223,12 @@ async function handleFont(action) {
         let restoreCmd = '';
         const disabledExists = await fileExists(disabledPath);
         if (disabledExists) {
-            // 优先 .disabled
+            // 重命名 .disabled
             restoreCmd = `mv "${disabledPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${name}"`;
         } else {
             const backupExists = await fileExists(backupPath);
             if (backupExists) {
-                // 其次 uni_backup
+                // 复制 uni_backup
                 if (/.*\.(ttf|otf|ttc)$/i.test(name)) {
                     restoreCmd = `cp "${backupPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${filename}"`;
                 } else {

@@ -336,7 +336,10 @@ input:checked+.slider:before {
 .terminal-buttons .mini-btn svg {
     width: 14px;
     height: 14px;
+    min-width: 14px;
+    min-height: 14px;
     fill: currentColor;
+    display: block;
 }
 
 /* ripple 样式 */
