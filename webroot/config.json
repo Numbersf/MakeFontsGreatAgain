@@ -1,0 +1,6 @@
+{
+  "title": "MFGA",
+  "icon": "icon.png",
+  "exitConfirm": false,
+  "backInterceptor": "javascript"
+}
