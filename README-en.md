@@ -33,6 +33,13 @@
 - ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
 #  Update log
+ 16.3.5.04-15-beta2(1635041502)
+ - 1.action.sh:Fixed the issue where GMS blocking skipped the pause application in WebUI mode.
+ - 2.WebUI:Added automatic translation and help interface; renamed the icon title "clear" to "clean" and optimized the icon size; fixed inconsistent line breaks.
+ - 3.unicode_filter.sh、service.sh:Added automatic translation.
+ - 4.新增彩色图标字体MFGA.ttf（）
+ - 5.fonts.xml:Further improved compatibility.
+ 
  16.3.1.04-15-beta(1631041501)
  - 1.unicode_filter.c:Completely fixed interval jumping and out-of-bounds issues.
  - 2.fonts.xml:Adapted symbol calls for certain Private Use Areas (PUA) in RedMagic OS.

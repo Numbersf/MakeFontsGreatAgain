@@ -1540,11 +1540,14 @@
         </font>
     </family>
     
-    <!-- 盲文区符号扩充-->
+    <!-- 咿云冷雨注：补充彩色符号扩充 -->
     <family>
         <font weight="400" style="normal">BraillePatterns.ttf</font>
     </family>
-    <!-- 盲文区符号扩充（终） -->
+    <family>
+        <font weight="400" style="normal">MFGA.ttf</font>
+    </family>
+    <!-- 补充彩色符号扩充（终） -->
     
     <family>
         <font weight="400" style="normal">NotoSansSymbols-Regular-Subsetted.ttf</font>
@@ -1943,6 +1946,9 @@
     <!-- 最后增加对「天珩全字库」的支持（终）-->
         
     <!-- 补字区Power by 咿云冷雨@2026 yiyunlengyu -->
+    <family>
+        <font weight="400" style="normal">MFGA.ttf</font>
+    </family>
     <family>
         <font weight="400" style="normal">NotoSansPro.otf</font>
     </family>
