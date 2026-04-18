@@ -137,7 +137,8 @@ body {
     font-weight: bold;
     white-space: normal;
     word-break: break-word;
-    max-width: calc(100% - 50px);
+    flex: 1;
+    min-width: 0;
     user-select: none;
 }
 
@@ -145,6 +146,7 @@ body {
     position: relative;
     display: inline-block;
     margin-left: auto;
+    flex-shrink: 0;
     width: 42px;
     height: 25px;
 }
@@ -170,7 +172,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    max-width: calc(100% - 60px);
+    flex: 1;
+    min-width: 0;
 }
 
 .font-desc-text {
@@ -186,7 +189,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    max-width: calc(100% - 60px);
+    flex: 1;
+    min-width: 0;
 }
 
 .gms-desc-text {
