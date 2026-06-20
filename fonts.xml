@@ -40,266 +40,99 @@
     <!-- For WebView font -->
     <!-- 使用空壳字体文件"Roboto"提供度量参数，防止出现偏移 -->
     <family name="sans-serif">
-        <font weight="100" style="normal">Roboto-Thin.ttf</font>
-        <font weight="100" style="italic">Roboto-ThinItalic.ttf</font>
-        <font weight="200" style="normal">Roboto-ExtraLight.ttf</font>
-        <font weight="200" style="italic">Roboto-ExtraLightItalic.ttf</font>
-        <font weight="300" style="normal">Roboto-Light.ttf</font>
-        <font weight="300" style="italic">Roboto-LightItalic.ttf</font>
-        <font weight="350" style="normal">Roboto-Regular.ttf</font>
-        <font weight="350" style="italic">Roboto-Italic.ttf</font>
-        <font weight="400" style="normal">Roboto-Regular.ttf</font>
-        <font weight="400" style="italic">Roboto-Italic.ttf</font>
-        <font weight="500" style="normal">Roboto-Medium.ttf</font>
-        <font weight="500" style="italic">Roboto-MediumItalic.ttf</font>
-        <font weight="600" style="normal">Roboto-SemiBold.ttf</font>
-        <font weight="600" style="italic">Roboto-SemiBoldItalic.ttf</font>
-        <font weight="700" style="normal">Roboto-Bold.ttf</font>
-        <font weight="700" style="italic">Roboto-BoldItalic.ttf</font>
-        <font weight="800" style="normal">Roboto-ExtraBold.ttf</font>
-        <font weight="800" style="italic">Roboto-ExtraBoldItalic.ttf</font>
-        <font weight="900" style="normal">Roboto-ExtraBold.ttf</font>
-        <font weight="900" style="italic">Roboto-ExtraBoldItalic.ttf</font>
+        <font weight="100" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="100" />
+        </font>
+        <font weight="200" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="200" />
+        </font>
+        <font weight="300" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="300" />
+        </font>
+        <font weight="400" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="400" />
+        </font>
+        <font weight="500" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="500" />
+        </font>
+        <font weight="600" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="600" />
+        </font>
+        <font weight="700" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="700" />
+        </font>
+        <font weight="800" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="800" />
+        </font>
+        <font weight="900" style="normal">Roboto-Regular.ttf
+            <axis tag="ital" stylevalue="0" />
+            <axis tag="wdth" stylevalue="100" />
+            <axis tag="wght" stylevalue="900" />
+        </font>
+    </family>
+    <family>
+        <font supportedAxes="wght,ital">Roboto-Regular.ttf
+            <axis tag="wdth" stylevalue="100" />
+        </font>
     </family>
     
     <family>
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
         <font weight="700" style="normal">700.ttf</font>
         <font weight="800" style="normal">800.ttf</font>
         <font weight="900" style="normal">900.ttf</font>
-    </family> 
-    
-    <family>
-        <font weight="100" style="normal">Roboto-Thin.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="100" />
-        </font>
-        <font weight="200" style="normal">Roboto-ExtraLight.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="200" />
-        </font>
-        <font weight="300" style="normal">Roboto-Light.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="300" />
-        </font>
-        <font weight="350" style="normal">Roboto-Regular.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="normal">Roboto-Regular.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="400" />
-        </font>
-        <font weight="500" style="normal">Roboto-Medium.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="500" />
-        </font>
-        <font weight="600" style="normal">Roboto-SemiBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="600" />
-        </font>
-        <font weight="700" style="normal">Roboto-Bold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="700" />
-        </font>
-        <font weight="800" style="normal">Roboto-ExtraBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="800" />
-        </font>
-        <font weight="900" style="normal">Roboto-ExtraBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="900" />
-        </font>
-        <font weight="100" style="italic">Roboto-ThinItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="100" />
-        </font>
-        <font weight="200" style="italic">Roboto-ExtraLightItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="200" />
-        </font>
-        <font weight="300" style="italic">Roboto-LightItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="300" />
-        </font>
-        <font weight="350" style="italic">Roboto-Italic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="italic">Roboto-Italic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="400" />
-        </font>
-        <font weight="500" style="italic">Roboto-MediumItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="500" />
-        </font>
-        <font weight="600" style="italic">Roboto-SemiBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="600" />
-        </font>
-        <font weight="700" style="italic">Roboto-BoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="700" />
-        </font>
-        <font weight="800" style="italic">Roboto-ExtraBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="800" />
-        </font>
-        <font weight="900" style="italic">Roboto-ExtraBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="900" />
-        </font>
     </family>
 
-
     <!-- Note that aliases must come after the fonts they reference. -->
+    <alias name="sans-serif-semibold" to="sans-serif" weight="600" />
+    <alias name="sans-en-thin" to="sys-sans-en" weight="100" />
+    <alias name="sans-en-light" to="sys-sans-en" weight="300" />
+    <alias name="sans-en-nomal" to="sys-sans-en" weight="400" />
+    <alias name="sans-en-medium" to="sys-sans-en" weight="500" />
+    <alias name="sans-en-semibold" to="sys-sans-en" weight="600" />
     <alias name="sans-serif-thin" to="sans-serif" weight="100" />
     <alias name="sans-serif-light" to="sans-serif" weight="300" />
     <alias name="sans-serif-medium" to="sans-serif" weight="500" />
-    <alias name="sans-serif-black" to="sans-serif" weight="700" />
+    <alias name="sans-serif-black" to="sans-serif" weight="900" />
     <alias name="arial" to="sans-serif" />
     <alias name="helvetica" to="sans-serif" />
     <alias name="tahoma" to="sans-serif" />
     <alias name="verdana" to="sans-serif" />
 
     <family name="sans-serif-condensed">
-        <font weight="100" style="normal">Roboto-Thin.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="100" />
-        </font>
-        <font weight="200" style="normal">Roboto-ExtraLight.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="200" />
-        </font>
-        <font weight="300" style="normal">Roboto-Light.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="300" />
-        </font>
-        <font weight="350" style="normal">Roboto-Light.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="normal">Roboto-Regular.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="400" />
-        </font>
-        <font weight="500" style="normal">Roboto-Medium.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="500" />
-        </font>
-        <font weight="600" style="normal">Roboto-SemiBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="600" />
-        </font>
-        <font weight="700" style="normal">Roboto-Bold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="700" />
-        </font>
-        <font weight="800" style="normal">Roboto-ExtraBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="800" />
-        </font>
-        <font weight="900" style="normal">Roboto-ExtraBold.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="900" />
-        </font>
-        <font weight="100" style="italic">Roboto-ThinItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="100" />
-        </font>
-        <font weight="200" style="italic">Roboto-ExtraLightItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="200" />
-        </font>
-        <font weight="300" style="italic">Roboto-LightItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="300" />
-        </font>
-        <font weight="350" style="italic">Roboto-LightItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="italic">Roboto-Italic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="400" />
-        </font>
-        <font weight="500" style="italic">Roboto-MediumItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="500" />
-        </font>
-        <font weight="600" style="italic">Roboto-SemiBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="600" />
-        </font>
-        <font weight="700" style="italic">Roboto-BoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="700" />
-        </font>
-        <font weight="800" style="italic">Roboto-ExtraBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="800" />
-        </font>
-        <font weight="900" style="italic">Roboto-ExtraBoldItalic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="900" />
+        <font supportedAxes="wght,ital">Roboto-Regular.ttf
+            <axis tag="wdth" stylevalue="75" />
         </font>
     </family>
     <alias name="sans-serif-condensed-light" to="sans-serif-condensed" weight="300" />
     <alias name="sans-serif-condensed-medium" to="sans-serif-condensed" weight="500" />
-    
+
 	<!-- 可变衬线字体调用 -->
     <family name="serif">
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
@@ -318,7 +151,7 @@
     <alias name="goudy" to="serif" />
     <alias name="fantasy" to="serif" />
     <alias name="ITC Stone Serif" to="serif" />
-    
+
 	<!-- 可变等宽字体调用 -->
     <family name="monospace">
         <font weight="400" style="normal">DroidSansMono.ttf</font>
@@ -391,102 +224,92 @@
     <alias name="source-sans-pro-semi-bold" to="source-sans-pro" weight="600"/>
 
     <family name="roboto-flex">
-        <font weight="100" style="normal">Roboto-Thin.ttf
+        <font weight="100" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="100" />
         </font>
-        <font weight="200" style="normal">Roboto-ExtraLight.ttf
+        <font weight="200" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="200" />
         </font>
-        <font weight="300" style="normal">Roboto-Light.ttf
+        <font weight="300" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="300" />
         </font>
-        <font weight="350" style="normal">Roboto-Regular.ttf
-          <axis tag="ital" stylevalue="0" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="normal">Roboto-Regular.ttf
+        <font weight="400" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="400" />
         </font>
-        <font weight="500" style="normal">Roboto-Medium.ttf
+        <font weight="500" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="500" />
         </font>
-        <font weight="600" style="normal">Roboto-SemiBold.ttf
+        <font weight="600" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="600" />
         </font>
-        <font weight="700" style="normal">Roboto-Bold.ttf
+        <font weight="700" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="700" />
         </font>
-        <font weight="800" style="normal">Roboto-ExtraBold.ttf
+        <font weight="800" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="800" />
         </font>
-        <font weight="900" style="normal">Roboto-ExtraBold.ttf
+        <font weight="900" style="normal">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="0" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="900" />
         </font>
-        <font weight="100" style="italic">Roboto-ThinItalic.ttf
+        <font weight="100" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="100" />
         </font>
-        <font weight="200" style="italic">Roboto-ExtraLightItalic.ttf
+        <font weight="200" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="200" />
         </font>
-        <font weight="300" style="italic">Roboto-LightItalic.ttf
+        <font weight="300" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="300" />
         </font>
-        <font weight="350" style="italic">Roboto-Italic.ttf
-          <axis tag="ital" stylevalue="1" />
-          <axis tag="wdth" stylevalue="100" />
-          <axis tag="wght" stylevalue="350" />
-        </font>
-        <font weight="400" style="italic">Roboto-Italic.ttf
+        <font weight="400" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="400" />
         </font>
-        <font weight="500" style="italic">Roboto-MediumItalic.ttf
+        <font weight="500" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="500" />
         </font>
-        <font weight="600" style="italic">Roboto-SemiBoldItalic.ttf
+        <font weight="600" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="600" />
         </font>
-        <font weight="700" style="italic">Roboto-BoldItalic.ttf
+        <font weight="700" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="700" />
         </font>
-        <font weight="800" style="italic">Roboto-ExtraBoldItalic.ttf
+        <font weight="800" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="800" />
         </font>
-        <font weight="900" style="italic">Roboto-ExtraBoldItalic.ttf
+        <font weight="900" style="italic">RobotoFlex-Regular.ttf
           <axis tag="ital" stylevalue="1" />
           <axis tag="wdth" stylevalue="100" />
           <axis tag="wght" stylevalue="900" />
@@ -1558,7 +1381,6 @@
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
@@ -1570,7 +1392,6 @@
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
@@ -1582,7 +1403,6 @@
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
@@ -1594,7 +1414,6 @@
         <font weight="100" style="normal">100.ttf</font>
         <font weight="200" style="normal">200.ttf</font>
         <font weight="300" style="normal">300.ttf</font>
-        <font weight="350" style="normal">350.ttf</font>
         <font weight="400" style="normal">400.ttf</font>
         <font weight="500" style="normal">500.ttf</font>
         <font weight="600" style="normal">600.ttf</font>
