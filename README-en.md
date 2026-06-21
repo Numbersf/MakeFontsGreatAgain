@@ -37,7 +37,7 @@
  - 1.action.sh:Fixed the issue where GMS blocking skipped the pause application in WebUI mode.
  - 2.WebUI:Added automatic translation and help interface; renamed the icon title "clear" to "clean" and optimized the icon size; fixed inconsistent line breaks.
  - 3.unicode_filter.sh、service.sh:Added automatic translation.
- - 4.新增彩色图标字体MFGA.ttf（）
+ - 4.Introduce the new color icon font MFGA.ttf.（）
  - 5.fonts.xml:Further improved compatibility.
  
  16.3.1.04-15-beta(1631041501)
