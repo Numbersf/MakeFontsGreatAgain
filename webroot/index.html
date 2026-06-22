@@ -73,6 +73,17 @@
                     </div>
 
                     <div class="help-section">
+                        <div class="help-sub-title" data-i18n="HELP_RECOLOR">修改字符颜色</div>
+                        <div class="help-answer">
+                            <span data-i18n="HELP_FORMAT">格式:</span><br>
+                            <span class="help-code" data-copy="U+XXXX;#RRGGBB">U+XXXX;#RRGGBB</span>
+                            <span data-i18n="HELP_EXAMPLE">举例:</span><br>
+                            <span class="help-code" data-copy="U+002F;#F5A9B8">U+002F;#F5A9B8</span>
+                            <span data-i18n="HELP_RECOLOR_DESC">给指定 Unicode 字符的字形挂一个固定颜色。同时作用于 100.ttf~900.ttf 全部 9 个整百字重。再次输入完全相同的命令(同一个码位+同一个颜色)即可还原为默认颜色；如果码位相同但颜色不同，会直接替换成新颜色，不需要先还原。</span>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
                         <div class="help-sub-title" data-i18n="HELP_BLOCK_GMS">屏蔽 GMS 字体</div>
                         <div class="help-answer" data-i18n="HELP_BLOCK_GMS_DESC1">暂停 GMS 自带的字体服务并删除本地缓存字体文件使部分 GAPP 指向系统字体。执行时会强行停止(杀后台) Gmail 和 Chrome 一次。执行后出现应用闪退请重启手机。理论上所有 Android8+ 设备都能正常工作。隔一段时间字体就会再次缓存出来，需再次执行</div>
                         <div class="help-answer" data-i18n="HELP_BLOCK_GMS_DESC2">点击开关后会立即执行而不再询问，WebUI版本更多用于 action.sh 音量键控制/触屏识别失效时。正常执行结束会显示退出码 0，结束后开关会再次关闭</div>
@@ -106,6 +117,28 @@
                         恢复
                     </div>
                 </div>
+            </div>
+
+            <div class="toggle-list font-block recolor-row">
+                <div class="recolor-header-row">
+                    <div class="recolor-text-group">
+                        <div class="toggle-text" data-i18n="RECOLOR_TITLE">
+                            修改字符颜色
+                        </div>
+                        <div class="font-desc-text recolor-desc-split" id="recolor-desc-text" data-i18n="RECOLOR_DESC">
+                            再次输入相同内容即可还原
+                        </div>
+                    </div>
+                    <div class="recolor-play-btn ripple-element" id="apply-recolor" title="执行">
+                        <svg width="14" height="16" viewBox="-2.333 0 14 16" overflow="visible" fill="currentColor">
+                            <polygon points="0,0 14,8 0,16"/>
+                        </svg>
+                    </div>
+                </div>
+                <input id="recolor-input"
+                       class="simple-input"
+                       data-i18n-placeholder="RECOLOR_INPUT_PLACEHOLDER"
+                       placeholder="例:U+002F;#F5A9B8">
             </div>
 
             <div class="toggle-list gms-row">

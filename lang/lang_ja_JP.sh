@@ -65,3 +65,10 @@ UNI_FAIL="Unicode 範囲ブロックに失敗しました"
 NOTIFY_TITLE="MFGA"
 NOTIFY_TAG="Tag"
 NOTIFY_BODY="高度なグローバルフォントモジュール MFGA をご利用いただきありがとうございます。通知を削除するにはスワイプしてください。Powered by Yiyunlengyu."
+
+##### recolor_glyph.sh #####
+RCG_USAGE="[✗] 使い方: sh recolor_glyph.sh \"U+XXXX;#RRGGBB\""
+RCG_BAD_FORMAT="[✗] 形式が正しくありません。U+XXXX;#RRGGBB 形式で入力してください（例: U+002F;#F5A9B8）:"
+RCG_NO_BIN="[✗] このアーキテクチャに対応するバイナリが見つかりません:"
+RCG_SKIP_MISSING="[!] フォントウェイトファイルが存在しません。スキップします:"
+RCG_DONE="完了: 成功 %OK%, スキップ %SKIP%, 失敗 %FAIL%"

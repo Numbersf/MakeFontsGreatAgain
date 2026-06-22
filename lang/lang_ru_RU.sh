@@ -65,3 +65,10 @@ UNI_FAIL="Фильтрация диапазонов Unicode завершилас
 NOTIFY_TITLE="MFGA"
 NOTIFY_TAG="Tag"
 NOTIFY_BODY="Спасибо за использование модуля Расширенный глобальный модуль шрифтов MFGA. Смахните, чтобы закрыть уведомление. Powered by Yiyunlengyu."
+
+##### recolor_glyph.sh #####
+RCG_USAGE="[✗] Использование: sh recolor_glyph.sh \"U+XXXX;#RRGGBB\""
+RCG_BAD_FORMAT="[✗] Неверный формат, ожидается U+XXXX;#RRGGBB (например, U+002F;#F5A9B8):"
+RCG_NO_BIN="[✗] Бинарный файл для данной архитектуры не найден:"
+RCG_SKIP_MISSING="[!] Файл шрифта для данного насыщения не найден, пропуск:"
+RCG_DONE="Готово: успешно %OK%, пропущено %SKIP%, ошибок %FAIL%"

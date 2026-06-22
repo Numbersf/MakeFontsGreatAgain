@@ -97,6 +97,8 @@ const t = key => T[key] ?? key;
 const fontInput = document.getElementById('font-input');
 const disableBtn = document.getElementById('disable-font');
 const restoreBtn = document.getElementById('restore-font');
+const recolorInput = document.getElementById('recolor-input');
+const applyRecolorBtn = document.getElementById('apply-recolor');
 const gmsSwitch = document.getElementById('gms-switch');
 const terminal = document.querySelector('.output-terminal-content');
 const cleanBtn = document.querySelector('.terminal-buttons .clean-terminal');
@@ -256,6 +258,78 @@ async function handleFont(action) {
     }
 }
 
+async function handleRecolor() {
+    const raw = recolorInput.value.trim();
+    if (!raw) { toast(t('TOAST_INPUT_EMPTY')); return; }
+    if (!/^[uU]\+[0-9A-Fa-f]{1,6};#?[0-9A-Fa-f]{6}$/.test(raw)) {
+        toast(t('TOAST_RECOLOR_INVALID'));
+        return;
+    }
+
+    const descEl = document.getElementById('recolor-desc-text');
+    applyRecolorBtn.classList.add('toggle-muted');
+    log(`${t('LOG_TRY_RECOLOR')}${raw}`);
+
+    try {
+        const cmd = `sh /data/adb/modules/MFGA/recolor_glyph.sh "${raw}"`;
+        const result = await exec(cmd);
+        let output = typeof result === 'string' ? result
+            : (result.stdout ?? result.output ?? '');
+        let errOutput = typeof result === 'object' ? (result.stderr ?? '') : '';
+        const exitCode = (typeof result === 'object' && result !== null)
+            ? (result.errno ?? result.exitCode ?? result.code ?? null)
+            : null;
+
+        output = (output || '').trim();
+        errOutput = (errOutput || '').trim();
+
+        // 逐行分析二进制输出，区分 APPLY / REVERT / REPLACE
+        let hasRevert = false;
+        let hasApply = false;
+        let hasReplace = false;
+        output.split('\n').forEach(line => {
+            if (/\[REVERT\]/.test(line)) hasRevert = true;
+            if (/\[APPLY\]/.test(line))  hasApply = true;
+            if (/\[REPLACE\]/.test(line)) hasReplace = true;
+            const html = line.replace(/</g,'&lt;');
+            if (html) log(html);
+        });
+
+        const succeeded = exitCode !== null ? exitCode === 0 : !errOutput;
+        if (succeeded) {
+            if (errOutput) log(errOutput.replace(/\n/g, '<br>'));
+            if (hasRevert) {
+                log(t('LOG_RECOLOR_REVERTED'));
+                toast(t('TOAST_RECOLOR_REVERTED'));
+                // 描述文字短暂变色提示"已还原"
+                if (descEl) {
+                    descEl.setAttribute('data-i18n', 'RECOLOR_DESC_REVERTED');
+                    descEl.textContent = t('RECOLOR_DESC_REVERTED');
+                    descEl.classList.add('is-revert');
+                    setTimeout(() => {
+                        descEl.setAttribute('data-i18n', 'RECOLOR_DESC');
+                        descEl.textContent = t('RECOLOR_DESC');
+                        descEl.classList.remove('is-revert');
+                    }, 3000);
+                }
+            } else if (hasReplace) {
+                log(t('LOG_RECOLOR_REPLACED'));
+                toast(t('TOAST_RECOLOR_APPLIED'));
+            } else {
+                log(t('LOG_RECOLOR_DONE'));
+                toast(t('TOAST_RECOLOR_APPLIED'));
+            }
+        } else {
+            if (errOutput) warn(errOutput.replace(/\n/g, '<br>'));
+            warn(t('LOG_RECOLOR_FAIL'));
+        }
+    } catch (e) {
+        warn(`${t('LOG_RECOLOR_ERR')}${e}`);
+    } finally {
+        applyRecolorBtn.classList.remove('toggle-muted');
+    }
+}
+
 async function handleGms() {
     if (!gmsSwitch) { warn(t('LOG_NO_GMS_SWITCH')); return; }
     if (gmsSwitch.disabled) return;
@@ -299,6 +373,9 @@ if (gmsSwitch) {
 // 屏蔽和恢复按钮
 if (disableBtn) disableBtn.addEventListener('click', () => handleFont('disable'));
 if (restoreBtn) restoreBtn.addEventListener('click', () => handleFont('restore'));
+
+// 字符颜色修改按钮
+if (applyRecolorBtn) applyRecolorBtn.addEventListener('click', () => handleRecolor());
 
 // 清理和复制按钮
 if (cleanBtn) {
