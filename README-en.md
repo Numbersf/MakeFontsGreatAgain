@@ -9,6 +9,7 @@
 > **This module can block ``GMS fonts`` through ``action.sh`` and the ``WebUI``, covering most ``GAPPS``. This feature conflicts with the ``PIF module`` (also partially depending on the mounting method), so please enable the uninstall module separately for ``Play Services and Store``, do not enable “default uninstall module”, and do not use the ``shamiko`` whitelist**
  
 > **This module allows specifying ``ttf/otf`` font ranges to block, while leaving other areas effective**
+ 
 > **This module allows you to directly modify the color of any symbol**
  
 # Theoretical Compatibility
@@ -34,6 +35,11 @@
 - ``16.2.1`` Allows blocking font ranges while preserving other parts outside this range
  
 #  Update log
+ 17.0.0.06-27-alpha(1717180001)
+ - 1.Synchronized Roboto font to version 3.0.16(SU)
+ - 2.Added main font colorization in WebUI; requires COLRv0 support, Android 10 and above
+ - 3.Adjusted some composite symbols in the main font, fixing missing glyphs and display issues on higher Android versions
+ 
  16.3.5.04-15-beta2(1635041502)
  - 1.action.sh:Fixed the issue where GMS blocking skipped the pause application in WebUI mode.
  - 2.WebUI:Added automatic translation and help interface; renamed the icon title "clear" to "clean" and optimized the icon size; fixed inconsistent line breaks.
