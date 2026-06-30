@@ -338,9 +338,21 @@ int main(int argc, char **argv){
     if(!cmap_record){ fprintf(stderr,"No cmap table.\n"); return 1; }
 
     uint16_t numSub = r16(buf+cmap_offset+2);
+    uint32_t seen_offsets[MAX_RANGES*4];
+    int seen_count = 0;
     for(int i=0;i<numSub;i++){
         uint8_t *rec = buf+cmap_offset+4+i*8;
         uint32_t off = r32(rec+4);
+
+        int already = 0;
+        for(int k=0;k<seen_count;k++){
+            if(seen_offsets[k]==off){ already=1; break; }
+        }
+        if(already) continue;
+        if(seen_count < (int)(sizeof(seen_offsets)/sizeof(seen_offsets[0]))){
+            seen_offsets[seen_count++] = off;
+        }
+
         uint8_t *sub = buf+cmap_offset+off;
         uint16_t fmt = r16(sub);
         if(fmt==12)      rebuild_format12_safe(sub, &list);
