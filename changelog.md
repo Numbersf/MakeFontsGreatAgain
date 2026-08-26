@@ -8,6 +8,8 @@ CN
  - 5.更新通道改为 releases/latest 直链；Xposed 默认作用域扩至 14 个应用
  - 6.新增 CI 质量门禁（shellcheck / JS / JSON / 版本一致性 / C 工具冒烟测试）
  - 7.覆盖补全：NotoSansPro 新增亚美尼亚文、埃及象形文字、卡纳达文、线性文字A/B 五个脚本（待 CI 重建字体后生效）
+ - 8.主字形切换为马路口圆体 Maruko Gothic SC（简体全覆盖），默认正文 Light 细体，100-500→Light、600-900→Medium
+ - 9.修复火狐花体/小型大写：cursive/casual/smallcaps 指向主字体
  
 17.0.0.06-27-alpha(1717180001)
  - 1.同步Roboto到3.0.16(SU)

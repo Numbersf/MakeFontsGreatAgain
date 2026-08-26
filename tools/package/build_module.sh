@@ -75,6 +75,11 @@ for f in fonts/*.ttf fonts/*.otf; do
   [ -e "$f" ] || continue
   cp -f "$f" "$STAGE/system/fonts/"
 done
+# 删除被本 fork 替代的基底字体（主字重已被 Maruko 圆体替换；花哨族已指向主字体）
+for f in 100.ttf 200.ttf 300.ttf 400.ttf 500.ttf 600.ttf 700.ttf 800.ttf 900.ttf \
+         ComingSoon.ttf DancingScript-Regular.ttf CarroisGothicSC-Regular.ttf; do
+  rm -f "$STAGE/system/fonts/$f"
+done
 cp -f fonts/LICENSE-MIT fonts/LICENSE-OFL "$STAGE/" 2>/dev/null || true
 
 # 脚本（模块根目录）

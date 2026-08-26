@@ -53,8 +53,15 @@
 
 ## 五、结论 / 需要决策
 
-1. **A（无 GSUB/GPOS）**：建议接受现状（上游同样），除非你想让我评估 fontTools 替代管线。
-2. **B（5 脚本缺口）**：要不要取消注释加回 urls.txt？我可以改（改的是构建输入，会改变 NotoSansPro 覆盖，**不动现有字形风格**）。
+1. **A（无 GSUB/GPOS）**：NotoSansPro 无版式表，但它是兜底字体，主字形已换成 Maruko（带 GSUB/GPOS/GDEF）。接受现状。
+2. **B（5 脚本缺口）**：已加回 urls.txt（见第四节）。待 CI 重建 NotoSansPro 后生效。
 3. **C / D**：不用处理。
 
-不动任何东西也完全可用——这些都是如实交代的边界，不是本次改动引入的。
+## 六、主字形切换：马路口圆体 Maruko Gothic SC（2026-08-26）
+
+- **主字体** 换成 **Maruko Gothic SC（馬路口圓體）** —— Zen Maru Gothic 的补字计划，OFL 开源、免费商用，简体中文全覆盖（实测高频字/简化偏旁缺 0，CJK 统一表意文字区 99.9%）。
+- **细体偏好**：100-500 字重 → `MarukoGothicCJKsc-Light.ttf`（Light 细体），600-900 → `MarukoGothicCJKsc-Medium.ttf`。默认正文（weight 400）即 Light 细圆体。
+- **拉丁/数字/假名** 全由 Maruko 提供（ASCII/拉丁-1/假名全覆盖）；希腊/西里尔部分覆盖，缺失 fallback 到兜底字体。
+- **火狐花体/小型大写修复**：`cursive`/`casual`/`sans-serif-smallcaps` 三个族从 DancingScript/ComingSoon/CarroisGothicSC 改为指向主字体（300→Light、700→Medium），不再出现花体/小型大写。
+- **打包**：`build_module.sh` 自动删除被替代的基底字体（100-900.ttf、ComingSoon、DancingScript、CarroisGothicSC）；`recolor_glyph.sh` 推导已适配 Maruko 文件名。
+- ⚠️ **已知**：作者声明字形较粗糙（Noto Sans 推论生成），高分辨率（>48px）可能看出破绽；文件较大（Light 32MB + Medium 21MB，模块 zip 显著增大）。

@@ -93,15 +93,15 @@
     </family>
     
     <family>
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
 
     <!-- Note that aliases must come after the fonts they reference. -->
@@ -130,15 +130,15 @@
 
 	<!-- 可变衬线字体调用 -->
     <family name="serif">
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
     <!-- 可变衬线字体调用（终） -->
 
@@ -167,21 +167,21 @@
     <alias name="courier" to="serif-monospace" />
     <alias name="courier new" to="serif-monospace" />
 
-    <family name="casual">
-        <font weight="400" style="normal" postScriptName="400">400.ttf</font>
+        <family name="casual">
+        <font weight="300" style="normal" postScriptName="MarukoGothicCJKsc-Light.ttf">MarukoGothicCJKsc-Light.ttf</font>
     </family>
 
-    <family name="cursive">
-      <font weight="400" style="normal">400.ttf
-        <axis tag="wght" stylevalue="400" />
+        <family name="cursive">
+      <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf
+        <axis tag="wght" stylevalue="300" />
       </font>
-      <font weight="700" style="normal">700.ttf
+      <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf
         <axis tag="wght" stylevalue="700" />
       </font>
     </family>
 
-    <family name="sans-serif-smallcaps">
-        <font weight="400" style="normal">400.ttf</font>
+        <family name="sans-serif-smallcaps">
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
     </family>
 
     <!--  MIUI MOD: Font_VariableFont  -->
@@ -1378,48 +1378,48 @@
     
     <!-- lxgw 注：其次调用各自语言字体 -->
     <family lang="zh-Hans">
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
     <family lang="zh-Hant,zh-Bopo">
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
     <family lang="ja">
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
     <family lang="ko">
-        <font weight="100" style="normal">100.ttf</font>
-        <font weight="200" style="normal">200.ttf</font>
-        <font weight="300" style="normal">300.ttf</font>
-        <font weight="400" style="normal">400.ttf</font>
-        <font weight="500" style="normal">500.ttf</font>
-        <font weight="600" style="normal">600.ttf</font>
-        <font weight="700" style="normal">700.ttf</font>
-        <font weight="800" style="normal">800.ttf</font>
-        <font weight="900" style="normal">900.ttf</font>
+        <font weight="100" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="200" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="300" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="400" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="500" style="normal">MarukoGothicCJKsc-Light.ttf</font>
+        <font weight="600" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="700" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="800" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
+        <font weight="900" style="normal">MarukoGothicCJKsc-Medium.ttf</font>
     </family>
     <family lang="ja">
         <font weight="100" style="normal" index="0" postScriptName="NotoSansCJKJP-Regular">

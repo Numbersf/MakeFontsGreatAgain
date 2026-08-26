@@ -15,11 +15,14 @@ if [ -z "$RAW" ]; then
     exit 1
 fi
 
-# 从 fonts.xml 推导“主字重字体”：即 100..900.ttf（无名默认族 + serif 族的实际字形文件）
+# 从 fonts.xml 推导“主字重字体”：Maruko 圆体（100-500→Light, 600-900→Medium）
+# 兼容旧式 100..900.ttf 命名
 derive_weight_fonts() {
     if [ -f "$MODPATH/fonts.xml" ]; then
-        grep -o '>[0-9][0-9][0-9]\.ttf<' "$MODPATH/fonts.xml" 2>/dev/null \
-            | tr -d '><' | sort -u
+        grep -oE '>[A-Za-z0-9._-]+\.(ttf|otf)<' "$MODPATH/fonts.xml" 2>/dev/null \
+            | tr -d '><' \
+            | grep -E 'MarukoGothicCJKsc|^[0-9]{3}\.ttf$' \
+            | sort -u
     fi
 }
 
