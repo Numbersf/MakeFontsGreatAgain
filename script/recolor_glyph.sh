@@ -15,6 +15,21 @@ if [ -z "$RAW" ]; then
     exit 1
 fi
 
+# 从 fonts.xml 推导“主字重字体”：即 100..900.ttf（无名默认族 + serif 族的实际字形文件）
+derive_weight_fonts() {
+    if [ -f "$MODPATH/fonts.xml" ]; then
+        grep -o '>[0-9][0-9][0-9]\.ttf<' "$MODPATH/fonts.xml" 2>/dev/null \
+            | tr -d '><' | sort -u
+    fi
+}
+
+FONT_FILES=$(derive_weight_fonts)
+if [ -z "$FONT_FILES" ]; then
+    for W in $WEIGHTS; do
+        FONT_FILES="$FONT_FILES $W.ttf"
+    done
+fi
+
 CP_PART=$(echo "$RAW" | cut -d';' -f1)
 COLOR_PART=$(echo "$RAW" | cut -d';' -f2)
 
@@ -32,7 +47,7 @@ case "$ARCH" in
     arm*)    BIN="$BIN_DIR/recolor_glyph_arm" ;;
     x86_64)  BIN="$BIN_DIR/recolor_glyph_x86_64" ;;
     i*86)    BIN="$BIN_DIR/recolor_glyph_x86" ;;
-    *)       echo "[!] $UNI_UNSUPPORTED_ARCH $ARCH"; exit 1 ;;
+    *)       echo "[!] $RCG_UNSUPPORTED_ARCH $ARCH"; exit 1 ;;
 esac
 
 if [ -f "$BIN" ]; then
@@ -48,10 +63,10 @@ OK=0
 SKIP=0
 FAIL=0
 
-for W in $WEIGHTS; do
-    FONT_PATH="$FONT_DIR/$W.ttf"
+for FF in $FONT_FILES; do
+    FONT_PATH="$FONT_DIR/$FF"
     if [ ! -f "$FONT_PATH" ]; then
-        echo "$RCG_SKIP_MISSING $W.ttf"
+        echo "$RCG_SKIP_MISSING $FF"
         SKIP=$((SKIP + 1))
         continue
     fi

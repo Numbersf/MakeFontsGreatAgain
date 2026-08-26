@@ -44,6 +44,10 @@ class ModernEntry : XposedModule() {
             val typefaceClass = Class.forName("android.graphics.Typeface", false, cl)
             for (m in typefaceClass.declaredMethods) {
                 if (m.name != methodName) continue
+                // 只 hook 公开的静态工厂，避免动到内部实现细节（private 方法
+                // 不经过 app 直接调用，hook 只会白白增加开销）
+                if (!java.lang.reflect.Modifier.isPublic(m.modifiers)) continue
+                if (!java.lang.reflect.Modifier.isStatic(m.modifiers)) continue
                 hookAndReplace(m)
             }
         }.onFailure { log(Log.WARN, TAG, "hook Typeface.$methodName failed: $it") }

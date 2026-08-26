@@ -1,8 +1,18 @@
 // unicode_filter.c
 // Supports format 4 + format 12
 // Author: 咿云冷雨(Numbersf)
-// Fixed: multi-range clip corruption, split-range loss,
-//        format4 partial overlap, glyphID drift on start-clip
+//
+// v2 rewrite: instead of patching the cmap in place (which could silently
+// drop kept glyphs when a deletion split a format-4 segment and the segment
+// count outgrew the original table, and which left stale glyphIdArray
+// offsets after segment compaction), the tool now rebuilds the whole cmap
+// table into an exact-size buffer and writes the font to <file>.tmp,
+// atomically renamed over the original.
+//
+// Exit codes:
+//   0 = success
+//   1 = usage / open / parse error
+//   2 = no valid range parsed
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,8 +20,8 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/mman.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #define MAX_RANGES 128
 #define MAX_SPLIT  (MAX_RANGES * 2 + 1)   // worst-case output segments per input segment
@@ -29,8 +39,8 @@ static void w32(uint8_t *b,uint32_t v){
     b[0]=(v>>24)&0xFF; b[1]=(v>>16)&0xFF; b[2]=(v>>8)&0xFF; b[3]=v&0xFF;
 }
 
-/* ── checksum ── */
-uint32_t checksum(const uint8_t *data, uint32_t len){
+/* ── checksum (padded to 4 bytes) ── */
+static uint32_t checksum(const uint8_t *data, uint32_t len){
     uint32_t sum=0, n=(len+3)&~3u;
     for(uint32_t i=0;i<n;i+=4){
         if(i+3<len){ sum+=r32(data+i); }
@@ -48,8 +58,6 @@ uint32_t checksum(const uint8_t *data, uint32_t len){
  *
  * 输入一个 [start,end] 区段，从中减去 RangeList 所有删除区间，
  * 输出剩余的若干子区段写入 out[]，返回子区段数量。
- *
- * 算法：扫描排序后的删除区间，逐步切割剩余空间。
  * ──────────────────────────────────────────────────── */
 static int clip_segments(uint32_t start, uint32_t end,
                          const RangeList *list,
@@ -59,7 +67,6 @@ static int clip_segments(uint32_t start, uint32_t end,
     Range sorted[MAX_RANGES];
     int n = list->count;
     memcpy(sorted, list->ranges, (size_t)n * sizeof(Range));
-    /* 简单插入排序，区间数通常很少 */
     for(int i=1;i<n;i++){
         Range key=sorted[i]; int j=i-1;
         while(j>=0 && sorted[j].start > key.start){ sorted[j+1]=sorted[j]; j--; }
@@ -75,16 +82,13 @@ static int clip_segments(uint32_t start, uint32_t end,
         if(de < cur) continue;   /* 删除区间完全在左侧，已跳过 */
         if(ds > end) break;      /* 删除区间完全在右侧，后面也不用看 */
 
-        /* cur .. ds-1 是保留段（若 ds > cur） */
         if(ds > cur){
             out[count].start = cur;
             out[count].end   = ds - 1;
             count++;
         }
-        /* 跳过删除区间 */
         cur = de + 1;
     }
-    /* 剩余尾部 */
     if(cur <= end){
         out[count].start = cur;
         out[count].end   = end;
@@ -94,46 +98,66 @@ static int clip_segments(uint32_t start, uint32_t end,
 }
 
 /* ════════════════════════════════════════════════════
- * FORMAT 12
+ * FORMAT 12 rebuild (exact size)
  * 每个 group = [startCharCode(4), endCharCode(4), startGlyphID(4)]
- * 裁剪时 startGlyphID 需随 startCharCode 偏移同步增加。
+ * 裁剪时 startGlyphID 随 startCharCode 偏移同步增加。
+ * 返回新子表缓冲（malloc），*out_len 为长度。失败返回 NULL。
  * ════════════════════════════════════════════════════ */
-void rebuild_format12_safe(uint8_t *sub, const RangeList *list){
+static uint8_t *rebuild_format12(const uint8_t *sub, uint32_t subLen,
+                                 const RangeList *list, uint32_t *out_len)
+{
+    if (subLen < 16) return NULL;
+    uint32_t lenField = r32(sub+4);          /* length 字段应与传入长度一致 */
+    if (lenField != subLen || lenField < 16) return NULL;
     uint32_t n   = r32(sub+12);
-    uint8_t *grp = sub+16;
-    uint32_t wi  = 0;                  /* write index */
+    if (16u + n*12u > subLen) return NULL;   /* 越界，拒绝 */
+
+    const uint8_t *grp = sub+16;
+    Range segs[MAX_SPLIT];
+    uint32_t maxOut = n * MAX_SPLIT;
+    uint32_t wi = 0;
 
     for(uint32_t i=0;i<n;i++){
-        uint8_t *g         = grp + i*12;
-        uint32_t start     = r32(g);
-        uint32_t end       = r32(g+4);
-        uint32_t startGlyph= r32(g+8);
+        const uint8_t *g = grp + i*12;
+        uint32_t start = r32(g), end = r32(g+4);
+        if (start > end) return NULL;
+        int ns = clip_segments(start, end, list, segs);
+        wi += (uint32_t)ns;
+        if (wi > maxOut) return NULL;
+    }
 
-        Range out[MAX_SPLIT];
-        int nseg = clip_segments(start, end, list, out);
+    uint32_t newLen = 16u + wi*12u;
+    uint8_t *out = (uint8_t *)calloc(1, newLen);
+    if (!out) return NULL;
+    w16(out, 12);
+    w32(out+4, newLen);                      /* length 字段 */
+    w16(out+8, 0);                           /* language = 0 */
+    w32(out+12, wi);                         /* numGroups */
 
-        for(int s=0;s<nseg;s++){
-            uint32_t ns  = out[s].start;
-            uint32_t ne  = out[s].end;
-            /* glyphID 随 startCharCode 的偏移线性移动 */
-            uint32_t ng  = startGlyph + (ns - start);
-
-            uint8_t *dst = grp + wi*12;
-            w32(dst,    ns);
-            w32(dst+4,  ne);
+    wi = 0;
+    for(uint32_t i=0;i<n;i++){
+        const uint8_t *g = grp + i*12;
+        uint32_t start = r32(g), end = r32(g+4);
+        uint32_t startGlyph = r32(g+8);
+        int ns = clip_segments(start, end, list, segs);
+        for(int s=0;s<ns;s++){
+            uint32_t ns_ = segs[s].start, ne_ = segs[s].end;
+            uint32_t ng = startGlyph + (ns_ - start);   /* glyphID 随偏移线性移动 */
+            uint8_t *dst = out + 16 + wi*12;
+            w32(dst,    ns_);
+            w32(dst+4,  ne_);
             w32(dst+8,  ng);
             wi++;
         }
     }
-    w32(sub+12, wi);
-    /* 同步更新 format12 子表的 length 字段（偏移4，4字节） */
-    w32(sub+4, 16u + wi*12u);
+    *out_len = newLen;
+    return out;
 }
 
 /* ════════════════════════════════════════════════════
- * FORMAT 4
+ * FORMAT 4 rebuild (exact size)
  *
- * 原始布局（偏移从子表头算起）：
+ * 布局（偏移从子表头算起）：
  *   0  format(2)
  *   2  length(2)
  *   4  language(2)
@@ -148,156 +172,334 @@ void rebuild_format12_safe(uint8_t *sub, const RangeList *list){
  *  16+segCount*6  idRangeOffset[segCount]
  *  16+segCount*8  glyphIdArray[...]
  *
- * 策略：
- *   1. 把所有非哨兵段读出来，经 clip_segments 处理后
- *      存入动态数组（允许段数增加，因为一个段可能被拆成多个）。
- *   2. idRangeOffset==0 时，glyphID = (charCode + idDelta) & 0xFFFF，
- *      拆分子段只需调整 idDelta 即可，无需动 glyphIdArray。
- *   3. idRangeOffset!=0 时，glyphID 来自 glyphIdArray 间接索引，
- *      裁剪逻辑较复杂——本实现对此类段采用保守策略：
- *      仅做全删（完全覆盖）或保持原样（无交叉），
- *      部分重叠时截断为不重叠的最大子段，避免乱跳。
- *   4. 重建后更新 segCountX2、length 及相关二分查找辅助字段。
+ * 关键修正（相对旧版原地裁剪）：
+ *  1. 精确重建：输出段数可以超过原始段数（删除中间一段会把一个
+ *     ro==0 段拆成两段），不再“截断丢弃”保留字形。
+ *  2. idRangeOffset 是相对 idRangeOffset[i] 字位置的偏移；段被压缩后
+ *     i/j 变化，必须重算：newRO = oldRO - 2 * (i 之后被删除的段数)。
+ *     glyphIdArray 原样搬移。
+ *  3. ro!=0 的段沿用保守策略：仅当左边界未被裁剪时才保留。
  * ════════════════════════════════════════════════════ */
+static uint8_t *rebuild_format4(const uint8_t *sub, uint32_t subLen,
+                                const RangeList *list, uint32_t *out_len)
+{
+    if (subLen < 16) return NULL;
+    uint16_t segCount = r16(sub+6)/2;        /* 含末尾哨兵 */
+    if (segCount == 0 || 16u + (uint32_t)segCount*8u > subLen) return NULL;
 
-typedef struct {
-    uint16_t start, end, delta, rangeOffset;
-} Seg4;
+    const uint8_t *p = sub+14;
+    const uint8_t *endCode       = p;  p += (size_t)segCount*2 + 2; /* +pad */
+    const uint8_t *startCode     = p;  p += (size_t)segCount*2;
+    const uint8_t *idDelta       = p;  p += (size_t)segCount*2;
+    const uint8_t *idRangeOffset = p;
+    const uint8_t *glyphArray    = sub + 16u + (uint32_t)segCount*8u;
+    uint32_t glyphArrayLen = subLen - 16u - (uint32_t)segCount*8u;
 
-static uint16_t log2floor(uint16_t x){
-    uint16_t r=0; while(x>>=1) r++; return r;
-}
-
-void rebuild_format4_safe(uint8_t *sub, const RangeList *list){
-    uint16_t segCount = r16(sub+6)/2;          /* 含末尾哨兵 */
-
-    uint8_t *p = sub+14;
-    uint16_t *endCode       = (uint16_t*)p;  p += segCount*2 + 2; /* +pad */
-    uint16_t *startCode     = (uint16_t*)p;  p += segCount*2;
-    uint16_t *idDelta       = (uint16_t*)p;  p += segCount*2;
-    uint16_t *idRangeOffset = (uint16_t*)p;  /* p += segCount*2; */
-
-    /* ── 读取所有非哨兵段 ── */
-    /* 最坏情况每段被拆成 MAX_SPLIT 份，+1 留给哨兵 */
-    int maxOut = (segCount-1)*MAX_SPLIT + 1;
-    Seg4 *out = (Seg4*)malloc((size_t)maxOut * sizeof(Seg4));
-    if(!out){ fprintf(stderr,"OOM\n"); return; }
-    int nout = 0;
-
-    for(int i=0; i<(int)segCount-1; i++){  /* 跳过最后哨兵 */
-        uint32_t s  = r16((uint8_t*)&startCode[i]);
-        uint32_t e  = r16((uint8_t*)&endCode[i]);
-        uint16_t dt = r16((uint8_t*)&idDelta[i]);
-        uint16_t ro = r16((uint8_t*)&idRangeOffset[i]);
-
-        Range segs[MAX_SPLIT];
+    Range segs[MAX_SPLIT];
+    uint32_t maxOut = (uint32_t)segCount * MAX_SPLIT;
+    uint32_t newSeg = 0;
+    for (int i=0; i<(int)segCount-1; i++){   /* 跳过最后哨兵 */
+        uint32_t s  = r16(startCode + i*2);
+        uint32_t e  = r16(endCode   + i*2);
+        if (s > e) return NULL;
         int ns = clip_segments(s, e, list, segs);
+        newSeg += (uint32_t)ns;
+        if (newSeg > maxOut) return NULL;
+    }
+    newSeg += 1;                              /* 哨兵 */
+    if (newSeg == 0 || newSeg > 0xFFFF) return NULL;
 
-        for(int k=0;k<ns;k++){
-            uint32_t ns_ = segs[k].start;
-            uint32_t ne_ = segs[k].end;
+    uint32_t newLen = 16u + newSeg*8u + glyphArrayLen;
+    uint8_t *out = (uint8_t *)calloc(1, newLen);
+    if (!out) return NULL;
 
-            if(ro == 0){
-                /*
-                 * glyphID = (charCode + delta) & 0xFFFF
-                 * 拆分后新段的 delta 不变（线性映射，偏移一致）。
-                 */
-                out[nout].start       = (uint16_t)ns_;
-                out[nout].end         = (uint16_t)ne_;
-                out[nout].delta       = dt;
-                out[nout].rangeOffset = 0;
-                nout++;
-            } else {
-                /*
-                 * idRangeOffset != 0：间接查 glyphIdArray。
-                 * 仅保留与原段完全吻合的子段（即裁剪后起止未变的部分），
-                 * 其余因 glyphIdArray 偏移无法安全修正而丢弃。
-                 * ——保守但正确，不产生乱跳。
-                 */
-                if(ns_ == s && ne_ == e){
-                    /* 未被裁剪，原样保留 */
-                    out[nout].start       = (uint16_t)s;
-                    out[nout].end         = (uint16_t)e;
-                    out[nout].delta       = dt;
-                    out[nout].rangeOffset = ro;
-                    nout++;
-                } else if(ns_ == s && ne_ < e){
-                    /* 仅右侧被截，glyphIdArray 起点不变，可安全保留 */
-                    out[nout].start       = (uint16_t)ns_;
-                    out[nout].end         = (uint16_t)ne_;
-                    out[nout].delta       = dt;
-                    out[nout].rangeOffset = ro;
-                    nout++;
-                }
-                /* 左侧被截 (ns_ > s) 时 glyphIdArray 偏移错乱，丢弃 */
+    w16(out, 4);
+    w16(out+2, (uint16_t)newLen);             /* length 字段（format4 为 2 字节） */
+    w16(out+4, 0);                            /* language */
+    w16(out+6, (uint16_t)(newSeg*2));         /* segCountX2 */
+
+    uint8_t *wEnd   = out + 14;
+    uint8_t *wStart = wEnd + (size_t)newSeg*2 + 2;
+    uint8_t *wDelta = wStart + (size_t)newSeg*2;
+    uint8_t *wRO    = wDelta + (size_t)newSeg*2;
+    uint8_t *wGlyph = wRO    + (size_t)newSeg*2;
+
+    uint32_t total_removed = 0;
+    for (int i=0; i<(int)segCount-1; i++){
+        uint32_t s = r16(startCode + i*2), e = r16(endCode + i*2);
+        if (clip_segments(s, e, list, segs) == 0) total_removed++;
+    }
+
+    uint32_t removed_before = 0;              /* 本段之前被整段删除的段数 */
+    uint32_t j = 0;                           /* 输出段下标 */
+    for (int i=0; i<(int)segCount-1; i++){
+        uint32_t s  = r16(startCode + i*2);
+        uint32_t e  = r16(endCode   + i*2);
+        uint16_t dt = r16(idDelta   + i*2);
+        uint16_t ro = r16(idRangeOffset + i*2);
+
+        int ns = clip_segments(s, e, list, segs);
+        if (ns == 0){ removed_before++; continue; }
+
+        if (ro == 0){
+            /* glyphID = (charCode + delta) & 0xFFFF，拆分后 delta 不变 */
+            for (int k=0;k<ns;k++){
+                w16(wEnd   + j*2, (uint16_t)segs[k].end);
+                w16(wStart + j*2, (uint16_t)segs[k].start);
+                w16(wDelta + j*2, dt);
+                w16(wRO    + j*2, 0);
+                j++;
+            }
+        } else {
+            /* 仅保留左边界未被裁剪的子段（segs[k].start==s），其余丢弃 */
+            int32_t removed_after = (int32_t)(total_removed - removed_before);
+            int32_t newRO = (int32_t)ro - 2 * removed_after;
+            if (newRO < 0 || newRO > 0xFFFF){ free(out); return NULL; }
+            for (int k=0;k<ns;k++){
+                if (segs[k].start != s) continue;
+                w16(wEnd   + j*2, (uint16_t)segs[k].end);
+                w16(wStart + j*2, (uint16_t)segs[k].start);
+                w16(wDelta + j*2, dt);
+                w16(wRO    + j*2, (uint16_t)newRO);
+                j++;
             }
         }
     }
 
-    /* ── 追加哨兵 ── */
-    out[nout].start       = 0xFFFF;
-    out[nout].end         = 0xFFFF;
-    out[nout].delta       = 1;
-    out[nout].rangeOffset = 0;
-    nout++;
+    /* ── 哨兵 ── */
+    w16(wEnd   + j*2, 0xFFFF);
+    w16(wStart + j*2, 0xFFFF);
+    w16(wDelta + j*2, 1);
+    w16(wRO    + j*2, 0);
+    j++;
 
-    uint16_t newSeg = (uint16_t)nout;
+    memcpy(wGlyph, glyphArray, glyphArrayLen);
 
-    /* ── 回写（段数不超过原始分配空间时原地回写） ── */
-    /* format4 子表内存是固定的，我们只能在原 segCount 范围内回写。
-       若新段数 <= 原段数，直接回写并用哨兵填充剩余；
-       若新段数 > 原段数（理论上不可能，因为我们只删不增地处理
-       idRangeOffset!=0 的段，且 ro==0 拆分最多和原来一样多），
-       截断到原段数（极端边界保护）。                          */
-    if(newSeg > segCount) newSeg = segCount;  /* 保险截断 */
+    /* ── searchRange / entrySelector / rangeShift ── */
+    uint16_t sc = (uint16_t)j;
+    uint16_t p2 = 1;
+    while ((uint16_t)(p2*2) <= sc && p2 < 0x8000) p2 = (uint16_t)(p2*2);
+    uint16_t es = 0, t = p2; while (t > 1){ t >>= 1; es++; }
+    w16(out+8,  (uint16_t)(p2*2));            /* searchRange  */
+    w16(out+10, es);                          /* entrySelector */
+    w16(out+12, (uint16_t)((sc - p2)*2));     /* rangeShift   */
 
-    p = sub+14;
-    uint16_t *wEnd = (uint16_t*)p;  p += segCount*2 + 2;
-    uint16_t *wStart = (uint16_t*)p; p += segCount*2;
-    uint16_t *wDelta = (uint16_t*)p; p += segCount*2;
-    uint16_t *wRO    = (uint16_t*)p;
-
-    for(int i=0;i<newSeg;i++){
-        w16((uint8_t*)&wEnd[i],   out[i].end);
-        w16((uint8_t*)&wStart[i], out[i].start);
-        w16((uint8_t*)&wDelta[i], out[i].delta);
-        w16((uint8_t*)&wRO[i],    out[i].rangeOffset);
-    }
-    /* 将原来多出的旧段用哨兵覆盖（避免残留脏数据被误读） */
-    for(int i=newSeg;i<segCount;i++){
-        w16((uint8_t*)&wEnd[i],   0xFFFF);
-        w16((uint8_t*)&wStart[i], 0xFFFF);
-        w16((uint8_t*)&wDelta[i], 1);
-        w16((uint8_t*)&wRO[i],    0);
-    }
-
-    /* ── 更新 segCountX2 及二分查找辅助字段 ── */
-    w16(sub+6, (uint16_t)(newSeg*2));
-    uint16_t sc = newSeg;
-    uint16_t p2 = (uint16_t)(1u << log2floor(sc));
-    w16(sub+8,  (uint16_t)(p2*2));              /* searchRange  */
-    w16(sub+10, log2floor(p2));                 /* entrySelector */
-    w16(sub+12, (uint16_t)((sc - p2)*2));       /* rangeShift   */
-
-    /* length = 固定头(14) + 4个数组×segCount×2 + pad(2) + glyphIdArray */
-    /* 注意：glyphIdArray 我们没有改动，只更新段数相关字段，
-       length 保持原值以免破坏后续 glyphIdArray 数据。          */
-
-    free(out);
+    *out_len = newLen;
+    return out;
 }
 
-/* ── fix head checksum ── */
-void fix_font_checksum(uint8_t *buf, uint32_t size){
-    uint16_t numTables = r16(buf+4);
-    uint8_t *head = NULL;
-    for(int i=0;i<numTables;i++){
-        uint8_t *rec = buf+12+i*16;
-        if(!memcmp(rec,"head",4)){ head = buf+r32(rec+8); break; }
+/* 子表自身长度：format 4/6/8/10/13/14 的 length@+2（2字节），
+   format 12 的 length@+4（4字节），format 0 固定 262。 */
+static uint32_t subtable_self_len(const uint8_t *sub, uint32_t avail){
+    uint16_t fmt = r16(sub);
+    if (avail < 4) return 0;
+    if (fmt == 0) return 262u;
+    if (fmt == 12){
+        if (avail < 8) return 0;
+        uint32_t l = r32(sub+4);
+        return (l >= 16 && l <= avail) ? l : 0;
     }
-    if(!head) return;
-    w32(head+8, 0);
-    uint32_t adj = 0xB1B0AFBA - checksum(buf, size);
-    w32(head+8, adj);
+    uint32_t l = r16(sub+2);
+    return (l >= 4 && l <= avail) ? l : 0;
+}
+
+static void free_all_sub(uint8_t **subs, int n){
+    for (int i=0;i<n;i++) free(subs[i]);
+}
+
+/* ────────────────────────────────────────────────────
+ * 重建整个 cmap 表
+ * 返回新缓冲（malloc），*out_len 为新长度；失败返回 NULL。
+ * 未改动的子表（format 0/2/6/8/10/13/14）原样搬移。
+ * ──────────────────────────────────────────────────── */
+static uint8_t *rebuild_cmap(const uint8_t *cmap, uint32_t cmapLen,
+                             const RangeList *list, uint32_t *out_len)
+{
+    if (cmapLen < 4) return NULL;
+    uint16_t numSub = r16(cmap+2);
+    if (4u + (uint32_t)numSub*8u > cmapLen) return NULL;
+    if (numSub == 0) return NULL;
+
+    uint32_t *oldOffsets = (uint32_t *)malloc(sizeof(uint32_t)*numSub);
+    uint8_t  **newSub    = (uint8_t **)calloc(numSub, sizeof(uint8_t*));
+    uint32_t *newSubLen  = (uint32_t *)malloc(sizeof(uint32_t)*numSub);
+    uint32_t *newOffsets = (uint32_t *)malloc(sizeof(uint32_t)*numSub);
+    int      *recMap     = (int *)malloc(sizeof(int)*numSub);
+    if (!oldOffsets || !newSub || !newSubLen || !newOffsets || !recMap){
+        free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap);
+        return NULL;
+    }
+
+    int unique = 0;
+    for (int i=0;i<numSub;i++){
+        const uint8_t *rec = cmap + 4 + i*8;
+        uint32_t off = r32(rec+4);
+        if (off >= cmapLen){ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+
+        int k = -1;
+        for (int t=0;t<unique;t++) if (oldOffsets[t]==off){ k=t; break; }
+        if (k >= 0){ recMap[i] = k; continue; }
+
+        const uint8_t *sub = cmap + off;
+        uint32_t avail = cmapLen - off;
+        if (avail < 2){ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+        uint16_t fmt = r16(sub);
+
+        uint32_t selfLen = subtable_self_len(sub, avail);
+        if (!selfLen){ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+
+        uint8_t *nb = NULL; uint32_t nlen = 0;
+        if (fmt==12) nb = rebuild_format12(sub, selfLen, list, &nlen);
+        else if (fmt==4) nb = rebuild_format4 (sub, selfLen, list, &nlen);
+        else {
+            nb = (uint8_t *)malloc(selfLen);
+            if (nb){ memcpy(nb, sub, selfLen); nlen = selfLen; }
+        }
+        if (!nb){ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+
+        oldOffsets[unique] = off;
+        newSub[unique]     = nb;
+        newSubLen[unique]  = nlen;
+        recMap[i]          = unique;
+        unique++;
+    }
+
+    /* 摆放：记录偏移，先累加 */
+    uint32_t headerLen = 4u + (uint32_t)numSub*8u;
+    uint32_t cursor = headerLen;
+    for (int k=0;k<unique;k++){
+        newOffsets[k] = cursor;
+        cursor += (newSubLen[k] + 3u) & ~3u;
+    }
+    if (cursor < headerLen){ /* 溢出保护 */ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+
+    uint8_t *out = (uint8_t *)calloc(1, cursor);
+    if (!out){ free_all_sub(newSub, unique); free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap); return NULL; }
+
+    memcpy(out, cmap, 4);                     /* version + numTables */
+    for (int i=0;i<numSub;i++){
+        const uint8_t *rec = cmap + 4 + i*8;
+        uint8_t *dst = out + 4 + i*8;
+        memcpy(dst, rec, 4);                  /* platformID + encodingID */
+        w32(dst+4, newOffsets[recMap[i]]);    /* 编码记录偏移字段在 +4（不是 +6） */
+    }
+    for (int k=0;k<unique;k++){
+        memcpy(out + newOffsets[k], newSub[k], newSubLen[k]);
+    }
+
+    free_all_sub(newSub, unique);
+    free(oldOffsets); free(newSub); free(newSubLen); free(newOffsets); free(recMap);
+    *out_len = cursor;
+    return out;
+}
+
+/* ────────────────────────────────────────────────────
+ * 写新字体：sfnt 头 + 表目录（cmap 替换，其余原样），
+ * 写 <path>.tmp 后原子 rename。
+ * ──────────────────────────────────────────────────── */
+static int write_font(const char *path, const uint8_t *orig, uint32_t origLen,
+                      const uint8_t *newCmap, uint32_t newCmapLen)
+{
+    if (origLen < 12) return -1;
+    uint16_t numTables = r16(orig+4);
+    if (12u + (uint32_t)numTables*16u > origLen || numTables == 0) return -1;
+
+    uint32_t headOff = 0, headLen = 0;
+    for (int i=0;i<numTables;i++){
+        const uint8_t *rec = orig + 12 + i*16;
+        if (!memcmp(rec,"head",4)){ headOff = r32(rec+8); headLen = r32(rec+12); }
+    }
+    if (!headOff || headOff + headLen > origLen || headLen < 12) return -1;
+
+    uint32_t dirLen = 12u + (uint32_t)numTables*16u;
+    uint32_t *offs = (uint32_t *)malloc(sizeof(uint32_t)*numTables);
+    uint32_t *lens = (uint32_t *)malloc(sizeof(uint32_t)*numTables);
+    uint32_t *sums = (uint32_t *)malloc(sizeof(uint32_t)*numTables);
+    if (!offs || !lens || !sums){ free(offs); free(lens); free(sums); return -1; }
+
+    uint32_t cursor = dirLen;
+    for (int i=0;i<numTables;i++){
+        const uint8_t *rec = orig + 12 + i*16;
+        uint32_t o, l;
+        if (!memcmp(rec,"cmap",4)){ o = cursor; l = newCmapLen; }
+        else {
+            o = r32(rec+8); l = r32(rec+12);
+            if (o + l > origLen){ free(offs); free(lens); free(sums); return -1; }
+        }
+        offs[i] = cursor; lens[i] = l;
+        cursor += (l + 3u) & ~3u;
+        if (cursor < offs[i]){ free(offs); free(lens); free(sums); return -1; } /* 溢出保护 */
+    }
+
+    for (int i=0;i<numTables;i++){
+        const uint8_t *rec = orig + 12 + i*16;
+        if (!memcmp(rec,"cmap",4)){
+            sums[i] = checksum(newCmap, newCmapLen);
+        } else if (!memcmp(rec,"head",4)){
+            uint8_t *headCopy = (uint8_t *)malloc(headLen);
+            if (!headCopy){ free(offs); free(lens); free(sums); return -1; }
+            memcpy(headCopy, orig+headOff, headLen);
+            w32(headCopy+8, 0);               /* checkSumAdjustment = 0 后重算 */
+            sums[i] = checksum(headCopy, headLen);
+            free(headCopy);
+        } else {
+            sums[i] = r32(rec+4);             /* 其余表数据未变，校验和不变 */
+        }
+    }
+
+    uint8_t *out = (uint8_t *)calloc(1, cursor);
+    if (!out){ free(offs); free(lens); free(sums); return -1; }
+
+    memcpy(out, orig, 4);                     /* sfnt 版本 */
+    w16(out+4, numTables);
+    /* 二进制搜索参数按规范计算 */
+    uint16_t sr = 1, es = 0;
+    while ((uint16_t)(sr*2) <= numTables){ sr = (uint16_t)(sr*2); es++; }
+    w16(out+6,  (uint16_t)(sr*16));
+    w16(out+8,  es);
+    w16(out+10, (uint16_t)(numTables*16 - sr*16));
+
+    for (int i=0;i<numTables;i++){
+        uint8_t *rec = out + 12 + i*16;
+        memcpy(rec, orig + 12 + i*16, 16);
+        w32(rec+4, sums[i]);
+        w32(rec+8, offs[i]);
+        w32(rec+12, lens[i]);
+
+        uint8_t *dst = out + offs[i];
+        if (!memcmp(rec,"cmap",4)) memcpy(dst, newCmap, newCmapLen);
+        else memcpy(dst, orig + r32(orig+12+i*16+8), lens[i]);
+    }
+
+    /* 整字校验和 → head.checkSumAdjustment */
+    uint32_t total = checksum(out, cursor);
+    for (int i=0;i<numTables;i++){
+        if (!memcmp(out+12+i*16,"head",4)){
+            w32(out + offs[i] + 8, 0xB1B0AFBAu - total);
+            break;
+        }
+    }
+    free(offs); free(lens); free(sums);
+
+    /* 写临时文件 + rename */
+    size_t plen = strlen(path);
+    char *tmp = (char *)malloc(plen + 8);
+    if (!tmp){ free(out); return -1; }
+    snprintf(tmp, plen + 8, "%s.tmp", path);
+
+    int fd = open(tmp, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+    if (fd < 0){ free(out); free(tmp); return -1; }
+    size_t written = 0;
+    while (written < cursor){
+        ssize_t w = write(fd, out + written, cursor - written);
+        if (w <= 0){ close(fd); unlink(tmp); free(out); free(tmp); return -1; }
+        written += (size_t)w;
+    }
+    if (fsync(fd) != 0){ close(fd); unlink(tmp); free(out); free(tmp); return -1; }
+    close(fd);
+    if (rename(tmp, path) != 0){ unlink(tmp); free(out); free(tmp); return -1; }
+    free(tmp); free(out);
+    return 0;
 }
 
 int main(int argc, char **argv){
@@ -312,6 +514,9 @@ int main(int argc, char **argv){
     while(token && list.count < MAX_RANGES){
         uint32_t s, e;
         if(sscanf(token,"U+%x-U+%x",&s,&e)==2){
+            if (s > e){ uint32_t t=s; s=e; e=t; }   /* 容忍倒序 */
+            if (s > 0x10FFFFu) s = 0x10FFFFu;
+            if (e > 0x10FFFFu) e = 0x10FFFFu;
             list.ranges[list.count].start = s;
             list.ranges[list.count].end   = e;
             list.count++;
@@ -319,56 +524,50 @@ int main(int argc, char **argv){
         token = strtok(NULL, ";,");
     }
     free(ranges);
-    if(list.count==0){ printf("No valid ranges parsed.\n"); return 1; }
+    if(list.count==0){ printf("No valid ranges parsed.\n"); return 2; }
 
-    int fd = open(argv[1], O_RDWR);
+    int fd = open(argv[1], O_RDONLY);
     if(fd<0){ perror("open"); return 1; }
-    struct stat st; fstat(fd, &st);
-    uint8_t *buf = mmap(NULL, (size_t)st.st_size,
-                        PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-    if(buf==MAP_FAILED){ perror("mmap"); close(fd); return 1; }
-
-    uint16_t numTables   = r16(buf+4);
-    uint32_t cmap_offset = 0;
-    uint8_t *cmap_record = NULL;
-    for(int i=0;i<numTables;i++){
-        uint8_t *rec = buf+12+i*16;
-        if(!memcmp(rec,"cmap",4)){ cmap_offset=r32(rec+8); cmap_record=rec; }
+    struct stat st; if (fstat(fd, &st) != 0 || st.st_size <= 0 || st.st_size > 0x7FFFFFFFu){ close(fd); return 1; }
+    uint8_t *buf = (uint8_t *)malloc((size_t)st.st_size);
+    if (!buf){ close(fd); return 1; }
+    size_t rd = 0;
+    while (rd < (size_t)st.st_size){
+        ssize_t r = read(fd, buf + rd, (size_t)st.st_size - rd);
+        if (r <= 0){ free(buf); close(fd); return 1; }
+        rd += (size_t)r;
     }
-    if(!cmap_record){ fprintf(stderr,"No cmap table.\n"); return 1; }
-
-    uint16_t numSub = r16(buf+cmap_offset+2);
-    uint32_t seen_offsets[MAX_RANGES*4];
-    int seen_count = 0;
-    for(int i=0;i<numSub;i++){
-        uint8_t *rec = buf+cmap_offset+4+i*8;
-        uint32_t off = r32(rec+4);
-
-        int already = 0;
-        for(int k=0;k<seen_count;k++){
-            if(seen_offsets[k]==off){ already=1; break; }
-        }
-        if(already) continue;
-        if(seen_count < (int)(sizeof(seen_offsets)/sizeof(seen_offsets[0]))){
-            seen_offsets[seen_count++] = off;
-        }
-
-        uint8_t *sub = buf+cmap_offset+off;
-        uint16_t fmt = r16(sub);
-        if(fmt==12)      rebuild_format12_safe(sub, &list);
-        else if(fmt==4)  rebuild_format4_safe (sub, &list);
-    }
-
-    /* 更新 cmap 表校验和 */
-    uint32_t cmap_len = r32(cmap_record+12);
-    w32(cmap_record+4, checksum(buf+cmap_offset, cmap_len));
-
-    fix_font_checksum(buf, (uint32_t)st.st_size);
-
-    msync(buf, (size_t)st.st_size, MS_SYNC);
-    munmap(buf, (size_t)st.st_size);
     close(fd);
+    uint32_t origLen = (uint32_t)st.st_size;
 
+    uint16_t numTables = r16(buf+4);
+    uint32_t cmapOff = 0, cmapLen = 0;
+    for(int i=0;i<numTables;i++){
+        const uint8_t *rec = buf+12+i*16;
+        if(!memcmp(rec,"cmap",4)){ cmapOff=r32(rec+8); cmapLen=r32(rec+12); }
+    }
+    if(!cmapOff || cmapOff + cmapLen > origLen){
+        fprintf(stderr,"No valid cmap table.\n");
+        free(buf);
+        return 1;
+    }
+
+    uint32_t newCmapLen = 0;
+    uint8_t *newCmap = rebuild_cmap(buf + cmapOff, cmapLen, &list, &newCmapLen);
+    if (!newCmap){
+        fprintf(stderr,"cmap rebuild failed.\n");
+        free(buf);
+        return 1;
+    }
+
+    int ret = write_font(argv[1], buf, origLen, newCmap, newCmapLen);
+    free(newCmap);
+    free(buf);
+
+    if (ret != 0){
+        fprintf(stderr,"write failed.\n");
+        return 1;
+    }
     printf("SAFE CMAP REBUILD COMPLETE\n");
     return 0;
 }

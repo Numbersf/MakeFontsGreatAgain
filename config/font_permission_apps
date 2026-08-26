@@ -1,0 +1,5 @@
+# 取消内置字体权限的应用列表（service.sh / uninstall.sh 读取）
+# 每行一个包名，# 开头为注释。开机时将这些应用的内部字体设为不可读，强制使用系统字体。
+# 删除应用请直接删除对应行，或通过 WebUI 操作。
+com.dragon.read
+com.qidian.QDReader

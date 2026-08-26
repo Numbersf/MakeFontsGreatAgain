@@ -70,5 +70,6 @@ NOTIFY_BODY="Thank you for using Advanced Global Font Module MFGA. Swipe to dism
 RCG_USAGE="[✗] Usage: sh recolor_glyph.sh \"U+XXXX;#RRGGBB\""
 RCG_BAD_FORMAT="[✗] Invalid format, expected U+XXXX;#RRGGBB (e.g. U+002F;#F5A9B8):"
 RCG_NO_BIN="[✗] No binary found for this architecture:"
+RCG_UNSUPPORTED_ARCH="[!] Unsupported architecture:"
 RCG_SKIP_MISSING="[!] Font weight file not found, skipping:"
 RCG_DONE="Done: succeeded %OK%, skipped %SKIP%, failed %FAIL%"

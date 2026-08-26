@@ -619,4 +619,10 @@ U+16D40-U+16D79(U+16D7F)
  - 6.新增拓展私用区A的U+F0000
 ```
 󰀀
-```
+``` 
+# 构建与打包（本 fork）
+- ``tools/package/build_module.sh``：组装可安装的模块 zip。以 ``--base-zip`` 指定的上游 release 为字体基底，覆盖本仓库定制内容，自动生成 ``module.prop``，产出 ``dist/MFGA-<版本>.<versionCode>.zip`` 与 ``MFGA-SELFUSE-...zip``（对应两个更新通道）
+- 示例：``tools/package/build_module.sh --base-zip MFGA-17.0.0.06-27-alpha.1717180001.zip --bin-dir tools/prebuilt/bin``
+- ``tools/package/validate_module.py``：打包前的质检（module.prop 字段、必需文件、fonts.xml 引用 ↔ system/fonts 对照、bin 完整性）
+- ``.github/workflows/release.yml``：手动触发（可填上游 base zip URL）或推送 ``v*`` tag 时自动：NDK 编译 C 工具 → 下载基底 → 打包 → 校验 → 上传 artifact 并创建 GitHub Release
+- 不带 ``--base-zip`` 时只打包仓库内 5 个字体（会警告缺字，模块仍可安装但大部分字体退化为系统默认）

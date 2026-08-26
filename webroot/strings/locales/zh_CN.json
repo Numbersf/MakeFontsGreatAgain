@@ -64,5 +64,18 @@
   "LOG_NO_GMS_SWITCH": "[✗] 未找到 gms-switch 元素",
   "LOG_DISABLED_TEXT": "已屏蔽: ",
   "LOG_NOT_FOUND_TEXT": "未找到: ",
-  "LOG_BACKUP_MISSING": "备份文件不存在"
+  "LOG_BACKUP_MISSING": "备份文件不存在",
+  "FONT_PERM_TITLE": "取消内置字体权限的应用",
+  "FONT_PERM_DESC": "开机时将这些应用的内部字体设为不可读，强制使用系统字体。删除请编辑 config/font_permission_apps",
+  "FONT_PERM_PLACEHOLDER": "例:com.whatsapp",
+  "FONT_PERM_ADD": "添加",
+  "FONT_PERM_RUN": "立即执行",
+  "FONT_PERM_EMPTY": "（列表为空，使用内置默认）",
+  "TOAST_FONT_PERM_INVALID": "包名格式不对",
+  "TOAST_FONT_PERM_DUP": "该应用已在列表中",
+  "TOAST_FONT_PERM_ADDED": "已添加，重启后生效",
+  "TOAST_FONT_PERM_RUN": "已执行",
+  "LOG_FONT_PERM_FAIL": "[!] 读取应用列表失败: ",
+  "LOG_FONT_PERM_DONE": "[✓] 已对应用执行字体权限屏蔽: ",
+  "LOG_FONT_PERM_ERR": "[✗] 执行失败: "
 }

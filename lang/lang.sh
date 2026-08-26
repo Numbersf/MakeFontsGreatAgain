@@ -56,6 +56,10 @@ fi
 
 [ "$LANGUAGE_LOADED" -eq 0 ] && . "$LANG_DIR/lang_zh_CN.sh"
 
+# 只允许纯标识符键名，防止键名注入任意 shell 代码
 msg() {
+  case "$1" in
+    *[!A-Za-z0-9_]*|'') echo "$1"; return ;;
+  esac
   eval "echo \"\${$1}\""
 }

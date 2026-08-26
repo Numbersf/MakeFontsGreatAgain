@@ -33,6 +33,11 @@ if [ -z "$FONT" ] || [ -z "$RANGES" ]; then
     exit 1
 fi
 
+# 拒绝路径穿越：字体名只能是纯文件名
+case "$FONT" in
+  */*|*..*|*\ *|'') echo "[!] $UNI_FONT_NOT_FOUND $FONT"; exit 1 ;;
+esac
+
 # 强制限定字体目录
 FONT_PATH="$FONTS_DIR/$FONT"
 if [ ! -f "$FONT_PATH" ]; then

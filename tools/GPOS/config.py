@@ -12,12 +12,19 @@
     /storage/emulated/0/125
 """
 
-SOURCE_DIR = "/storage/emulated/0/123"
-MODIFIED_DIR = "/storage/emulated/0/124"
-RESULT_DIR = "/storage/emulated/0/125"
+import os
+
+
+def _p(name, default):
+    return os.environ.get(name, default)
+
+
+SOURCE_DIR = _p("MFGA_SOURCE_DIR", "/storage/emulated/0/123")
+MODIFIED_DIR = _p("MFGA_MODIFIED_DIR", "/storage/emulated/0/124")
+RESULT_DIR = _p("MFGA_RESULT_DIR", "/storage/emulated/0/125")
 
 # 字重文件名（不含路径），按需增删
-WEIGHTS = ["200.ttf", "300.ttf", "400.ttf", "700.ttf"]
+WEIGHTS = _p("MFGA_WEIGHTS", "200.ttf 300.ttf 400.ttf 700.ttf").split()
 
 # 中间产物路径（合并完字形、但还没建 GPOS 的版本），方便分步调试
-MERGED_DIR = "/storage/emulated/0/125_merged_tmp"
+MERGED_DIR = _p("MFGA_MERGED_DIR", "/storage/emulated/0/125_merged_tmp")

@@ -64,5 +64,18 @@
   "LOG_NO_GMS_SWITCH": "[✗] Элемент gms-switch не найден",
   "LOG_DISABLED_TEXT": "Заблокировано: ",
   "LOG_NOT_FOUND_TEXT": "Не найдено: ",
-  "LOG_BACKUP_MISSING": "Файл резервной копии отсутствует"
+  "LOG_BACKUP_MISSING": "Файл резервной копии отсутствует",
+  "FONT_PERM_TITLE": "Приложения с отозванным доступом к шрифтам",
+  "FONT_PERM_DESC": "Делает встроенные шрифты этих приложений недоступными при загрузке, чтобы использовался системный шрифт. Для удаления отредактируйте config/font_permission_apps",
+  "FONT_PERM_PLACEHOLDER": "напр. com.whatsapp",
+  "FONT_PERM_ADD": "Добавить",
+  "FONT_PERM_RUN": "Выполнить сейчас",
+  "FONT_PERM_EMPTY": "(пусто, используются встроенные значения)",
+  "TOAST_FONT_PERM_INVALID": "Недопустимое имя пакета",
+  "TOAST_FONT_PERM_DUP": "Приложение уже в списке",
+  "TOAST_FONT_PERM_ADDED": "Добавлено, вступит в силу после перезагрузки",
+  "TOAST_FONT_PERM_RUN": "Готово",
+  "LOG_FONT_PERM_FAIL": "[!] Не удалось загрузить список приложений: ",
+  "LOG_FONT_PERM_DONE": "[✓] Доступ к шрифтам отозван для: ",
+  "LOG_FONT_PERM_ERR": "[✗] Ошибка: "
 }

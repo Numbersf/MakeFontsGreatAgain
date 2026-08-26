@@ -21,14 +21,10 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Check project
-        run: |
-          ls -la mfga-xposed
-
       - name: Generate Gradle Wrapper
         working-directory: mfga-xposed
         run: |
-          gradle wrapper --gradle-version 8.9
+          gradle wrapper --gradle-version 8.9 --no-daemon
           chmod +x gradlew
 
       - name: Set up Android SDK
@@ -39,7 +35,7 @@ jobs:
 
       - name: Build release APK
         working-directory: mfga-xposed
-        run: ./gradlew assembleRelease --stacktrace
+        run: ./gradlew assembleRelease --stacktrace --no-daemon
 
       - name: Locate APK
         working-directory: mfga-xposed

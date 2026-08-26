@@ -1,0 +1,125 @@
+name: Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Shell syntax check (sh -n)
+        run: |
+          set -e
+          for f in script/*.sh lang/*.sh; do
+            sh -n "$f"
+            echo "  ✓ $f"
+          done
+          bash -n tools/package/build_module.sh
+          echo "  ✓ tools/package/build_module.sh"
+
+      - name: Shellcheck
+        run: |
+          set -e
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck >/dev/null
+          shellcheck -s sh script/*.sh lang/*.sh
+          shellcheck -s bash tools/package/build_module.sh
+
+      - name: WebUI JS syntax check
+        run: node --check webroot/scripts.js
+
+      - name: JSON validity + locale key parity
+        run: |
+          set -e
+          for f in update.json update2.json webroot/strings/locales/*.json; do
+            python3 -m json.tool "$f" > /dev/null
+            echo "  ✓ $f"
+          done
+          python3 - <<'EOF'
+          import json, re
+          js = open("webroot/scripts.js").read() + open("webroot/index.html").read()
+          used = set(re.findall(r"t\('([A-Z_0-9]+)'\)", js))
+          used |= set(re.findall(r'data-i18n="([A-Z_0-9]+)"', js))
+          ref = json.load(open("webroot/strings/locales/zh_CN.json"))
+          missing = sorted(k for k in used if k not in ref)
+          assert not missing, f"locale keys used but missing in zh_CN.json: {missing}"
+          for loc in ("en_US", "ja_JP", "ru_RU"):
+              d = json.load(open(f"webroot/strings/locales/{loc}.json"))
+              miss = sorted(set(ref) - set(d))
+              assert not miss, f"{loc} missing keys vs zh_CN: {miss}"
+          print("  ✓ locale key parity OK")
+          EOF
+
+      - name: Workflow YAML validity
+        run: |
+          set -e
+          python3 - <<'EOF'
+          import glob, yaml
+          for f in sorted(glob.glob(".github/workflows/*.yml")):
+              with open(f) as fh:
+                  yaml.safe_load(fh)
+              print(f"  ✓ {f}")
+          EOF
+
+      - name: fonts.xml well-formed (XML)
+        run: |
+          python3 - <<'EOF'
+          import xml.etree.ElementTree as ET
+          ET.parse("fonts.xml")
+          print("  ✓ fonts.xml well-formed")
+          EOF
+
+      - name: fonts_list.yaml parseable
+        run: |
+          python3 - <<'EOF'
+          # 不依赖 PyYAML：只验证结构一致性（whitelist/blacklist/reverse 必须存在）
+          import re
+          text = open("fonts_list.yaml").read()
+          for key in ("whitelist", "blacklist", "reverse"):
+              assert re.search(rf"^\s*{key}:", text, re.M), f"missing {key} in fonts_list.yaml"
+          print("  ✓ fonts_list.yaml sections present")
+          EOF
+
+      - name: Version consistency (update.json ↔ changelog.md)
+        run: |
+          set -e
+          VER=$(python3 -c "import json;print(json.load(open('update.json'))['version'])")
+          VC=$(python3 -c "import json;print(json.load(open('update.json'))['versionCode'])")
+          grep -q "$VER" changelog.md || { echo "changelog.md missing version $VER"; exit 1; }
+          grep -q "($VC)" changelog.md || { echo "changelog.md missing versionCode $VC"; exit 1; }
+          echo "  ✓ version $VER ($VC) present in changelog.md"
+
+  c-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Compile C tools (native, warning-free)
+        run: |
+          set -e
+          gcc -Wall -Wextra -Werror -O2 -o /tmp/unicode_filter tools/unicode_filter.c
+          gcc -Wall -Wextra -Werror -O2 -o /tmp/recolor_glyph tools/recolor_glyph.c
+          echo "  ✓ both C tools compile warning-free"
+
+      - name: Smoke-test unicode_filter on real font
+        run: |
+          set -e
+          pip install --quiet fonttools
+          cp fonts/Unicode16-new.ttf /tmp/t.ttf
+          /tmp/unicode_filter /tmp/t.ttf "U+1F000-U+1F0FF;U+00C0-U+00FF"
+          python3 - <<'EOF'
+          from fontTools.ttLib import TTFont
+          a = TTFont("fonts/Unicode16-new.ttf").getBestCmap()
+          b = TTFont("/tmp/t.ttf").getBestCmap()
+          removed = set(range(0x1F000, 0x1F100)) | set(range(0xC0, 0x100))
+          assert not (removed & set(b)), "removed codepoints still mapped"
+          for cp, gid in a.items():
+              if cp in removed:
+                  continue
+              assert b.get(cp) == gid, f"glyph drift at {cp:#x}"
+          print("  ✓ unicode_filter smoke test OK")
+          EOF

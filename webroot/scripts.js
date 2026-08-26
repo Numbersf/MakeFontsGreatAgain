@@ -94,6 +94,20 @@ applyTranslations(T);
 // 取翻译字符串，缺失时返回 key 自身
 const t = key => T[key] ?? key;
 
+// ── 安全工具 ─────────────────────────────────────────────
+// HTML 转义：所有不可信文本进入 terminal 前必须先过这里，防 XSS
+function escHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;',
+        '"': '&quot;', "'": '&#39;'
+    })[c]);
+}
+
+// POSIX 单引号转义：所有用户输入拼进 shell 命令前必须先过这里，防命令注入
+function shq(s) {
+    return "'" + String(s).replace(/'/g, "'\\''") + "'";
+}
+
 const fontInput = document.getElementById('font-input');
 const disableBtn = document.getElementById('disable-font');
 const restoreBtn = document.getElementById('restore-font');
@@ -104,15 +118,16 @@ const terminal = document.querySelector('.output-terminal-content');
 const cleanBtn = document.querySelector('.terminal-buttons .clean-terminal');
 const copyBtn = document.querySelector('.terminal-buttons .copy-terminal');
 
-console.log("gmsSwitch =", gmsSwitch);
-
-function log(msg) {
-    terminal.innerHTML += msg + "<br>";
+// 默认转义；调用方需要注入受信任的 HTML 片段时传 raw=true。
+// 多行文本自动转换为 <br>。
+function log(msg, raw = false) {
+    const parts = String(msg).split('\n');
+    terminal.innerHTML += (raw ? parts.join('<br>') : parts.map(escHtml).join('<br>')) + "<br>";
     terminal.scrollTop = terminal.scrollHeight;
 }
 
 function warn(msg) {
-    terminal.innerHTML += `<span style="color:#ef4444;font-weight:bold">${msg}</span><br>`;
+    terminal.innerHTML += `<span style="color:#ef4444;font-weight:bold">${escHtml(msg)}</span><br>`;
     terminal.scrollTop = terminal.scrollHeight;
 }
 
@@ -120,8 +135,14 @@ async function ensureDir() {
     await exec('mkdir -p /data/adb/modules/MFGA/system/fonts');
 }
 
+// 逐行转义后再给 .disabled 行加高亮，杜绝把 ls 输出当 HTML 注入
 function highlightDisabledFiles(lsOutput) {
-    return lsOutput.replace(/(.*\.disabled)/g, '<span style="color:#eab308;font-weight:bold">$1</span>');
+    return String(lsOutput).split('\n').map(line => {
+        const safe = escHtml(line);
+        return /\.disabled\s*$/.test(line)
+            ? `<span style="color:#eab308;font-weight:bold">${safe}</span>`
+            : safe;
+    }).join('<br>');
 }
 
 async function showCurrentFiles() {
@@ -132,7 +153,7 @@ async function showCurrentFiles() {
             ? ls
             : (ls?.output ?? ls?.stdout ?? ls?.stderr ?? JSON.stringify(ls));
         output = output.trim();
-        log(`${t('LOG_FONT_DIR')}<br>${highlightDisabledFiles(output).replace(/\n/g, '<br>')}`);
+        log(`${escHtml(t('LOG_FONT_DIR'))}<br>${highlightDisabledFiles(output)}`, true);
     } catch (e) {
         warn(`${t('LOG_DIR_FAIL')}${e}`);
     }
@@ -151,12 +172,12 @@ async function handleFont(action) {
     const dir = '/data/adb/modules/MFGA/system/fonts';
     const filePath = `${dir}/${name}`;
     const backupDir = '/data/adb/modules/MFGA/uni_backup';
-    await exec(`mkdir -p "${backupDir}"`);
+    await exec(`mkdir -p ${shq(backupDir)}`);
 
     const isDisable = action === 'disable';
 
     async function fileExists(path) {
-        const result = await exec(`[ -f "${path}" ] && echo yes || echo no`);
+        const result = await exec(`[ -f ${shq(path)} ] && echo yes || echo no`);
         let output = typeof result === 'string' ? result
             : (result?.stdout ?? result?.output ?? '');
         return output.trim() === 'yes';
@@ -165,6 +186,11 @@ async function handleFont(action) {
     const match = name.match(/^([\w.-]+)(?:,\(([^)]+)\))?$/);
     const filename = match[1];
     const ranges = match[2] ?? '';
+    // 防路径穿越：文件名禁止 .. 或 /，否则 mv/cp 可能动到模块目录之外
+    if (filename.includes('..') || filename.includes('/')) {
+        toast(t('TOAST_INPUT_INVALID'));
+        return;
+    }
     const disabledPath = `${filePath}.disabled`;
     const backupPath = `${backupDir}/${filename}`;
 
@@ -179,7 +205,7 @@ async function handleFont(action) {
         // 检查是否有 Unicode 区间
         if (ranges) {
             // 有 Unicode 区间 → 调用 unicode_filter.sh
-            const cmd = `sh /data/adb/modules/MFGA/unicode_filter.sh "${filename}" "${ranges}"`;
+            const cmd = `sh /data/adb/modules/MFGA/unicode_filter.sh ${shq(filename)} ${shq(ranges)}`;
             log(`${t('LOG_TRY_DISABLE')}${filename}${t('LOG_RANGE')}${ranges}`);
             try {
                 const result = await exec(cmd);
@@ -190,12 +216,11 @@ async function handleFont(action) {
                     ? (result.exitCode ?? result.code ?? result.exit_code ?? null)
                     : null;
                 const succeeded = exitCode !== null ? exitCode === 0 : !output.includes('[✗]');
-                const htmlOutput = output.replace(/\n/g, '<br>');
                 if (succeeded) {
-                    if (htmlOutput) log(htmlOutput);
+                    if (output) log(output);
                     log(`${t('LOG_DISABLED_OK')}${filename}`);
                 } else {
-                    if (htmlOutput) warn(htmlOutput);
+                    if (output) warn(output);
                     warn(`${t('LOG_DISABLED_FAIL')}${filename}`);
                 }
             } catch (e) {
@@ -203,17 +228,18 @@ async function handleFont(action) {
             }
         } else {
             // 无 Unicode 区间 → 直接 mv 改名为 .disabled
+            if (!(await fileExists(filePath))) {
+                warn(`${t('LOG_NOT_FOUND_TEXT')}${filename}`);
+                return;
+            }
             try {
-                const disabledText = t('LOG_DISABLED_TEXT');
-                const notFoundText = t('LOG_NOT_FOUND_TEXT');
-                const result = await exec(
-                    `[ -f "${filePath}" ] && mv "${filePath}" "${disabledPath}" && echo "${disabledText}${filename}" || echo "${notFoundText}${filename}"`
-                );
-                let output = typeof result === 'string' ? result
-                    : (result.stdout ?? result.output ?? '');
-                output = output.trim();
-                if (output.includes(disabledText)) log(`[✓] ${output}`);
-                else if (output.includes(notFoundText)) warn(`[!] ${output}`);
+                const result = await exec(`mv ${shq(filePath)} ${shq(disabledPath)}`);
+                const exitCode = (typeof result === 'object' && result !== null)
+                    ? (result.errno ?? result.exitCode ?? result.code ?? result.exit_code ?? null)
+                    : null;
+                const ok = exitCode === null || exitCode === 0;
+                if (ok) log(`[✓] ${t('LOG_DISABLED_TEXT')}${filename}`);
+                else warn(`${t('LOG_DISABLED_FAIL')}${filename}`);
             } catch (e) {
                 warn(`${t('LOG_DISABLED_FAIL')}${filename}${t('LOG_ERR_SUFFIX')}${e}`);
             }
@@ -222,38 +248,53 @@ async function handleFont(action) {
 
     } else {
         // 恢复逻辑
-        let restoreCmd = '';
         const disabledExists = await fileExists(disabledPath);
         if (disabledExists) {
-            // 重命名 .disabled
-            restoreCmd = `mv "${disabledPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${name}"`;
-        } else {
-            const backupExists = await fileExists(backupPath);
-            if (backupExists) {
-                // 复制 uni_backup
-                if (/.*\.(ttf|otf|ttc)$/i.test(name)) {
-                    restoreCmd = `cp "${backupPath}" "${filePath}" && echo "${t('LOG_RESTORED')}${filename}"`;
+            // 重命名 .disabled 恢复
+            try {
+                const result = await exec(`mv ${shq(disabledPath)} ${shq(filePath)}`);
+                const exitCode = (typeof result === 'object' && result !== null)
+                    ? (result.errno ?? result.exitCode ?? result.code ?? result.exit_code ?? null)
+                    : null;
+                if (exitCode === null || exitCode === 0) {
+                    log(`[✓] ${t('LOG_RESTORED')}${name}`);
                 } else {
-                    warn(t('LOG_RANGE_RESTORE_HINT'));
-                    return;
+                    warn(`${t('LOG_RESTORE_FAIL')}${name}`);
                 }
-            } else {
-                warn(`${t('LOG_NOT_FOUND_RESTORE')}${name}`);
-                return;
+            } catch (e) {
+                warn(`${t('LOG_RESTORE_FAIL')}${name}${t('LOG_ERR_SUFFIX')}${e}`);
             }
+            await showCurrentFiles();
+            return;
         }
 
+        const backupExists = await fileExists(backupPath);
+        if (!backupExists) {
+            warn(`${t('LOG_NOT_FOUND_RESTORE')}${name}`);
+            return;
+        }
+        if (!/.*\.(ttf|otf|ttc)$/i.test(name)) {
+            warn(t('LOG_RANGE_RESTORE_HINT'));
+            return;
+        }
+        // 从 uni_backup 复制恢复
         try {
-            const result = await exec(restoreCmd);
-            let output = typeof result === 'string' ? result
-                : (result.stdout ?? result.output ?? '');
-            output = output.trim();
-            if (output) log(`[✓] ${output}`);
-            const backupMissingText = t('LOG_BACKUP_MISSING');
-            await exec(`[ -f "${backupPath}" ] && rm "${backupPath}" || echo "${backupMissingText}"`);
-            if (disabledExists) await showCurrentFiles();
+            const result = await exec(`cp ${shq(backupPath)} ${shq(filePath)}`);
+            const exitCode = (typeof result === 'object' && result !== null)
+                ? (result.errno ?? result.exitCode ?? result.code ?? result.exit_code ?? null)
+                : null;
+            if (exitCode === null || exitCode === 0) {
+                log(`[✓] ${t('LOG_RESTORED')}${filename}`);
+            } else {
+                warn(`${t('LOG_RESTORE_FAIL')}${name}`);
+            }
         } catch (e) {
             warn(`${t('LOG_RESTORE_FAIL')}${name}${t('LOG_ERR_SUFFIX')}${e}`);
+        }
+        // 清掉备份
+        const rm = await exec(`rm -f ${shq(backupPath)}`);
+        if ((typeof rm === 'object' && rm !== null && (rm.errno ?? rm.exitCode ?? rm.code ?? rm.exit_code) !== 0)) {
+            warn(`${t('LOG_BACKUP_MISSING')}`);
         }
     }
 }
@@ -271,7 +312,7 @@ async function handleRecolor() {
     log(`${t('LOG_TRY_RECOLOR')}${raw}`);
 
     try {
-        const cmd = `sh /data/adb/modules/MFGA/recolor_glyph.sh "${raw}"`;
+        const cmd = `sh /data/adb/modules/MFGA/recolor_glyph.sh ${shq(raw)}`;
         const result = await exec(cmd);
         let output = typeof result === 'string' ? result
             : (result.stdout ?? result.output ?? '');
@@ -291,13 +332,12 @@ async function handleRecolor() {
             if (/\[REVERT\]/.test(line)) hasRevert = true;
             if (/\[APPLY\]/.test(line))  hasApply = true;
             if (/\[REPLACE\]/.test(line)) hasReplace = true;
-            const html = line.replace(/</g,'&lt;');
-            if (html) log(html);
+            if (line) log(line);
         });
 
         const succeeded = exitCode !== null ? exitCode === 0 : !errOutput;
         if (succeeded) {
-            if (errOutput) log(errOutput.replace(/\n/g, '<br>'));
+            if (errOutput) log(errOutput);
             if (hasRevert) {
                 log(t('LOG_RECOLOR_REVERTED'));
                 toast(t('TOAST_RECOLOR_REVERTED'));
@@ -320,7 +360,7 @@ async function handleRecolor() {
                 toast(t('TOAST_RECOLOR_APPLIED'));
             }
         } else {
-            if (errOutput) warn(errOutput.replace(/\n/g, '<br>'));
+            if (errOutput) warn(errOutput);
             warn(t('LOG_RECOLOR_FAIL'));
         }
     } catch (e) {
@@ -351,7 +391,8 @@ async function handleGms() {
     });
 
     try {
-        const code = await runScript('sh', ['/data/adb/modules/MFGA/action.sh'], { MODE: 'web' });
+        // 'web' 作为位置参数传入，而不是依赖 spawn 的 env（部分 WebUI 不支持 env）
+        const code = await runScript('sh', ['/data/adb/modules/MFGA/action.sh', 'web']);
         log(`${t('LOG_GMS_DONE')}${code}`);
     } catch (err) {
         warn(`${t('LOG_GMS_ERR')}${err}`);
@@ -369,6 +410,66 @@ if (gmsSwitch) {
 } else {
     console.warn("gmsSwitch 未找到，监听器未绑定");
 }
+
+// ── 内置字体权限应用列表 ─────────────────────────────────
+const fontPermInput = document.getElementById('font-perm-input');
+const fontPermAddBtn = document.getElementById('font-perm-add');
+const fontPermRunBtn = document.getElementById('font-perm-run');
+const fontPermList = document.getElementById('font-perm-list');
+
+const FONT_PERM_CONFIG = '/data/adb/modules/MFGA/config/font_permission_apps';
+const FONT_PERM_DEFAULTS = ['com.dragon.read', 'com.qidian.QDReader'];
+
+async function loadFontPermApps() {
+    const r = await exec(`cat ${shq(FONT_PERM_CONFIG)} 2>/dev/null || true`);
+    const out = (typeof r === 'string' ? r : (r.stdout ?? '') || '').trim();
+    const apps = out.split('\n').map(s => s.trim()).filter(s => s && !s.startsWith('#'));
+    return apps.length ? apps : FONT_PERM_DEFAULTS;
+}
+
+function renderFontPermList(apps) {
+    if (!fontPermList) return;
+    fontPermList.innerHTML = apps.length
+        ? apps.map(a => `<span class="chip">${escHtml(a)}</span>`).join(' ')
+        : `<span class="font-perm-empty">${escHtml(t('FONT_PERM_EMPTY'))}</span>`;
+}
+
+async function refreshFontPermList() {
+    try {
+        renderFontPermList(await loadFontPermApps());
+    } catch (e) {
+        warn(`${t('LOG_FONT_PERM_FAIL')}${e}`);
+    }
+}
+
+async function addFontPermApp() {
+    const pkg = fontPermInput.value.trim();
+    if (!pkg) { toast(t('TOAST_INPUT_EMPTY')); return; }
+    if (!/^[a-zA-Z0-9._]+$/.test(pkg)) { toast(t('TOAST_FONT_PERM_INVALID')); return; }
+    const apps = await loadFontPermApps();
+    if (apps.includes(pkg)) { toast(t('TOAST_FONT_PERM_DUP')); return; }
+    await exec(`mkdir -p /data/adb/modules/MFGA/config && echo ${shq(pkg)} >> ${shq(FONT_PERM_CONFIG)}`);
+    fontPermInput.value = '';
+    await refreshFontPermList();
+    toast(t('TOAST_FONT_PERM_ADDED'));
+}
+
+async function runFontPerm() {
+    try {
+        const apps = await loadFontPermApps();
+        for (const app of apps) {
+            await exec(`find /data/user/*/${app} -type f \\( -iname "*.ttf" -o -iname "*.otf" -o -iname "*.ttc" \\) -exec chmod 000 {} \\; 2>/dev/null || true`);
+        }
+        log(`${t('LOG_FONT_PERM_DONE')}${apps.join(', ')}`);
+        toast(t('TOAST_FONT_PERM_RUN'));
+    } catch (e) {
+        warn(`${t('LOG_FONT_PERM_ERR')}${e}`);
+    }
+}
+
+if (fontPermAddBtn) fontPermAddBtn.addEventListener('click', addFontPermApp);
+if (fontPermRunBtn) fontPermRunBtn.addEventListener('click', runFontPerm);
+if (fontPermList) refreshFontPermList();
 
 // 屏蔽和恢复按钮
 if (disableBtn) disableBtn.addEventListener('click', () => handleFont('disable'));

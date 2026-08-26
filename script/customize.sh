@@ -50,7 +50,8 @@ done
 
 MIUI_NAM=$(getprop ro.miui.ui.version.name)
 MIOS_NAM=$(getprop ro.mi.os.version.name)
-if [[ -n "$MIUI_NAM" || -n "$MIOS_NAM" ]]; then
+# 注意：不能用 [[ ]]（bash 语法），脚本跑在 Android 的 sh(mksh/ash) 下
+if [ -n "$MIUI_NAM" ] || [ -n "$MIOS_NAM" ]; then
   ui_print "$(msg XIAOMI_KEEP)"
 else
   ui_print "$(msg NON_XIAOMI_REMOVE)"

@@ -1,0 +1,29 @@
+# 构建产物
+build/
+*.zip
+*.otd
+out/
+dist/
+
+# CI 预编译的 C 工具（由 release workflow 生成）
+tools/prebuilt/
+
+# 下载的字体源
+tools/fontslist/*.ttf
+tools/fontslist/*.otf
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Gradle / Android
+mfga-xposed/.gradle/
+mfga-xposed/local.properties
+mfga-xposed/app/build/
+*.iml
+
+# 临时文件
+*.tmp
+*.swp
+*~

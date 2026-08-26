@@ -70,5 +70,6 @@ NOTIFY_BODY="感谢使用高级全局字体模块MFGA，滑动以删除本通知
 RCG_USAGE="[✗] 用法: sh recolor_glyph.sh \"U+XXXX;#RRGGBB\""
 RCG_BAD_FORMAT="[✗] 格式不对，应为 U+XXXX;#RRGGBB，例如 U+002F;#F5A9B8:"
 RCG_NO_BIN="[✗] 找不到对应架构的二进制:"
+RCG_UNSUPPORTED_ARCH="[!] 不支持的处理器架构:"
 RCG_SKIP_MISSING="[!] 字重字体不存在，跳过:"
 RCG_DONE="完成: 成功 %OK%, 跳过 %SKIP%, 失败 %FAIL%"

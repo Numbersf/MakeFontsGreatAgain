@@ -1,0 +1,73 @@
+name: Update Committed Font
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每周一 03:00 UTC 自动检查上游字体是否有更新
+    - cron: "0 3 * * 1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download Fonts From URLs
+        run: |
+          set -e
+          mkdir -p tools/fontslist build
+          while read -r path; do
+            [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
+            if [[ "$path" =~ :// ]]; then url="$path"; else url="https://${path#//}"; fi
+            wget --timeout=30 --tries=3 -O "tools/fontslist/${url##*/}" "$url"
+          done < tools/fontslist/urls.txt
+
+      - name: Build and Merge Fonts
+        run: |
+          set -euo pipefail
+          chmod +x tools/{otfccdump,merge-otd,otfccbuild}
+          workdir=$(mktemp -d)
+          trap 'rm -rf "$workdir"' EXIT
+          otd_files=()
+          while read -r path; do
+            [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
+            if [[ "$path" =~ :// ]]; then url="$path"; else url="https://${path#//}"; fi
+            font="tools/fontslist/${url##*/}"
+            [[ -e "$font" ]] || continue
+            base=$(basename "$font" | sed 's/\.\(ttf\|otf\)$//')
+            if ! ./tools/otfccdump --ignore-hints "$font" -o "$workdir/${base}.otd"; then
+              echo "⚠️ skipping $font" >&2; continue
+            fi
+            otd_files+=("$workdir/${base}.otd")
+          done < tools/fontslist/urls.txt
+          ./tools/merge-otd -o notosanspro.otd -n "Noto Sans Pro;400;5;Normal" "${otd_files[@]}"
+          ./tools/otfccbuild notosanspro.otd -O1 -o build/NotoSansPro.otf
+
+      - name: Remove Emoji Overlap
+        run: |
+          python3 -m pip install --upgrade pip >/dev/null
+          pip install -q fonttools
+          git clone --depth=1 https://github.com/googlefonts/noto-emoji.git
+          python script/remove_emoji_overlap.py noto-emoji/colrv1/all.toml build/NotoSansPro.otf -o build/NotoSansPro.otf
+
+      - name: Open PR if font changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          if cmp -s build/NotoSansPro.otf fonts/NotoSansPro.otf; then
+            echo "NotoSansPro.otf 无变化，无需更新"
+            exit 0
+          fi
+          cp build/NotoSansPro.otf fonts/NotoSansPro.otf
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BRANCH="font-update-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH"
+          git add fonts/NotoSansPro.otf
+          git commit -m "chore(font): update NotoSansPro.otf [skip ci]"
+          git push origin "HEAD:$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore(font): update NotoSansPro.otf" \
+            --body "自动构建发现上游字体有更新，已重新生成 NotoSansPro.otf。"

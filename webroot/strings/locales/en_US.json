@@ -64,5 +64,18 @@
   "LOG_NO_GMS_SWITCH": "[✗] gms-switch element not found",
   "LOG_DISABLED_TEXT": "Blocked: ",
   "LOG_NOT_FOUND_TEXT": "Not found: ",
-  "LOG_BACKUP_MISSING": "Backup file does not exist"
+  "LOG_BACKUP_MISSING": "Backup file does not exist",
+  "FONT_PERM_TITLE": "Apps with built-in font access revoked",
+  "FONT_PERM_DESC": "Makes these apps' bundled fonts unreadable at boot so the system font is used. To remove, edit config/font_permission_apps",
+  "FONT_PERM_PLACEHOLDER": "e.g. com.whatsapp",
+  "FONT_PERM_ADD": "Add",
+  "FONT_PERM_RUN": "Run now",
+  "FONT_PERM_EMPTY": "(empty, using built-in defaults)",
+  "TOAST_FONT_PERM_INVALID": "Invalid package name",
+  "TOAST_FONT_PERM_DUP": "App already in list",
+  "TOAST_FONT_PERM_ADDED": "Added, takes effect after reboot",
+  "TOAST_FONT_PERM_RUN": "Done",
+  "LOG_FONT_PERM_FAIL": "[!] Failed to load app list: ",
+  "LOG_FONT_PERM_DONE": "[✓] Font access revoked for: ",
+  "LOG_FONT_PERM_ERR": "[✗] Failed: "
 }

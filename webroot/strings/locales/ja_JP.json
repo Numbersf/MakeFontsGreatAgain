@@ -64,5 +64,18 @@
   "LOG_NO_GMS_SWITCH": "[✗] gms-switch 要素が見つかりません",
   "LOG_DISABLED_TEXT": "ブロック済み: ",
   "LOG_NOT_FOUND_TEXT": "見つかりません: ",
-  "LOG_BACKUP_MISSING": "バックアップファイルが存在しません"
+  "LOG_BACKUP_MISSING": "バックアップファイルが存在しません",
+  "FONT_PERM_TITLE": "内蔵フォント権限を剥奪するアプリ",
+  "FONT_PERM_DESC": "起動時にこれらのアプリの内蔵フォントを読み取り不可にし、システムフォントを使用させます。削除は config/font_permission_apps を編集",
+  "FONT_PERM_PLACEHOLDER": "例:com.whatsapp",
+  "FONT_PERM_ADD": "追加",
+  "FONT_PERM_RUN": "今すぐ実行",
+  "FONT_PERM_EMPTY": "（空、組み込みの既定を使用）",
+  "TOAST_FONT_PERM_INVALID": "パッケージ名が不正です",
+  "TOAST_FONT_PERM_DUP": "このアプリは既にリストにあります",
+  "TOAST_FONT_PERM_ADDED": "追加しました。再起動後に有効です",
+  "TOAST_FONT_PERM_RUN": "実行しました",
+  "LOG_FONT_PERM_FAIL": "[!] アプリ一覧の読み込みに失敗: ",
+  "LOG_FONT_PERM_DONE": "[✓] フォント権限を剥奪しました: ",
+  "LOG_FONT_PERM_ERR": "[✗] 実行に失敗: "
 }

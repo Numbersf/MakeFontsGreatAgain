@@ -161,6 +161,30 @@
                     喵喵喵？
                 </div>
             </div>
+
+            <div class="toggle-list font-block" id="font-perm-row">
+                <div class="font-text-group">
+                    <div class="toggle-text" data-i18n="FONT_PERM_TITLE">
+                        取消内置字体权限的应用
+                    </div>
+                    <div class="font-desc-text" data-i18n="FONT_PERM_DESC">
+                        开机时将这些应用的内部字体设为不可读，强制使用系统字体。删除请编辑 /data/adb/modules/MFGA/config/font_permission_apps
+                    </div>
+                </div>
+                <input id="font-perm-input"
+                       class="simple-input"
+                       data-i18n-placeholder="FONT_PERM_PLACEHOLDER"
+                       placeholder="例:com.whatsapp">
+                <div class="font-btn-row">
+                    <div class="mini-btn ripple-element" id="font-perm-add" data-i18n="FONT_PERM_ADD">
+                        添加
+                    </div>
+                    <div class="mini-btn ripple-element" id="font-perm-run" data-i18n="FONT_PERM_RUN">
+                        立即执行
+                    </div>
+                </div>
+                <div id="font-perm-list" class="font-perm-list"></div>
+            </div>
         </div>
 
 <div class="output-terminal">

@@ -21,7 +21,7 @@ jobs:
           mkdir -p tools/fontslist build
           count=0
           while read -r path; do
-            [[ "$path" =~ ^\s*(#|$) ]] && continue
+            [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
             if [[ "$path" =~ :// ]]; then
               url="$path"
             else
@@ -43,7 +43,13 @@ jobs:
           trap 'rm -rf "$workdir"' EXIT
 
           echo "Converting fonts to .otd..."
-          for font in tools/fontslist/*.{ttf,otf}; do
+          # 按 urls.txt 的书写顺序转换（确定性的合并顺序），
+          # 不再按文件大小排序 —— 排序会让“最大字体”成为基底，结果不可复现
+          otd_files=()
+          while read -r path; do
+            [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
+            if [[ "$path" =~ :// ]]; then url="$path"; else url="https://${path#//}"; fi
+            font="tools/fontslist/${url##*/}"
             [[ -e "$font" ]] || continue
             base=$(basename "$font" | sed 's/\.\(ttf\|otf\)$//')
             out="$workdir/${base}.otd"
@@ -52,29 +58,40 @@ jobs:
               echo "⚠️ Warning: failed to process $font, skipping." >&2
               continue
             fi
-          done
+            otd_files+=("$out")
+          done < tools/fontslist/urls.txt
 
-          echo "Collecting .otd files and sorting by size..."
-          mapfile -t otd_files < <(ls -1S "$workdir"/*.otd)
           if [[ ${#otd_files[@]} -eq 0 ]]; then
             echo "❌ No .otd files found, exiting."
             exit 1
           fi
-          echo "Merging .otd files into notosanspro.otd..."
+          echo "Merging ${#otd_files[@]} .otd files in urls.txt order..."
           ./tools/merge-otd -o notosanspro.otd -n "Noto Sans Pro;400;5;Normal" "${otd_files[@]}"
           echo "Building final OpenType font NotoSansPro.otf..."
           ./tools/otfccbuild notosanspro.otd -O1 -o build/NotoSansPro.otf
           cp notosanspro.otd build/
-          cp -r tools/fontslist build/
-
-          echo "✅ Build complete: build/NotoSansPro.otf, build/notosanspro.otd"
 
       - name: Remove Emoji Overlap
         run: |
           python3 -m pip install --upgrade pip
           pip install fonttools
           git clone --depth=1 https://github.com/googlefonts/noto-emoji.git
-          python script/remove_emoji_overlap.py noto-emoji/colrv1/all.toml build/NotoSansPro.otf
+          # 直接原地输出最终产物（-o），避免产出 _noEmoji 中间名
+          python script/remove_emoji_overlap.py noto-emoji/colrv1/all.toml build/NotoSansPro.otf -o build/NotoSansPro.otf
+
+      - name: Verify Output Font
+        run: |
+          python3 - <<'EOF'
+          from fontTools.ttLib import TTFont
+          f = TTFont("build/NotoSansPro.otf")
+          cmap = f.getBestCmap()
+          assert len(cmap) > 10000, f"unexpectedly small cmap: {len(cmap)}"
+          # 不允许残留彩色 emoji 码位（这正是 overlap 移除的目的）
+          emoji = [cp for cp in cmap if 0x1F000 <= cp <= 0x1FAFF or 0x2600 <= cp <= 0x27BF]
+          print(f"OK: {len(cmap)} codepoints, emoji-like leftovers: {len(emoji)}")
+          assert len(emoji) == 0, f"emoji leftovers: {[hex(c) for c in emoji[:10]]}"
+          f.close()
+          EOF
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7

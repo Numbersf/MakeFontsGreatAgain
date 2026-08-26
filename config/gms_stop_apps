@@ -1,0 +1,4 @@
+# 屏蔽 GMS 字体前强制停止的应用列表（action.sh 读取）
+# 每行一个包名，# 开头为注释。这些应用会先被杀后台，避免仍持有 GMS 字体缓存。
+com.android.chrome
+com.google.android.gm

@@ -13,7 +13,26 @@ FONTS_LIST="$MODPATH/fonts_list.yaml"
 [ ! -f "$FONTS_LIST" ] && { ui_print "$ERR_NO_FONTS_LIST"; exit 1; }
 
 get_list() {
-  sed -n "/^[[:space:]]*fallback:/,/^[^[:space:]]/p" "$FONTS_LIST" | sed -n "/^[[:space:]]\\{2\\}$1:/,/^[[:space:]]\\{2\\}[a-zA-Z_][a-zA-Z_]*:/p" | sed 's/#.*$//' | sed -n 's/^[[:space:]]*-[[:space:]]*//p'
+  awk -v sec="$1" '
+    /^[[:space:]]*fallback:/ { infb=1; next }
+    !infb { next }
+    /^[[:space:]]*$/ { next }
+    /^[[:space:]]*#/ { next }
+    /^[[:space:]]*[a-zA-Z_][a-zA-Z_]*:/ {
+      k=$1; sub(/:$/,"",k)
+      on=(k==sec)
+      next
+    }
+    /^[[:space:]]*-/ {
+      if (on) {
+        v=$0; sub(/^[[:space:]]*-[[:space:]]*/,"",v); sub(/#.*/,"",v)
+        gsub(/[[:space:]]+/,"",v)
+        if (v!="") print v
+      }
+      next
+    }
+    /^[^[:space:]]/ { infb=0 }
+  ' "$FONTS_LIST"
 }
 
 FALLBACK_WHITELIST="$(get_list 'whitelist')"

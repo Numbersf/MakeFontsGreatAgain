@@ -86,19 +86,40 @@ def remove_overlap(source_font_path, emoji_codepoints, output_path):
 def main():
     if len(sys.argv) < 3:
         print("Usage:")
-        print("python remove_emoji_overlap.py all.toml target1.otf target2.otf ...")
+        print("python remove_emoji_overlap.py all.toml target1.otf [target2.otf ...] [-o output.otf]")
         sys.exit(1)
 
     toml_path = sys.argv[1]
-    target_fonts = sys.argv[2:]
+    args = sys.argv[2:]
+
+    output_path = None
+    if "-o" in args or "--output" in args:
+        try:
+            idx = args.index("-o") if "-o" in args else args.index("--output")
+            output_path = args[idx + 1]
+            del args[idx:idx + 2]
+        except (ValueError, IndexError):
+            print("[-o] requires an output path")
+            sys.exit(1)
+
+    target_fonts = args
+    if not target_fonts:
+        print("No target font given")
+        sys.exit(1)
+    if output_path and len(target_fonts) > 1:
+        print("[-o] can only be used with a single target font")
+        sys.exit(1)
 
     print("Parsing emoji list from all.toml...")
     emoji_codepoints = parse_all_toml(toml_path)
     print(f"Total emoji codepoints from TOML: {len(emoji_codepoints)}")
 
     for font_path in target_fonts:
-        output_path = font_path.replace(".otf", "_noEmoji.otf").replace(".ttf", "_noEmoji.ttf")
-        remove_overlap(font_path, emoji_codepoints, output_path)
+        if output_path:
+            out = output_path
+        else:
+            out = font_path.replace(".otf", "_noEmoji.otf").replace(".ttf", "_noEmoji.ttf")
+        remove_overlap(font_path, emoji_codepoints, out)
 
     print("\nDone.")
 

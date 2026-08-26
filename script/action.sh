@@ -33,8 +33,14 @@ CONFIRM_ACTION() {
 
 STOP_APPS() {
   echo "$(msg STOP_APPS)"
-  am force-stop com.android.chrome
-  am force-stop com.google.android.gm
+  # 强停的应用列表可配置：config/gms_stop_apps（每行一个包名，# 注释）
+  STOP_LIST=$(cat "$MODPATH/config/gms_stop_apps" 2>/dev/null \
+    | grep -v '^[[:space:]]*#' | grep -v '^[[:space:]]*$')
+  [ -z "$STOP_LIST" ] && STOP_LIST="com.android.chrome
+com.google.android.gm"
+  for APP in $STOP_LIST; do
+    am force-stop "$APP" 2>/dev/null
+  done
   echo "$(msg STOP_APPS_DONE)"
 }
 
@@ -66,7 +72,12 @@ DEL_GMSF() {
     echo "$(msg DEL_DATA_DONE)"
   fi
 
-  find /data -type d -path "*com.google.android.gms/files/fonts*" -exec rm -rf {} \;
+  # 只扫真实用户目录，避免全盘 find /data（慢且可能命中无关路径）
+  # shellcheck disable=SC2044
+  for d in /data/user /data/user_de /data/data; do
+    [ -d "$d" ] || continue
+    find "$d" -type d -path "*com.google.android.gms/files/fonts*" -exec rm -rf {} \; 2>/dev/null
+  done
   echo "$(msg DEL_ALL_DONE)"
 }
 
