@@ -44,12 +44,15 @@ jobs:
       - name: Download upstream base zip
         id: base
         run: |
+          DEFAULT_URL="https://github.com/Numbersf/MakeFontsGreatAgain/releases/download/1717180001/MFGA-17.0.0.06-27-alpha.1717180001.zip"
           URL="${{ inputs.base_zip_url }}"
+          # tag 推送没有 workflow_dispatch inputs；空 URL 必须回退默认基底，
+          # 否则打出来的 release zip 会缺 130+ 个字体。
           if [ -z "$URL" ]; then
-            echo "no base zip (workflow_dispatch with empty input)"
-            exit 0
+            URL="$DEFAULT_URL"
+            echo "inputs 为空（tag 推送或未填），使用默认基底"
           fi
-          if wget -q --timeout=60 -O upstream-base.zip "$URL"; then
+          if wget -q --timeout=90 -O upstream-base.zip "$URL"; then
             echo "downloaded: $(ls -lh upstream-base.zip | awk '{print $5}')"
             echo "base_zip=$PWD/upstream-base.zip" >> "$GITHUB_OUTPUT"
           else
