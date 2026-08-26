@@ -29,7 +29,6 @@ jobs:
           chmod +x tools/{otfccdump,merge-otd,otfccbuild}
           workdir=$(mktemp -d)
           trap 'rm -rf "$workdir"' EXIT
-          otd_files=()
           while read -r path; do
             [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
             if [[ "$path" =~ :// ]]; then url="$path"; else url="https://${path#//}"; fi
@@ -39,8 +38,9 @@ jobs:
             if ! ./tools/otfccdump --ignore-hints "$font" -o "$workdir/${base}.otd"; then
               echo "⚠️ skipping $font" >&2; continue
             fi
-            otd_files+=("$workdir/${base}.otd")
           done < tools/fontslist/urls.txt
+          # 与 build.yml 保持一致：最大字体为基底，避免字体风格漂移
+          mapfile -t otd_files < <(ls -1S "$workdir"/*.otd)
           ./tools/merge-otd -o notosanspro.otd -n "Noto Sans Pro;400;5;Normal" "${otd_files[@]}"
           ./tools/otfccbuild notosanspro.otd -O1 -o build/NotoSansPro.otf
 

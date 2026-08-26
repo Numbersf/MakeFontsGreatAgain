@@ -55,8 +55,9 @@
 ### 11. 【中】更新通道指向上游
 `update.json` / `update2.json` 的 zipUrl/changelog 都指向 `Numbersf/MakeFontsGreatAgain` —— 用户用本 fork 会收到上游包，等于覆盖掉本 fork 的字体表。已改指本仓库 `Sumicya/Selffont`。
 
-### 12. 【中】`build.yml` 字体合并顺序不可复现
-原来 `ls -1S` 按**文件大小**排序决定合并优先级（哪个字体最大谁当基底，完全随机）。改为严格按 `urls.txt` 书写顺序合并；`remove_emoji_overlap.py` 增加 `-o` 选项，strip 后直接覆盖产出最终 `NotoSansPro.otf`，并新增“产物校验”步骤（码位数、残留 emoji 断言）。
+### 12. 【中】`build.yml` 构建管线加固（合并顺序保持原样）
+- 合并顺序**保持原来的“按文件大小排序，最大字体为基底”** —— 这是有意的：改排序会改变重叠码位的字形取舍，直接影响字体风格。若要指定基底，需显式调整。
+- `remove_emoji_overlap.py` 增加 `-o` 选项，strip 后直接覆盖产出最终 `NotoSansPro.otf`，并新增“产物校验”步骤（码位数、残留 emoji 断言）。
 
 ### 13. 【低】仓库零质量检查
 新增 `.github/workflows/quality.yml`：`sh -n`、shellcheck、`node --check`、JSON 合法性 + 四语言 locale key 对齐、fonts.xml XML 合法性、update.json↔changelog 版本一致性、C 工具 `-Werror` 编译 + 真实字体上的 unicode_filter 冒烟测试。
@@ -77,7 +78,17 @@
 
 ---
 
-## 四（二）、第二轮激进改动（2026-08-26）
+## 四（三）、字体风格影响评估（2026-08-26 补充）
+
+用户特别关心"字体风格"与"推倒重做"。如实交代：
+
+- **未改动**：`fonts/` 下 5 个字体文件、`fonts.xml`、`fonts_list.yaml`、任何字形/度量数据。`recolor_glyph.sh` 推导出的字重与原来完全一致（100..900.ttf）。
+- **build 管线合并顺序已还原**为原始"最大字体为基底"，确保重新构建的 NotoSansPro.otf 与旧管线/上游风格一致（第一版激进改动曾改成 urls.txt 顺序，有风格漂移风险，已还原并加注释）。
+- **`update-font.yml`** 只自动开 PR、不自动合并，字体不会悄悄变。
+- **"推倒重做"清单**：仅 `unicode_filter.c`（旧代码有真实 bug，必须重写；47 组测试 glyph 级一致）与 `scripts.js` 的 `handleFont` 重构（行为等价+加固）。
+- **行为变化（需用户确认）**：Xposed 默认 scope 扩到 14 个包 —— WhatsApp/LINE/Discord 等 8 个新增应用会被强制使用系统字体；若不想影响这些应用的字体风格，把 scope.list 还原为 6 个即可。
+
+---
 
 - **可配置“取消内置字体权限”应用列表**：`service.sh` / `uninstall.sh` 改读 `config/font_permission_apps`（每行一个包名，`#` 注释，缺省回退到内置的 2 个阅读 App）；扫描范围从 `files/font` 等固定子目录改为整个 `/data/user/*/<包名>/`（覆盖多用户/工作资料）。WebUI 新增“取消内置字体权限的应用”区块：添加包名（白名单校验 + 防注入）、立即执行、实时显示当前列表（4 语言 i18n）。
 - **`search_dirs.sh` 改用 awk 解析 fonts_list.yaml**：替代脆弱的 sed 链，正确处理缩进/注释/空行，本地对 3 个 section 全部验证通过。

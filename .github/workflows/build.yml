@@ -43,9 +43,7 @@ jobs:
           trap 'rm -rf "$workdir"' EXIT
 
           echo "Converting fonts to .otd..."
-          # 按 urls.txt 的书写顺序转换（确定性的合并顺序），
-          # 不再按文件大小排序 —— 排序会让“最大字体”成为基底，结果不可复现
-          otd_files=()
+          # 转换顺序无关紧要（每个文件独立转 .otd）
           while read -r path; do
             [[ "$path" =~ ^[[:space:]]*(#|$) ]] && continue
             if [[ "$path" =~ :// ]]; then url="$path"; else url="https://${path#//}"; fi
@@ -58,14 +56,18 @@ jobs:
               echo "⚠️ Warning: failed to process $font, skipping." >&2
               continue
             fi
-            otd_files+=("$out")
           done < tools/fontslist/urls.txt
 
+          echo "Collecting .otd files and sorting by size..."
+          mapfile -t otd_files < <(ls -1S "$workdir"/*.otd)
           if [[ ${#otd_files[@]} -eq 0 ]]; then
             echo "❌ No .otd files found, exiting."
             exit 1
           fi
-          echo "Merging ${#otd_files[@]} .otd files in urls.txt order..."
+          # 保持原始“最大字体为基底”的合并顺序（与旧管线/上游一致），
+          # 避免改变重叠码位的字形取舍而影响字体风格。
+          # 若想指定基底，请显式调整这里的排序规则。
+          echo "Merging ${#otd_files[@]} .otd files (largest first)..."
           ./tools/merge-otd -o notosanspro.otd -n "Noto Sans Pro;400;5;Normal" "${otd_files[@]}"
           echo "Building final OpenType font NotoSansPro.otf..."
           ./tools/otfccbuild notosanspro.otd -O1 -o build/NotoSansPro.otf
