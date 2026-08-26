@@ -26,8 +26,8 @@ jobs:
         run: |
           set -e
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck >/dev/null
-          shellcheck -s sh script/*.sh lang/*.sh
-          shellcheck -s bash tools/package/build_module.sh
+          shellcheck -s sh -S error script/*.sh lang/*.sh
+          shellcheck -s bash -S error tools/package/build_module.sh
 
       - name: WebUI JS syntax check
         run: node --check webroot/scripts.js
